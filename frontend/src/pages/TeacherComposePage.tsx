@@ -207,7 +207,7 @@ export const TeacherComposePage: React.FC<Props> = ({
           alignItems: 'start'
         }}>
           {/* 左侧配置矩阵 */}
-          <div className="card-impeccable" style={{ padding: '32px' }}>
+          <div className="card-impeccable" style={{ padding: '32px', overflow: 'visible' }}>
             {/* 模式选择切换 */}
             <div style={{ marginBottom: '28px' }}>
               <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '12px' }}>
@@ -280,17 +280,19 @@ export const TeacherComposePage: React.FC<Props> = ({
                 </span>
               </div>
 
-              {dimensionRows.map(row => (
+              {dimensionRows.map((row, idx) => (
                 <div
                   key={row.key}
                   style={{
                     padding: '14px 18px',
-                    background: 'rgba(255, 255, 255, 0.025)',
+                    background: 'var(--bg-surface)',
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border-glass)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '10px'
+                    gap: '10px',
+                    position: 'relative',
+                    zIndex: 20 - idx
                   }}
                 >
                   {/* 维度头部：标签 + 教学价值简述 */}

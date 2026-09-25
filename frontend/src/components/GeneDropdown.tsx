@@ -57,14 +57,14 @@ export const GeneDropdown: React.FC<Props> = ({
   const selectedTrait = selectedItem?.dimensions?.[dimensionKey]?.value || selectedItem?.style || '';
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', zIndex: isOpen ? 999 : 1 }}>
       {/* Trigger Button */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         style={{
           width: '100%',
-          padding: '10px 14px',
+          padding: '11px 16px',
           borderRadius: 'var(--radius-sm)',
           background: 'var(--card-bg)',
           border: isOpen ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
@@ -83,7 +83,7 @@ export const GeneDropdown: React.FC<Props> = ({
           <span style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)', whiteSpace: 'nowrap' }}>
             {selectedItem?.name} {selectedItem?.subject ? `(${selectedItem.subject})` : ''}
           </span>
-          <span style={{ color: 'var(--border-glass)', fontSize: '0.8rem' }}>·</span>
+          <span style={{ color: 'var(--text-muted)', opacity: 0.6, fontSize: '0.8rem' }}>·</span>
           <span style={{ fontSize: '0.84rem', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {selectedTrait}
           </span>
@@ -108,11 +108,11 @@ export const GeneDropdown: React.FC<Props> = ({
             top: 'calc(100% + 6px)',
             left: 0,
             right: 0,
-            zIndex: 100,
-            background: 'var(--bg-surface-elevated, var(--card-bg))',
+            zIndex: 1000,
+            background: 'var(--bg-surface-elevated, #141e33)',
             border: '1px solid var(--border-glass)',
             borderRadius: 'var(--radius-md)',
-            boxShadow: 'var(--shadow-lg)',
+            boxShadow: '0 16px 36px -4px rgba(0, 0, 0, 0.45)',
             maxHeight: '260px',
             overflowY: 'auto',
             padding: '6px'
@@ -129,18 +129,18 @@ export const GeneDropdown: React.FC<Props> = ({
                   setIsOpen(false);
                 }}
                 style={{
-                  padding: '9px 12px',
+                  padding: '10px 14px',
                   borderRadius: 'var(--radius-sm)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   gap: '12px',
                   cursor: 'pointer',
-                  background: isSelected ? 'var(--accent-primary-subtle, rgba(37,99,235,0.12))' : 'transparent',
+                  background: isSelected ? 'var(--accent-primary-subtle, rgba(37,99,235,0.14))' : 'transparent',
                   transition: 'background var(--trans-fast)',
                 }}
                 onMouseEnter={e => {
-                  if (!isSelected) e.currentTarget.style.background = 'var(--bg-surface)';
+                  if (!isSelected) e.currentTarget.style.background = 'var(--bg-hover, rgba(255,255,255,0.06))';
                 }}
                 onMouseLeave={e => {
                   if (!isSelected) e.currentTarget.style.background = 'transparent';
