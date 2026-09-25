@@ -44,6 +44,7 @@ export const TeacherChatPage: React.FC<Props> = ({
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState(getStoredQwenKey());
   const [isAvatarCollapsed, setIsAvatarCollapsed] = useState(false);
+  const [allTeachers, setAllTeachers] = useState<any[]>([]);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const nativeVoiceTimerRef = useRef<any>(null);
 
@@ -56,6 +57,9 @@ export const TeacherChatPage: React.FC<Props> = ({
 
   useEffect(() => {
     loadTeacherInfo();
+    teachersApi.list().then(res => {
+      if (res.ok) setAllTeachers(res.teachers);
+    }).catch(() => {});
   }, [initialTeacherId]);
 
   useEffect(() => {
@@ -78,6 +82,15 @@ export const TeacherChatPage: React.FC<Props> = ({
       }
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const handleSwitchTeacher = (newTeacher: any) => {
+    setTeacher(newTeacher);
+    const greeting = `同学你好！我是你的${newTeacher.subject}老师【${newTeacher.name}】。已切换至当前教学模式，遇到任何理解卡点或大题推导难点，随时打在公屏上，咱们由浅入深一起攻克！`;
+    setMessages(prev => [...prev, { role: 'assistant', content: greeting }]);
+    if (voiceMode === 'tts') {
+      speechService.speak(greeting);
     }
   };
 
@@ -508,13 +521,17 @@ export const TeacherChatPage: React.FC<Props> = ({
                 </div>
                 <TeacherDigitalHuman
                   teacherName={synthRecipe?.name || teacher?.name || '王崇林 (特级教师)'}
+                  subject={teacher?.subject || '数学'}
                   subtitle={teacher?.style || '启发式板书与图景推演'}
                   avatarState={avatarState}
                   modelVideoUrl={teacher?.dh_model_video_url || './demo_videos/merged.mp4'}
+                  photoUrl={teacher?.photoUrl ? (teacher.photoUrl.startsWith('/') ? '.' + teacher.photoUrl : teacher.photoUrl) : './avatars/t1.svg'}
                   posterUrl={teacher?.photoUrl ? (teacher.photoUrl.startsWith('/') ? '.' + teacher.photoUrl : teacher.photoUrl) : './demo_videos/merged_poster.jpg'}
                   captionText={caption}
                   forceUnmute={forceUnmute}
                   voiceOn={voiceMode !== 'off'}
+                  teachersList={allTeachers}
+                  onSelectTeacher={handleSwitchTeacher}
                   onToggleVoice={() => {
                     if (nativeVoiceTimerRef.current) clearTimeout(nativeVoiceTimerRef.current);
                     if (voiceMode === 'native') {
