@@ -154,7 +154,7 @@ export const RadarChart5D: React.FC<Props> = ({
                   dominantBaseline="central"
                   fontSize="10px"
                   fontWeight="700"
-                  fill="var(--text-muted)"
+                  fill="var(--text-body)"
                   letterSpacing="0.02em"
                 >
                   {dim.label} <tspan fill="var(--accent-primary)">{Math.round(val * 100)}</tspan>

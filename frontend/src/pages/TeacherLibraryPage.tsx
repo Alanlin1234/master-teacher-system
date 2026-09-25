@@ -262,37 +262,42 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
 
         {/* 侧边全景档案抽屉 (Full Profile Drawer) */}
         {activeTeacher && (
-          <div style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            zIndex: 1000,
-            display: 'flex',
-            justifyContent: 'flex-end'
-          }}>
-            <div style={{
-              width: '100%',
-              maxWidth: '560px',
-              height: '100%',
-              background: 'var(--card-bg)',
-              borderLeft: '1px solid var(--border-glass)',
-              boxShadow: 'var(--shadow-xl)',
-              padding: '36px',
-              overflowY: 'auto',
+          <div 
+            onClick={() => setActiveTeacher(null)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0, 0, 0, 0.55)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              zIndex: 1000,
               display: 'flex',
-              flexDirection: 'column',
-              animation: 'slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+              justifyContent: 'flex-end'
             }}>
+            <div 
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                width: '100%',
+                maxWidth: '560px',
+                height: '100%',
+                background: 'var(--card-bg)',
+                borderLeft: '1px solid var(--border-glass)',
+                boxShadow: 'var(--shadow-xl)',
+                padding: '36px',
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                animation: 'slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}>
               {/* 抽屉头部 */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '8px',
+                    width: '34px',
+                    height: '34px',
+                    borderRadius: '10px',
                     background: 'rgba(59, 130, 246, 0.15)',
+                    border: '1px solid var(--border-academic)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -300,40 +305,51 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   }}>
                     <GraduationCapIcon size={18} />
                   </div>
-                  <h2 style={{ fontSize: '1.4rem', color: 'var(--text-main)' }}>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
                     名师全维教学画像
                   </h2>
                 </div>
                 <button
                   onClick={() => setActiveTeacher(null)}
                   style={{
-                    background: 'var(--bg-surface)',
+                    background: 'var(--bg-surface-elevated)',
                     border: '1px solid var(--border-glass)',
                     borderRadius: '50%',
-                    width: '32px',
-                    height: '32px',
+                    width: '34px',
+                    height: '34px',
                     cursor: 'pointer',
                     color: 'var(--text-main)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    transition: 'all 0.2s'
                   }}
+                  title="关闭"
                 >
                   <CloseIcon size={14} />
                 </button>
               </div>
 
               {/* 教师名片 */}
-              <div style={{ display: 'flex', gap: '18px', alignItems: 'center', marginBottom: '24px' }}>
+              <div style={{
+                display: 'flex',
+                gap: '18px',
+                alignItems: 'flex-start',
+                marginBottom: '24px',
+                padding: '18px',
+                background: 'var(--bg-surface-elevated)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--border-glass)'
+              }}>
                 <div style={{
                   width: '80px',
                   height: '80px',
-                  borderRadius: '20px',
+                  borderRadius: '16px',
                   overflow: 'hidden',
                   background: 'var(--bg-surface)',
                   border: '1px solid var(--border-glass)',
                   flexShrink: 0,
-                  boxShadow: 'var(--shadow-md)',
+                  boxShadow: 'var(--shadow-sm)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -348,12 +364,12 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                     style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                   />
                 </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <h3 style={{ fontSize: '1.4rem', color: 'var(--text-main)' }}>{activeTeacher.name}</h3>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                    <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>{activeTeacher.name}</h3>
                     <span className="badge badge-blue">{activeTeacher.subject}</span>
                   </div>
-                  <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-body)', lineHeight: '1.65', fontWeight: 500, margin: 0 }}>
                     {activeTeacher.description}
                   </p>
                 </div>
@@ -361,7 +377,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
 
               {/* 五维能力雷达图 */}
               <div style={{
-                background: 'var(--bg-surface)',
+                background: 'var(--bg-surface-elevated)',
                 borderRadius: 'var(--radius-lg)',
                 border: '1px solid var(--border-glass)',
                 padding: '24px',
@@ -371,7 +387,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                 alignItems: 'center'
               }}>
                 <div style={{
-                  fontSize: '0.86rem',
+                  fontSize: '0.88rem',
                   fontWeight: 700,
                   color: 'var(--accent-primary)',
                   marginBottom: '14px',
@@ -388,15 +404,15 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
 
               {/* 讲义与课件列表 */}
               <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ fontSize: '0.94rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <BookOpenIcon size={16} style={{ color: 'var(--accent-primary)' }} />
                   <span>名师代表讲义与考点剖析 ({activeTeacher.materials?.length || 0})</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {activeTeacher.materials?.map((m: any) => (
                     <div key={m.id} style={{
-                      padding: '12px 16px',
-                      background: 'var(--bg-surface)',
+                      padding: '14px 18px',
+                      background: 'var(--bg-surface-elevated)',
                       borderRadius: 'var(--radius-sm)',
                       border: '1px solid var(--border-glass)',
                       display: 'flex',
@@ -404,17 +420,19 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                       justifyContent: 'space-between'
                     }}>
                       <div>
-                        <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-main)' }}>{m.title}</div>
-                        <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '2px' }}>类型：{m.type} · 上传日期：{m.uploadDate}</div>
+                        <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-main)' }}>{m.title}</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-body)', marginTop: '4px', fontWeight: 500 }}>
+                          类型：<span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{m.type}</span> · 上传日期：<span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{m.uploadDate}</span>
+                        </div>
                       </div>
-                      <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>已建档</span>
+                      <span className="badge badge-cyan" style={{ fontSize: '0.74rem', padding: '4px 10px', fontWeight: 600 }}>已建档</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* 底部行动 */}
-              <div style={{ marginTop: 'auto', display: 'flex', gap: '12px' }}>
+              <div style={{ marginTop: 'auto', display: 'flex', gap: '12px', paddingTop: '16px' }}>
                 <button
                   onClick={() => {
                     const id = activeTeacher.id;

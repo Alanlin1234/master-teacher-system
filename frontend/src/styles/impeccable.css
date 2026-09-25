@@ -12,8 +12,11 @@
   --bg-surface: #0e1524;
   --bg-surface-elevated: #141e33;
   --bg-surface-glass: rgba(14, 21, 36, 0.82);
+  --card-bg: #0e1524;
   --bg-subtle: rgba(255, 255, 255, 0.04);
   --bg-muted: rgba(255, 255, 255, 0.07);
+  --bg-glass-subtle: rgba(255, 255, 255, 0.04);
+  --bg-glass-active: rgba(255, 255, 255, 0.08);
 
   /* Unified Signature Accent: Academic Cobalt (现代学术钴蓝) */
   --accent-primary: #3b82f6;
@@ -87,8 +90,11 @@
   --bg-surface: #ffffff;
   --bg-surface-elevated: #f1f5f9;
   --bg-surface-glass: rgba(255, 255, 255, 0.88);
+  --card-bg: #ffffff;
   --bg-subtle: rgba(15, 23, 42, 0.04);
   --bg-muted: rgba(15, 23, 42, 0.07);
+  --bg-glass-subtle: rgba(15, 23, 42, 0.03);
+  --bg-glass-active: rgba(15, 23, 42, 0.06);
 
   --accent-primary: #2563eb;
   --accent-primary-hover: #1d4ed8;
