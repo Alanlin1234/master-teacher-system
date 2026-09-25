@@ -92,10 +92,10 @@ export const TeacherStudioPage: React.FC<Props> = ({
     try {
       const mergeRes = await studioApi.merge(segments);
       if (mergeRes.ok) {
-        setMergedVideoUrl(mergeRes.merged_url || '/demo_videos/merged.mp4');
+        setMergedVideoUrl(mergeRes.merged_url || './demo_videos/merged.mp4');
       }
     } catch (e) {
-      setMergedVideoUrl('/demo_videos/merged.mp4');
+      setMergedVideoUrl('./demo_videos/merged.mp4');
     } finally {
       setIsRendering(false);
     }
@@ -250,7 +250,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
                     border: '1px solid var(--border-glass)',
                     flexShrink: 0
                   }}>
-                    <img src={t.photoUrl || '/photos/1.png'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={t.photoUrl || './photos/1.png'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '0.98rem', color: '#ffffff' }}>{t.name}</div>
@@ -328,7 +328,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
               {/* 右侧数字人视频预览底模 */}
               <div className="digital-human-frame" style={{ height: '300px' }}>
                 <video
-                  src="/demo_videos/model.mp4"
+                  src="./demo_videos/model.mp4"
                   autoPlay
                   loop
                   muted
@@ -469,7 +469,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
                   margin: '0 auto 32px'
                 }}>
                   <video
-                    src={mergedVideoUrl || '/demo_videos/merged.mp4'}
+                    src={mergedVideoUrl || './demo_videos/merged.mp4'}
                     controls
                     autoPlay
                     style={{ width: '100%', display: 'block', maxHeight: '440px', background: '#000' }}
@@ -486,7 +486,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
 
                   <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
                     <a
-                      href={mergedVideoUrl || '/demo_videos/merged.mp4'}
+                      href={mergedVideoUrl || './demo_videos/merged.mp4'}
                       download="名师数字人精品微课.mp4"
                       className="btn btn-primary"
                       style={{ padding: '12px 28px', display: 'flex', alignItems: 'center', gap: '8px' }}

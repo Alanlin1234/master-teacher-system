@@ -23,11 +23,18 @@ interface Props {
   captionText?: string;
 }
 
+const cleanMediaUrl = (url?: string) => {
+  if (!url) return './demo_videos/model.mp4';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('/')) return '.' + url;
+  return url;
+};
+
 export const TeacherDigitalHuman: React.FC<Props> = ({
   teacherName = '王崇林 (特级教师)',
   subtitle = '全国数学竞赛金牌教练 · 启发式逻辑推演',
   avatarState = 'idle',
-  modelVideoUrl = '/demo_videos/model.mp4',
+  modelVideoUrl = './demo_videos/model.mp4',
   voiceOn = true,
   onToggleVoice,
   onTranscript,
@@ -35,6 +42,16 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
 }) => {
   const [isListening, setIsListening] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoSrc = cleanMediaUrl(modelVideoUrl);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.defaultMuted = true;
+      videoRef.current.play().catch(() => {});
+    }
+  }, [videoSrc]);
 
   // Wire GSAP subtle floating motion
   useFloatingStage(stageRef, 5, 4.0);
@@ -122,7 +139,9 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
         boxShadow: 'inset 0 0 40px rgba(0,0,0,0.8)'
       }}>
         <video
-          src={modelVideoUrl}
+          ref={videoRef}
+          src={videoSrc}
+          poster="./photos/1.png"
           autoPlay
           loop
           muted

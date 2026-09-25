@@ -99,7 +99,7 @@ function handleStaticFallback<T>(url: string, options: RequestInit = {}): T {
       name: body.name || "AI多维融合特级教师",
       subject: "高中全科",
       avatar: "🧬",
-      photoUrl: "/photos/1.png",
+      photoUrl: "./photos/1.png",
       mode: body.mode || "free",
       summary: `深度融合了【${uniqueTeachers.join(" + ")}】的核心教学基因，具备严密逻辑体系与启发式点拨能力。`,
       radar: { style: 0.94, personality: 0.91, strengths: 0.96, method: 0.93, communication: 0.95 },
@@ -131,7 +131,7 @@ function handleStaticFallback<T>(url: string, options: RequestInit = {}): T {
       video: true,
       hint: "数字人微课演播厅就绪 (静态预览模式)",
       models: [
-        { id: "model_default", name: "4K 拟真名师交互底模", previewUrl: "/demo_videos/model.mp4" }
+        { id: "model_default", name: "4K 拟真名师交互底模", previewUrl: "./demo_videos/model.mp4" }
       ]
     } as unknown as T;
   }
@@ -163,14 +163,14 @@ function handleStaticFallback<T>(url: string, options: RequestInit = {}): T {
       ok: true,
       segment_index: 1,
       status: "rendered",
-      videoUrl: "/demo_videos/fallback-replaced.mp4"
+      videoUrl: "./demo_videos/fallback-replaced.mp4"
     } as unknown as T;
   }
 
   if (path.includes("/api/teacher-studio/merge")) {
     return {
       ok: true,
-      merged_url: "/demo_videos/merged.mp4",
+      merged_url: "./demo_videos/merged.mp4",
       title: "微课视频合成交付"
     } as unknown as T;
   }

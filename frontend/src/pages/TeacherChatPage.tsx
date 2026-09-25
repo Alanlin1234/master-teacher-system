@@ -343,7 +343,7 @@ export const TeacherChatPage: React.FC<Props> = ({
               teacherName={synthRecipe?.name || teacher?.name || '王崇林 老师'}
               subtitle={teacher?.style || '启发式板书与图景推演'}
               avatarState={avatarState}
-              modelVideoUrl={teacher?.dhModelVideoUrl || '/demo_videos/model.mp4'}
+              modelVideoUrl={teacher?.dhModelVideoUrl || './demo_videos/model.mp4'}
               captionText={caption}
               voiceOn={voiceOn}
               onToggleVoice={() => {
