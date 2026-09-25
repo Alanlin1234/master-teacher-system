@@ -394,3 +394,58 @@ h4 { font-size: 1.1rem; }
   box-shadow: var(--shadow-lg);
 }
 
+/* ==========================================================================
+   ACADEMIC MARKDOWN & KATEX FORMULA CONTRAST ENHANCEMENTS
+   ========================================================================== */
+.rich-academic-markdown {
+  color: var(--text-body);
+}
+
+.rich-academic-markdown strong {
+  color: var(--text-main) !important;
+  font-weight: 750 !important;
+}
+
+.rich-academic-markdown code {
+  color: var(--accent-primary);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-glass);
+}
+
+.katex {
+  font-size: 1.05em !important;
+  color: inherit !important;
+}
+
+.katex-display {
+  margin: 0.5em 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+
+[data-theme="light"] .katex {
+  color: #0f172a !important;
+}
+
+[data-theme="dark"] .katex {
+  color: #f8fafc !important;
+}
+
+[data-theme="light"] .rich-academic-markdown strong {
+  color: #0f172a !important;
+}
+
+[data-theme="dark"] .rich-academic-markdown strong {
+  color: #f8fafc !important;
+}
+
+[data-theme="light"] .rich-academic-markdown .inline-math-wrap .katex {
+  color: #0f172a !important;
+}
+
+[data-theme="dark"] .rich-academic-markdown .inline-math-wrap .katex {
+  color: #f8fafc !important;
+}
+
+
