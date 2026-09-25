@@ -1,0 +1,305 @@
+/* ==========================================================================
+   IMPECCABLE & TASTE DESIGN SYSTEM: DARK LUXURY (LINEAR / APPLE AESTHETIC)
+   - Backgrounds: Obsidian Deep, Midnight Slate, Cosmic Blue
+   - Accents: Icy Cyan (#38bdf8), Electric Cobalt (#3b82f6), Radiant Emerald (#10b981)
+   - Micro-Crystalline 1px borders with subtle inner glows
+   - High Contrast Typography (WCAG AAA)
+   ========================================================================== */
+
+:root {
+  /* Surface Layers (Dark Luxury) */
+  --bg-app: #060911;
+  --bg-surface: #0b1120;
+  --bg-surface-elevated: #0f172a;
+  --bg-surface-glass: rgba(15, 23, 42, 0.72);
+  --bg-subtle: rgba(255, 255, 255, 0.04);
+  --bg-muted: rgba(255, 255, 255, 0.07);
+
+  /* Luminous Accent Hierarchy */
+  --cyan-neon: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.28);
+  --blue-neon: #3b82f6;
+  --blue-glow: rgba(59, 130, 246, 0.32);
+  --indigo-deep: #6366f1;
+  --emerald-neon: #10b981;
+  --emerald-glow: rgba(16, 185, 129, 0.25);
+  --amber-neon: #f59e0b;
+  --rose-neon: #f43f5e;
+
+  /* Typography Colors */
+  --text-main: #f8fafc;
+  --text-body: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --text-inverse: #020617;
+
+  /* Micro-Crystalline Borders */
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-hover: rgba(56, 189, 248, 0.35);
+  --border-focus: #38bdf8;
+
+  /* Atmospheric Shadows */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.45), 0 2px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 40px -8px rgba(0, 0, 0, 0.6), 0 0 24px -4px rgba(56, 189, 248, 0.15);
+  --shadow-glow-cyan: 0 0 32px -4px rgba(56, 189, 248, 0.28);
+  --shadow-glow-blue: 0 0 32px -4px rgba(59, 130, 246, 0.32);
+
+  /* Precision Radii */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Physics-Informed Transitions */
+  --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  --trans-fast: 0.15s var(--ease-snappy);
+  --trans-normal: 0.25s var(--ease-snappy);
+  --trans-slow: 0.45s var(--ease-snappy);
+}
+
+/* Base Reset & Smooth Typography */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Headings with Tight Negative Letter-Spacing */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.04em; }
+h2 { font-size: 1.85rem; }
+h3 { font-size: 1.35rem; }
+h4 { font-size: 1.1rem; }
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.app-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Precision Tactile Buttons (Linear/Apple Quality) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  border-radius: var(--radius-full);
+  padding: 10px 22px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--trans-normal);
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #0284c7 60%, #06b6d4 100%);
+  color: #ffffff;
+  box-shadow: 0 0 24px -4px rgba(56, 189, 248, 0.4), 0 4px 12px rgba(37, 99, 235, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(56, 189, 248, 0.6), 0 8px 24px rgba(37, 99, 235, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(12px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-glass-hover);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-subtle);
+  color: #ffffff;
+}
+
+/* Luminous Glassmorphic Cards */
+.card-impeccable {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition: all var(--trans-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-impeccable:hover {
+  border-color: var(--border-glass-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Micro-crystal Glow Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+}
+
+.badge-cyan {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.badge-blue {
+  background: rgba(59, 130, 246, 0.14);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-emerald {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-amber {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-app);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Dark Luxury Form Controls */
+.input-luxury {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-glass);
+  color: #ffffff;
+  font-size: 0.92rem;
+  outline: none;
+  transition: all var(--trans-fast);
+}
+
+.input-luxury::placeholder {
+  color: var(--text-subtle);
+}
+
+.input-luxury:focus {
+  border-color: var(--cyan-neon);
+  box-shadow: 0 0 16px -2px rgba(56, 189, 248, 0.35);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.select-luxury {
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: #0f172a;
+  border: 1px solid var(--border-glass);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+}
+
+.select-luxury:focus {
+  border-color: var(--cyan-neon);
+  box-shadow: 0 0 14px -2px rgba(56, 189, 248, 0.35);
+}
+
+.select-luxury option {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.textarea-luxury {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-glass);
+  color: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  outline: none;
+  font-family: inherit;
+  transition: all var(--trans-fast);
+}
+
+.textarea-luxury:focus {
+  border-color: var(--cyan-neon);
+  box-shadow: 0 0 16px -2px rgba(56, 189, 248, 0.35);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+/* Glass Panel */
+.glass-panel {
+  background: var(--bg-surface-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+

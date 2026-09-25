@@ -1,0 +1,11 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.git
+.github
+.agents
+node_modules
+frontend/node_modules
+backend/data/*.db
+.env
