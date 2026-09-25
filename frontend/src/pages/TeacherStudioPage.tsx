@@ -116,19 +116,19 @@ export const TeacherStudioPage: React.FC<Props> = ({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{
-                width: '36px',
-                height: '36px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '10px',
-                background: 'rgba(56, 189, 248, 0.15)',
-                border: '1px solid rgba(56, 189, 248, 0.3)',
+                background: 'rgba(59, 130, 246, 0.14)',
+                border: '1px solid rgba(59, 130, 246, 0.35)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--cyan-neon)'
+                color: 'var(--accent-primary)'
               }}>
                 <VideoCameraIcon size={20} />
               </div>
-              <h1 style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.035em' }}>
+              <h1 className="brand-display" style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.03em' }}>
                 数字人微课视频生成工坊
               </h1>
             </div>

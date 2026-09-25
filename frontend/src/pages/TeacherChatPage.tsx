@@ -133,17 +133,17 @@ export const TeacherChatPage: React.FC<Props> = ({
               width: '38px',
               height: '38px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, rgba(217, 119, 6, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%)',
-              border: '1px solid rgba(217, 119, 6, 0.35)',
+              background: 'rgba(59, 130, 246, 0.14)',
+              border: '1px solid rgba(59, 130, 246, 0.35)',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'var(--accent-gold)'
+              color: 'var(--accent-primary)'
             }}>
               <MessageSquareIcon size={19} />
             </div>
             <div>
-              <h2 className="brand-serif" style={{ fontSize: '1.5rem', color: '#ffffff', fontWeight: 800, letterSpacing: '-0.02em' }}>
+              <h2 className="brand-display" style={{ fontSize: '1.5rem', color: '#ffffff', fontWeight: 800, letterSpacing: '-0.02em' }}>
                 {synthRecipe ? synthRecipe.name : teacher ? `${teacher.name} · 1对1深度互动课堂` : '名师伴学'}
               </h2>
               <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
@@ -164,8 +164,8 @@ export const TeacherChatPage: React.FC<Props> = ({
                 alignItems: 'center',
                 gap: '8px',
                 borderColor: 'var(--border-academic)',
-                color: 'var(--accent-gold-light)',
-                background: 'rgba(217, 119, 6, 0.08)'
+                color: '#93c5fd',
+                background: 'rgba(59, 130, 246, 0.1)'
               }}
               title="点击查看/配置阿里云通义千问 API 引擎"
             >
@@ -180,7 +180,7 @@ export const TeacherChatPage: React.FC<Props> = ({
               style={{ fontSize: '0.86rem', padding: '8px 18px', display: 'flex', alignItems: 'center', gap: '7px' }}
               title="将本次问答记录转化为微课脚本"
             >
-              <VideoCameraIcon size={15} style={{ color: 'var(--accent-gold)' }} />
+              <VideoCameraIcon size={15} style={{ color: 'var(--accent-primary)' }} />
               <span>导出为微课脚本</span>
               <ArrowRightIcon size={13} />
             </button>
@@ -396,7 +396,7 @@ export const TeacherChatPage: React.FC<Props> = ({
               <CloseIcon size={20} />
             </button>
 
-            <h3 className="brand-serif" style={{ fontSize: '1.3rem', color: 'var(--accent-gold)', marginBottom: '8px' }}>
+            <h3 className="brand-display" style={{ fontSize: '1.3rem', color: '#ffffff', marginBottom: '8px' }}>
               AI 教学大脑配置
             </h3>
             <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: '1.6' }}>

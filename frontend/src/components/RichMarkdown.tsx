@@ -37,7 +37,7 @@ const BlockMathCard: React.FC<{ formula: string; idx: number }> = ({ formula, id
         margin: '16px 0',
         borderRadius: '10px',
         background: '#070b14',
-        border: '1px solid rgba(217, 119, 6, 0.22)',
+        border: '1px solid rgba(59, 130, 246, 0.25)',
         overflow: 'hidden',
         boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)'
       }}
@@ -48,13 +48,13 @@ const BlockMathCard: React.FC<{ formula: string; idx: number }> = ({ formula, id
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '6px 14px',
-        background: 'rgba(217, 119, 6, 0.06)',
-        borderBottom: '1px solid rgba(217, 119, 6, 0.12)',
+        background: 'rgba(59, 130, 246, 0.08)',
+        borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
         fontSize: '0.72rem',
-        color: 'var(--accent-gold)'
+        color: '#93c5fd'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, letterSpacing: '0.04em' }}>
-          <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-gold)' }} />
+          <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-primary)' }} />
           <span>名师学术板书 · LaTeX 标准推演</span>
         </div>
         <button
@@ -111,10 +111,10 @@ export const RichMarkdown: React.FC<Props> = ({ content }) => {
           return (
             <h4
               key={idx}
-              className="brand-serif"
+              className="brand-display"
               style={{
                 margin: '18px 0 8px',
-                color: 'var(--accent-gold)',
+                color: '#ffffff',
                 fontSize: '1.1rem',
                 fontWeight: 700,
                 display: 'flex',
@@ -122,7 +122,7 @@ export const RichMarkdown: React.FC<Props> = ({ content }) => {
                 gap: '8px'
               }}
             >
-              <span style={{ color: 'var(--accent-gold)', fontSize: '0.9rem' }}>✦</span>
+              <span style={{ color: 'var(--accent-primary)', fontSize: '0.9rem' }}>✦</span>
               <span>{trimmed.slice(4)}</span>
             </h4>
           );
@@ -133,10 +133,10 @@ export const RichMarkdown: React.FC<Props> = ({ content }) => {
           return (
             <h5
               key={idx}
-              className="brand-serif"
+              className="brand-display"
               style={{
                 margin: '14px 0 6px',
-                color: '#ffffff',
+                color: '#e2e8f0',
                 fontSize: '1.0rem',
                 fontWeight: 600
               }}

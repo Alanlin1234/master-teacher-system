@@ -38,21 +38,21 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
             width: '34px',
             height: '34px',
             borderRadius: '10px',
-            background: 'linear-gradient(135deg, #92400e 0%, #d97706 60%, #fbbf24 100%)',
+            background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #3b82f6 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: '#ffffff',
-            boxShadow: '0 2px 12px rgba(217, 119, 6, 0.35)',
-            border: '1px solid rgba(251, 191, 36, 0.45)'
+            boxShadow: '0 2px 14px rgba(59, 130, 246, 0.35)',
+            border: '1px solid rgba(96, 165, 250, 0.45)'
           }}>
             <SparklesIcon size={18} />
           </div>
           <div>
-            <div className="brand-serif" style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '0.02em', color: '#ffffff' }}>
+            <div className="brand-display" style={{ fontSize: '1.08rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>
               循智导学 · 名师智教
             </div>
-            <div style={{ fontSize: '0.64rem', color: 'var(--accent-gold-light)', opacity: 0.85, fontWeight: 600, letterSpacing: '0.08em' }}>
+            <div style={{ fontSize: '0.62rem', color: '#93c5fd', opacity: 0.9, fontWeight: 700, letterSpacing: '0.1em' }}>
               MASTER TEACHER & ACADEMIC AVATAR
             </div>
           </div>
@@ -63,11 +63,11 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
           display: 'flex',
           alignItems: 'center',
           gap: '2px',
-          background: 'rgba(15, 23, 42, 0.7)',
+          background: 'rgba(14, 21, 36, 0.75)',
           borderRadius: 'var(--radius-full)',
           padding: '3px 5px',
           border: '1px solid var(--border-glass)',
-          boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
+          boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.4)'
         }}>
           {navItems.map(item => {
             const isActive = activeTab === item.key;
@@ -84,17 +84,17 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
                   borderRadius: 'var(--radius-full)',
                   fontSize: '0.84rem',
                   fontWeight: isActive ? 600 : 500,
-                  border: isActive ? '1px solid rgba(56, 189, 248, 0.35)' : '1px solid transparent',
+                  border: isActive ? '1px solid var(--accent-primary-border)' : '1px solid transparent',
                   cursor: 'pointer',
                   transition: 'all var(--trans-fast)',
-                  background: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
+                  background: isActive ? 'var(--accent-primary-subtle)' : 'transparent',
                   color: isActive ? '#ffffff' : 'var(--text-muted)',
-                  boxShadow: isActive ? '0 0 12px rgba(56, 189, 248, 0.2)' : 'none'
+                  boxShadow: isActive ? '0 0 12px var(--accent-primary-glow)' : 'none'
                 }}
                 onMouseEnter={e => {
                   if (!isActive) {
                     (e.currentTarget as HTMLElement).style.color = '#ffffff';
-                    (e.currentTarget as HTMLElement).style.background = 'rgba(255, 255, 255, 0.04)';
+                    (e.currentTarget as HTMLElement).style.background = 'rgba(255, 255, 255, 0.05)';
                   }
                 }}
                 onMouseLeave={e => {
@@ -104,7 +104,7 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
                   }
                 }}
               >
-                <ItemIcon size={15} style={{ color: isActive ? 'var(--cyan-neon)' : 'inherit' }} />
+                <ItemIcon size={15} style={{ color: isActive ? 'var(--accent-primary)' : 'inherit' }} />
                 <span>{item.label}</span>
               </button>
             );
@@ -124,13 +124,20 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
                 background: 'rgba(255, 255, 255, 0.04)',
                 border: '1px solid var(--border-glass)'
               }}>
-                <UserIcon size={14} style={{ color: 'var(--cyan-neon)' }} />
+                <UserIcon size={14} style={{ color: 'var(--accent-primary)' }} />
                 <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>
                   {user.username}
                 </span>
                 <span
-                  className={`badge ${user.role === 'admin' ? 'badge-amber' : user.portalRole === 'teacher' ? 'badge-blue' : 'badge-emerald'}`}
-                  style={{ fontSize: '0.66rem', padding: '1px 6px' }}
+                  style={{
+                    fontSize: '0.66rem',
+                    padding: '1px 6px',
+                    borderRadius: 'var(--radius-full)',
+                    background: 'rgba(59, 130, 246, 0.15)',
+                    color: '#93c5fd',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    fontWeight: 700
+                  }}
                 >
                   {user.role === 'admin' ? '管理员' : user.portalRole === 'teacher' ? '名师' : '学生'}
                 </span>

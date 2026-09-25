@@ -112,19 +112,19 @@ export const TeacherComposePage: React.FC<Props> = ({
         <div style={{ marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
-              width: '36px',
-              height: '36px',
+              width: '38px',
+              height: '38px',
               borderRadius: '10px',
-              background: 'rgba(56, 189, 248, 0.15)',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
+              background: 'rgba(59, 130, 246, 0.14)',
+              border: '1px solid rgba(59, 130, 246, 0.35)',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'var(--cyan-neon)'
+              color: 'var(--accent-primary)'
             }}>
               <DnaIcon size={20} />
             </div>
-            <h1 style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.035em' }}>
+            <h1 className="brand-display" style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.03em' }}>
               名师多维教学基因合成工坊
             </h1>
           </div>
@@ -155,14 +155,14 @@ export const TeacherComposePage: React.FC<Props> = ({
                       padding: '14px 16px',
                       borderRadius: 'var(--radius-md)',
                       textAlign: 'left',
-                      border: mode === m.key ? '1px solid var(--cyan-neon)' : '1px solid var(--border-glass)',
-                      background: mode === m.key ? 'rgba(56, 189, 248, 0.12)' : 'rgba(255, 255, 255, 0.03)',
-                      boxShadow: mode === m.key ? '0 0 16px rgba(56, 189, 248, 0.25)' : 'none',
+                      border: mode === m.key ? '1px solid var(--accent-primary-border)' : '1px solid var(--border-glass)',
+                      background: mode === m.key ? 'var(--accent-primary-subtle)' : 'rgba(255, 255, 255, 0.03)',
+                      boxShadow: mode === m.key ? '0 0 16px var(--accent-primary-glow)' : 'none',
                       cursor: 'pointer',
                       transition: 'all var(--trans-fast)'
                     }}
                   >
-                    <div style={{ fontWeight: 700, fontSize: '0.92rem', color: mode === m.key ? 'var(--cyan-neon)' : '#ffffff' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.92rem', color: mode === m.key ? '#93c5fd' : '#ffffff' }}>
                       {m.label}
                     </div>
                     <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '4px' }}>

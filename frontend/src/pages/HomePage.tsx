@@ -105,8 +105,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               gap: '8px',
               fontSize: '0.78rem',
               fontWeight: 700,
-              letterSpacing: '0.14em',
-              color: 'var(--accent-gold)',
+              letterSpacing: '0.12em',
+              color: 'var(--accent-primary)',
               textTransform: 'uppercase',
               marginBottom: '18px'
             }}>
@@ -114,19 +114,19 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                background: 'var(--accent-gold)',
-                boxShadow: '0 0 8px rgba(217, 119, 6, 0.4)'
+                background: 'var(--accent-primary)',
+                boxShadow: '0 0 10px var(--accent-primary-glow)'
               }} />
               <span>ACADEMIC INTELLIGENCE · 特级名师教研体系</span>
             </div>
 
-            <h1 className="brand-serif gsap-hero-title" style={{ fontSize: '3.3rem', lineHeight: '1.16', color: '#ffffff', marginBottom: '22px' }}>
+            <h1 className="brand-display gsap-hero-title" style={{ fontSize: '3.3rem', lineHeight: '1.2', color: '#ffffff', marginBottom: '22px' }}>
               汇聚特级名师教学精粹 <br />
               <span style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 60%, #fde68a 100%)',
+                background: 'linear-gradient(180deg, #ffffff 40%, #93c5fd 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                fontStyle: 'italic'
+                fontWeight: 800
               }}>
                 以拟真数字人重构沉浸教育
               </span>
@@ -152,7 +152,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 className="btn btn-secondary"
                 style={{ padding: '12px 24px', fontSize: '0.94rem' }}
               >
-                <DnaIcon size={16} style={{ color: 'var(--cyan-neon)' }} />
+                <DnaIcon size={16} style={{ color: 'var(--accent-primary)' }} />
                 <span>定制专属名师</span>
               </button>
               <button
@@ -160,12 +160,12 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 className="btn btn-ghost"
                 style={{ padding: '10px 18px', fontSize: '0.88rem', color: 'var(--text-muted)' }}
               >
-                <VolumeIcon size={16} style={{ color: 'var(--cyan-neon)' }} />
+                <VolumeIcon size={16} style={{ color: 'var(--accent-primary)' }} />
                 <span>试听名师发声</span>
               </button>
             </div>
 
-            {/* GSAP 动态滚屏数字指标 */}
+            {/* GSAP 动态滚屏数字指标 (纯净统一，去除杂色混用) */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
@@ -175,22 +175,22 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               borderTop: '1px solid var(--border-glass)'
             }}>
               <div className="gsap-hero-stat">
-                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff' }} className="tabular-nums">
+                <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#ffffff' }} className="tabular-nums">
                   {countTeachers}+
                 </div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>全学科特级名师库</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>全学科特级名师库</div>
               </div>
               <div className="gsap-hero-stat">
-                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--cyan-neon)' }} className="tabular-nums">
-                  {countDimensions} 维
+                <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#ffffff' }} className="tabular-nums">
+                  {countDimensions} <span style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-muted)' }}>维</span>
                 </div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>教学基因深度解构</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>教学基因深度解构</div>
               </div>
               <div className="gsap-hero-stat">
-                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--emerald-neon)' }} className="tabular-nums">
-                  {countDataSecurity}%
+                <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#ffffff' }} className="tabular-nums">
+                  {countDataSecurity}<span style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-muted)' }}>%</span>
                 </div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>学情数据专有私域沉淀</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>学情数据专有私域沉淀</div>
               </div>
             </div>
           </div>

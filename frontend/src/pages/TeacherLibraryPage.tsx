@@ -59,19 +59,19 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
               <div style={{
-                width: '36px',
-                height: '36px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '10px',
-                background: 'linear-gradient(135deg, rgba(217, 119, 6, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%)',
-                border: '1px solid rgba(217, 119, 6, 0.35)',
+                background: 'rgba(59, 130, 246, 0.14)',
+                border: '1px solid rgba(59, 130, 246, 0.35)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--accent-gold)'
+                color: 'var(--accent-primary)'
               }}>
                 <GraduationCapIcon size={20} />
               </div>
-              <h1 className="brand-serif" style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.02em' }}>
+              <h1 className="brand-display" style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.03em' }}>
                 全国金牌名师智库
               </h1>
             </div>
@@ -93,13 +93,13 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                 paddingLeft: '40px'
               }}
             />
-            <span style={{ position: 'absolute', left: '14px', top: '12px', color: 'var(--accent-gold)' }}>
+            <span style={{ position: 'absolute', left: '14px', top: '12px', color: 'var(--accent-primary)' }}>
               <SearchIcon size={16} />
             </span>
           </div>
         </div>
 
-        {/* 学科过滤 Tabs */}
+        {/* 学科过滤 Tabs (统一百年学府钴蓝微晶胶囊) */}
         <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', marginBottom: '32px' }}>
           {subjects.map(s => {
             const isSel = selectedSubject === s;
@@ -112,12 +112,12 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   borderRadius: 'var(--radius-full)',
                   fontSize: '0.88rem',
                   fontWeight: isSel ? 700 : 500,
-                  border: isSel ? '1px solid rgba(251, 191, 36, 0.5)' : '1px solid var(--border-glass)',
-                  background: isSel ? 'linear-gradient(135deg, #b45309 0%, #d97706 100%)' : 'rgba(255, 255, 255, 0.04)',
+                  border: isSel ? '1px solid var(--accent-primary-border)' : '1px solid var(--border-glass)',
+                  background: isSel ? 'linear-gradient(180deg, #3b82f6 0%, #2563eb 100%)' : 'rgba(255, 255, 255, 0.04)',
                   color: isSel ? '#ffffff' : 'var(--text-body)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
-                  boxShadow: isSel ? '0 2px 10px rgba(217, 119, 6, 0.3)' : 'none',
+                  boxShadow: isSel ? '0 2px 14px var(--accent-primary-glow)' : 'none',
                   transition: 'all var(--trans-fast)'
                 }}
               >

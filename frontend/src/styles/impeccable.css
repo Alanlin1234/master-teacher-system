@@ -7,53 +7,59 @@
    ========================================================================== */
 
 :root {
-  /* Surface Layers (Oxford Deep Navy & Academic Slate) */
-  --bg-app: #0a0f1d;
-  --bg-surface: #10182b;
-  --bg-surface-elevated: #162038;
-  --bg-surface-glass: rgba(16, 24, 43, 0.85);
+  /* Surface Layers (Pure Velvet Obsidian - 纯净深邃黑曜石) */
+  --bg-app: #080c14;
+  --bg-surface: #0e1524;
+  --bg-surface-elevated: #141e33;
+  --bg-surface-glass: rgba(14, 21, 36, 0.82);
   --bg-subtle: rgba(255, 255, 255, 0.04);
   --bg-muted: rgba(255, 255, 255, 0.07);
 
-  /* Academic Prestige Accents (常春藤金与学者墨绿) */
-  --accent-gold: #d97706;
-  --accent-gold-light: #fbbf24;
-  --accent-gold-glow: rgba(217, 119, 6, 0.22);
-  --accent-blue: #3b82f6;
+  /* Unified Signature Accent: Academic Cobalt (现代学术钴蓝) */
+  --accent-primary: #3b82f6;
+  --accent-primary-hover: #2563eb;
+  --accent-primary-glow: rgba(59, 130, 246, 0.28);
+  --accent-primary-subtle: rgba(59, 130, 246, 0.12);
+  --accent-primary-border: rgba(59, 130, 246, 0.35);
+
+  /* Backward Compatibility (优雅映射至学术钴蓝，彻底统一各页面冲突色) */
+  --accent-gold: var(--accent-primary);
+  --accent-gold-light: #93c5fd;
+  --accent-gold-glow: var(--accent-primary-glow);
+  --accent-blue: var(--accent-primary);
   --accent-blue-deep: #1e3a8a;
-  --accent-green: #059669;
-  --accent-green-light: #10b981;
-  --accent-amber: #f59e0b;
-  --accent-rose: #e11d48;
+  --accent-green: #10b981;
+  --accent-green-light: #34d399;
+  --accent-amber: #3b82f6;
+  --accent-rose: #f43f5e;
 
-  /* Backward Compatibility (优雅映射至学术香槟金与学者蓝) */
-  --cyan-neon: var(--accent-gold);
-  --cyan-glow: var(--accent-gold-glow);
-  --blue-neon: var(--accent-blue);
-  --blue-glow: rgba(59, 130, 246, 0.2);
-  --emerald-neon: var(--accent-green-light);
+  --cyan-neon: var(--accent-primary);
+  --cyan-glow: var(--accent-primary-glow);
+  --blue-neon: var(--accent-primary);
+  --blue-glow: var(--accent-primary-glow);
+  --emerald-neon: #10b981;
   --emerald-glow: rgba(16, 185, 129, 0.2);
-  --indigo-deep: #4338ca;
+  --indigo-deep: #1e3a8a;
 
-  /* Typography Colors (典雅高对比学术排版) */
+  /* Typography Colors (典雅高对比学术排版，WCAG AAA 级清晰度) */
   --text-main: #f8fafc;
-  --text-body: #e2e8f0;
+  --text-body: #cbd5e1;
   --text-muted: #94a3b8;
   --text-subtle: #64748b;
   --text-inverse: #020617;
 
-  /* Scholarly Precision Borders (去AI荧光，回归学术微金与板岩) */
+  /* Precision Borders (超细微晶线，告别杂乱厚重) */
   --border-glass: rgba(255, 255, 255, 0.08);
-  --border-academic: rgba(217, 119, 6, 0.22);
-  --border-glass-hover: rgba(217, 119, 6, 0.38);
-  --border-focus: var(--accent-gold);
+  --border-academic: rgba(59, 130, 246, 0.28);
+  --border-glass-hover: rgba(59, 130, 246, 0.45);
+  --border-focus: var(--accent-primary);
 
   /* Atmospheric Shadows */
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 2px 6px -2px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 16px 40px -8px rgba(0, 0, 0, 0.7), 0 0 24px -4px rgba(217, 119, 6, 0.12);
-  --shadow-glow-cyan: 0 0 24px -4px rgba(217, 119, 6, 0.22);
-  --shadow-glow-blue: 0 0 24px -4px rgba(59, 130, 246, 0.2);
+  --shadow-lg: 0 16px 40px -8px rgba(0, 0, 0, 0.7), 0 0 24px -4px rgba(59, 130, 246, 0.15);
+  --shadow-glow-cyan: 0 0 24px -4px rgba(59, 130, 246, 0.25);
+  --shadow-glow-blue: 0 0 24px -4px rgba(59, 130, 246, 0.25);
 
   /* Precision Radii */
   --radius-xs: 6px;
@@ -78,11 +84,12 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   background-color: var(--bg-app);
   color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -104,10 +111,11 @@ h4 { font-size: 1.1rem; }
   font-variant-numeric: tabular-nums;
 }
 
-/* 人文名校殿堂宋体/衬线体规范 */
-.brand-serif {
-  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', SimSun, 'Cinzel', Georgia, serif;
-  letter-spacing: -0.01em;
+/* 现代工业几何展示字级规范 (替换易降级锯齿的宋体，杜绝视觉怪异感) */
+.brand-serif, .brand-display {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 .app-container {
@@ -139,15 +147,16 @@ h4 { font-size: 1.1rem; }
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #2563eb 0%, #0284c7 60%, #06b6d4 100%);
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
   color: #ffffff;
-  box-shadow: 0 0 24px -4px rgba(56, 189, 248, 0.4), 0 4px 12px rgba(37, 99, 235, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px -3px rgba(59, 130, 246, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 32px rgba(56, 189, 248, 0.6), 0 8px 24px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+  box-shadow: 0 0 28px rgba(59, 130, 246, 0.6), 0 4px 14px rgba(37, 99, 235, 0.4);
 }
 
 .btn-secondary {
@@ -158,7 +167,7 @@ h4 { font-size: 1.1rem; }
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.09);
   border-color: var(--border-glass-hover);
   color: #ffffff;
   transform: translateY(-1px);
