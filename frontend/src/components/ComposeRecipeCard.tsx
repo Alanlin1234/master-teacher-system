@@ -61,7 +61,7 @@ export const ComposeRecipeCard: React.FC<Props> = ({ recipe, onStartChat, onOpen
 
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h3 style={{ fontSize: '1.25rem', color: '#ffffff', fontWeight: 800, letterSpacing: '-0.02em' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)', fontWeight: 800, letterSpacing: '-0.02em' }}>
                 {recipe.name}
               </h3>
               <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>
@@ -76,27 +76,27 @@ export const ComposeRecipeCard: React.FC<Props> = ({ recipe, onStartChat, onOpen
 
         {/* 一致性指数度量胶囊 */}
         <div style={{
-          background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(37, 99, 235, 0.2))',
+          background: 'var(--bg-surface)',
           padding: '8px 18px',
           borderRadius: 'var(--radius-md)',
-          border: '1px solid rgba(56, 189, 248, 0.35)',
+          border: '1px solid var(--border-glass)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'flex-end',
-          boxShadow: '0 0 16px rgba(56, 189, 248, 0.15)'
+          boxShadow: 'var(--shadow-sm)'
         }}>
-          <div style={{ fontSize: '0.72rem', color: 'var(--cyan-neon)', fontWeight: 600, letterSpacing: '0.04em' }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--accent-primary)', fontWeight: 600, letterSpacing: '0.04em' }}>
             五维融合一致性
           </div>
-          <div style={{ fontSize: '1.45rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.1 }} className="tabular-nums">
+          <div style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--accent-primary)', lineHeight: 1.1 }} className="tabular-nums">
             {consistency}%
           </div>
         </div>
       </div>
 
-      {/* 专区一：五维教学能力拓扑雷达图 (独立居中，宽敞呼吸空间，杜绝边角挤压) */}
+      {/* 专区一：五维教学能力拓扑雷达图 */}
       <div style={{
-        background: 'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08) 0%, rgba(15, 23, 42, 0.5) 70%, transparent 100%)',
+        background: 'var(--bg-surface)',
         border: '1px solid var(--border-glass)',
         borderRadius: 'var(--radius-lg)',
         padding: '20px 12px',
@@ -116,13 +116,13 @@ export const ComposeRecipeCard: React.FC<Props> = ({ recipe, onStartChat, onOpen
         }}>
           5D CAPABILITY TOPOLOGY · 教学能力预测图谱
         </div>
-        <RadarChart5D scores={radarScores} size={230} showLabels={true} highlightColor="#38bdf8" />
+        <RadarChart5D scores={radarScores} size={230} showLabels={true} highlightColor="var(--accent-primary)" />
       </div>
 
-      {/* 专区二：五维基因溯源谱系 (独立展开，文字绝不折行截断) */}
+      {/* 专区二：五维基因溯源谱系 */}
       <div style={{ marginBottom: '20px' }}>
-        <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#ffffff', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <DnaIcon size={14} style={{ color: 'var(--cyan-neon)' }} />
+        <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <DnaIcon size={14} style={{ color: 'var(--accent-primary)' }} />
           <span>五维基因重组谱系</span>
         </div>
 
@@ -135,7 +135,7 @@ export const ComposeRecipeCard: React.FC<Props> = ({ recipe, onStartChat, onOpen
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '9px 14px',
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: 'var(--bg-surface)',
                 border: '1px solid var(--border-glass)',
                 borderRadius: 'var(--radius-sm)',
                 gap: '12px'
@@ -145,7 +145,7 @@ export const ComposeRecipeCard: React.FC<Props> = ({ recipe, onStartChat, onOpen
                 <span className="badge badge-cyan" style={{ fontSize: '0.72rem', whiteSpace: 'nowrap', flexShrink: 0 }}>
                   {val.dimension_name || key}
                 </span>
-                <span style={{ fontSize: '0.86rem', fontWeight: 700, color: '#ffffff', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-main)', whiteSpace: 'nowrap', flexShrink: 0 }}>
                   {val.teacher_name}
                 </span>
                 <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

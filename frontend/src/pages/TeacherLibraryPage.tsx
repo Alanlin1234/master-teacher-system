@@ -78,7 +78,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
               }}>
                 <GraduationCapIcon size={20} />
               </div>
-              <h1 className="brand-display" style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.03em' }}>
+              <h1 className="brand-display" style={{ fontSize: '2.1rem', color: 'var(--text-main)', letterSpacing: '-0.03em' }}>
                 全国金牌名师智库
               </h1>
             </div>
@@ -87,7 +87,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
             </p>
           </div>
 
-          {/* 搜索框 (纯 SVG 矢量放大镜，无 Emoji) */}
+          {/* 搜索框 */}
           <div style={{ position: 'relative', width: '300px' }}>
             <input
               type="text"
@@ -106,7 +106,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
           </div>
         </div>
 
-        {/* 学科过滤 Tabs (统一百年学府钴蓝微晶胶囊) */}
+        {/* 学科过滤 Tabs */}
         <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', marginBottom: '32px' }}>
           {subjects.map(s => {
             const isSel = selectedSubject === s;
@@ -119,12 +119,12 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   borderRadius: 'var(--radius-full)',
                   fontSize: '0.88rem',
                   fontWeight: isSel ? 700 : 500,
-                  border: isSel ? '1px solid var(--accent-primary-border)' : '1px solid var(--border-glass)',
-                  background: isSel ? 'linear-gradient(180deg, #3b82f6 0%, #2563eb 100%)' : 'rgba(255, 255, 255, 0.04)',
-                  color: isSel ? '#ffffff' : 'var(--text-body)',
+                  border: isSel ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                  background: isSel ? 'var(--accent-primary)' : 'var(--card-bg)',
+                  color: isSel ? '#ffffff' : 'var(--text-muted)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
-                  boxShadow: isSel ? '0 2px 14px var(--accent-primary-glow)' : 'none',
+                  boxShadow: isSel ? 'var(--shadow-sm)' : 'none',
                   transition: 'all var(--trans-fast)'
                 }}
               >
@@ -167,10 +167,10 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                     height: '64px',
                     borderRadius: '16px',
                     overflow: 'hidden',
-                    background: 'radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.85))',
-                    border: '1px solid rgba(56, 189, 248, 0.28)',
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border-glass)',
                     flexShrink: 0,
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.35)',
+                    boxShadow: 'var(--shadow-sm)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -188,14 +188,14 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
 
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <h3 style={{ fontSize: '1.25rem', color: '#ffffff', fontWeight: 800 }}>
+                      <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)', fontWeight: 800 }}>
                         {t.name}
                       </h3>
                       <span className="badge badge-blue">
                         {t.subject}
                       </span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--cyan-neon)', fontWeight: 600, marginTop: '2px' }}>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--accent-primary)', fontWeight: 600, marginTop: '2px' }}>
                       {t.style}
                     </div>
                   </div>
@@ -216,7 +216,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   ))}
                 </div>
 
-                {/* 底部行动栏 (无 Emoji，全矢量) */}
+                {/* 底部行动栏 */}
                 <div style={{
                   marginTop: 'auto',
                   paddingTop: '16px',
@@ -229,7 +229,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   <button
                     onClick={() => setActiveTeacher(t)}
                     className="btn btn-ghost"
-                    style={{ fontSize: '0.82rem', padding: '6px 10px', color: 'var(--cyan-neon)', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    style={{ fontSize: '0.82rem', padding: '6px 10px', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}
                   >
                     <span>查看画像</span>
                     <ChevronRightIcon size={13} />
@@ -242,7 +242,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                       style={{ fontSize: '0.82rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '5px' }}
                       title="把该老师基因加入合成工坊"
                     >
-                      <DnaIcon size={14} style={{ color: 'var(--cyan-neon)' }} />
+                      <DnaIcon size={14} style={{ color: 'var(--accent-primary)' }} />
                       <span>基因合成</span>
                     </button>
                     <button
@@ -265,9 +265,9 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
           <div style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(6, 9, 17, 0.75)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
+            background: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             zIndex: 1000,
             display: 'flex',
             justifyContent: 'flex-end'
@@ -276,9 +276,9 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
               width: '100%',
               maxWidth: '560px',
               height: '100%',
-              background: '#0b1120',
+              background: 'var(--card-bg)',
               borderLeft: '1px solid var(--border-glass)',
-              boxShadow: '0 0 60px rgba(0, 0, 0, 0.8)',
+              boxShadow: 'var(--shadow-xl)',
               padding: '36px',
               overflowY: 'auto',
               display: 'flex',
@@ -292,28 +292,28 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                     width: '32px',
                     height: '32px',
                     borderRadius: '8px',
-                    background: 'rgba(56, 189, 248, 0.15)',
+                    background: 'rgba(59, 130, 246, 0.15)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'var(--cyan-neon)'
+                    color: 'var(--accent-primary)'
                   }}>
                     <GraduationCapIcon size={18} />
                   </div>
-                  <h2 style={{ fontSize: '1.4rem', color: '#ffffff' }}>
+                  <h2 style={{ fontSize: '1.4rem', color: 'var(--text-main)' }}>
                     名师全维教学画像
                   </h2>
                 </div>
                 <button
                   onClick={() => setActiveTeacher(null)}
                   style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
+                    background: 'var(--bg-surface)',
                     border: '1px solid var(--border-glass)',
                     borderRadius: '50%',
                     width: '32px',
                     height: '32px',
                     cursor: 'pointer',
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -330,10 +330,10 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   height: '80px',
                   borderRadius: '20px',
                   overflow: 'hidden',
-                  background: 'radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.2), rgba(15, 23, 42, 0.9))',
-                  border: '1px solid rgba(56, 189, 248, 0.3)',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-glass)',
                   flexShrink: 0,
-                  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)',
+                  boxShadow: 'var(--shadow-md)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -350,7 +350,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <h3 style={{ fontSize: '1.4rem', color: '#ffffff' }}>{activeTeacher.name}</h3>
+                    <h3 style={{ fontSize: '1.4rem', color: 'var(--text-main)' }}>{activeTeacher.name}</h3>
                     <span className="badge badge-blue">{activeTeacher.subject}</span>
                   </div>
                   <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', marginTop: '4px' }}>
@@ -361,7 +361,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
 
               {/* 五维能力雷达图 */}
               <div style={{
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: 'var(--bg-surface)',
                 borderRadius: 'var(--radius-lg)',
                 border: '1px solid var(--border-glass)',
                 padding: '24px',
@@ -373,7 +373,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                 <div style={{
                   fontSize: '0.86rem',
                   fontWeight: 700,
-                  color: 'var(--cyan-neon)',
+                  color: 'var(--accent-primary)',
                   marginBottom: '14px',
                   letterSpacing: '0.04em',
                   display: 'flex',
@@ -383,20 +383,20 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   <SlidersIcon size={14} />
                   <span>五维度教学基因解构雷达</span>
                 </div>
-                <RadarChart5D scores={activeTeacher.dimScores} size={250} highlightColor="#38bdf8" />
+                <RadarChart5D scores={activeTeacher.dimScores} size={250} highlightColor="var(--accent-primary)" />
               </div>
 
               {/* 讲义与课件列表 */}
               <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <BookOpenIcon size={16} style={{ color: 'var(--cyan-neon)' }} />
+                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <BookOpenIcon size={16} style={{ color: 'var(--accent-primary)' }} />
                   <span>名师代表讲义与考点剖析 ({activeTeacher.materials?.length || 0})</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {activeTeacher.materials?.map((m: any) => (
                     <div key={m.id} style={{
                       padding: '12px 16px',
-                      background: 'rgba(255, 255, 255, 0.03)',
+                      background: 'var(--bg-surface)',
                       borderRadius: 'var(--radius-sm)',
                       border: '1px solid var(--border-glass)',
                       display: 'flex',
@@ -404,7 +404,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                       justifyContent: 'space-between'
                     }}>
                       <div>
-                        <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#f8fafc' }}>{m.title}</div>
+                        <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-main)' }}>{m.title}</div>
                         <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '2px' }}>类型：{m.type} · 上传日期：{m.uploadDate}</div>
                       </div>
                       <span className="badge badge-cyan" style={{ fontSize: '0.72rem' }}>已建档</span>
@@ -424,7 +424,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   className="btn btn-secondary"
                   style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                 >
-                  <DnaIcon size={15} style={{ color: 'var(--cyan-neon)' }} />
+                  <DnaIcon size={15} style={{ color: 'var(--accent-primary)' }} />
                   <span>加入合成工坊</span>
                 </button>
                 <button

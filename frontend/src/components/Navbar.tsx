@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from '../store/authStore';
+import { useTheme } from '../store/themeStore';
 import {
   LayoutGridIcon,
   GraduationCapIcon,
@@ -8,6 +9,8 @@ import {
   VideoCameraIcon,
   SparklesIcon,
   UserIcon,
+  SunIcon,
+  MoonIcon,
 } from './Icons';
 
 interface Props {
@@ -17,6 +20,7 @@ interface Props {
 
 export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
   const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const navItems = [
     { key: 'home', label: '品牌首页', Icon: LayoutGridIcon },
@@ -49,10 +53,10 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
             <SparklesIcon size={18} />
           </div>
           <div>
-            <div className="brand-display" style={{ fontSize: '1.08rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>
+            <div className="brand-display" style={{ fontSize: '1.08rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
               循智导学 · 名师智教
             </div>
-            <div style={{ fontSize: '0.62rem', color: '#93c5fd', opacity: 0.9, fontWeight: 700, letterSpacing: '0.1em' }}>
+            <div style={{ fontSize: '0.62rem', color: 'var(--accent-primary)', fontWeight: 700, letterSpacing: '0.1em' }}>
               MASTER TEACHER & ACADEMIC AVATAR
             </div>
           </div>
@@ -63,11 +67,11 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
           display: 'flex',
           alignItems: 'center',
           gap: '2px',
-          background: 'rgba(14, 21, 36, 0.75)',
+          background: 'var(--bg-subtle)',
           borderRadius: 'var(--radius-full)',
           padding: '3px 5px',
           border: '1px solid var(--border-glass)',
-          boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.4)'
+          boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.1)'
         }}>
           {navItems.map(item => {
             const isActive = activeTab === item.key;
@@ -83,18 +87,18 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
                   padding: '6px 15px',
                   borderRadius: 'var(--radius-full)',
                   fontSize: '0.84rem',
-                  fontWeight: isActive ? 600 : 500,
+                  fontWeight: isActive ? 700 : 500,
                   border: isActive ? '1px solid var(--accent-primary-border)' : '1px solid transparent',
                   cursor: 'pointer',
                   transition: 'all var(--trans-fast)',
                   background: isActive ? 'var(--accent-primary-subtle)' : 'transparent',
-                  color: isActive ? '#ffffff' : 'var(--text-muted)',
+                  color: isActive ? 'var(--accent-primary)' : 'var(--text-muted)',
                   boxShadow: isActive ? '0 0 12px var(--accent-primary-glow)' : 'none'
                 }}
                 onMouseEnter={e => {
                   if (!isActive) {
-                    (e.currentTarget as HTMLElement).style.color = '#ffffff';
-                    (e.currentTarget as HTMLElement).style.background = 'rgba(255, 255, 255, 0.05)';
+                    (e.currentTarget as HTMLElement).style.color = 'var(--text-main)';
+                    (e.currentTarget as HTMLElement).style.background = 'var(--bg-muted)';
                   }
                 }}
                 onMouseLeave={e => {
@@ -111,8 +115,38 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
           })}
         </nav>
 
-        {/* User Account / Auth Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {/* User Account / Theme Toggle Actions */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* 一键极简双主题切换按钮 (Apple/Linear 质感) */}
+          <button
+            onClick={toggleTheme}
+            className="btn btn-secondary"
+            style={{
+              padding: '6px 12px',
+              fontSize: '0.8rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              borderRadius: 'var(--radius-full)',
+              color: 'var(--text-main)',
+              border: '1px solid var(--border-glass)',
+              background: 'var(--bg-subtle)'
+            }}
+            title={theme === 'dark' ? '点击切换至极简高对比学术白' : '点击切换至黑曜石深色模式'}
+          >
+            {theme === 'dark' ? (
+              <>
+                <SunIcon size={14} style={{ color: '#f59e0b' }} />
+                <span style={{ fontSize: '0.78rem', fontWeight: 600 }}>浅色</span>
+              </>
+            ) : (
+              <>
+                <MoonIcon size={14} style={{ color: '#2563eb' }} />
+                <span style={{ fontSize: '0.78rem', fontWeight: 600 }}>深色</span>
+              </>
+            )}
+          </button>
+
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{
@@ -121,11 +155,11 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
                 gap: '8px',
                 padding: '4px 10px',
                 borderRadius: 'var(--radius-full)',
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: 'var(--bg-subtle)',
                 border: '1px solid var(--border-glass)'
               }}>
                 <UserIcon size={14} style={{ color: 'var(--accent-primary)' }} />
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
                   {user.username}
                 </span>
                 <span
@@ -133,9 +167,9 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
                     fontSize: '0.66rem',
                     padding: '1px 6px',
                     borderRadius: 'var(--radius-full)',
-                    background: 'rgba(59, 130, 246, 0.15)',
-                    color: '#93c5fd',
-                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    background: 'var(--accent-primary-subtle)',
+                    color: 'var(--accent-primary)',
+                    border: '1px solid var(--accent-primary-border)',
                     fontWeight: 700
                   }}
                 >

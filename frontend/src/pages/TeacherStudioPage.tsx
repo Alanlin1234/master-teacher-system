@@ -128,7 +128,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
               }}>
                 <VideoCameraIcon size={20} />
               </div>
-              <h1 className="brand-display" style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.03em' }}>
+              <h1 className="brand-display" style={{ fontSize: '2.1rem', color: 'var(--text-main)', letterSpacing: '-0.03em' }}>
                 数字人微课视频生成工坊
               </h1>
             </div>
@@ -138,7 +138,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* 步骤指示条 (Dark Luxury Stepper Design) */}
+        {/* 步骤指示条 */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -156,17 +156,17 @@ export const TeacherStudioPage: React.FC<Props> = ({
                   padding: '16px 20px',
                   borderRadius: 'var(--radius-md)',
                   background: isCurrent
-                    ? 'linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(15, 23, 42, 0.9) 100%)'
+                    ? 'var(--card-bg)'
                     : isDone
-                    ? 'rgba(16, 185, 129, 0.1)'
-                    : 'rgba(255, 255, 255, 0.03)',
-                  color: isCurrent ? '#ffffff' : isDone ? 'var(--emerald-neon)' : 'var(--text-muted)',
+                    ? 'var(--bg-surface)'
+                    : 'var(--card-bg)',
+                  color: isCurrent ? 'var(--text-main)' : isDone ? 'var(--accent-primary)' : 'var(--text-muted)',
                   border: isCurrent
-                    ? '1px solid var(--cyan-neon)'
+                    ? '1px solid var(--accent-primary)'
                     : isDone
-                    ? '1px solid rgba(16, 185, 129, 0.35)'
+                    ? '1px solid var(--accent-primary)'
                     : '1px solid var(--border-glass)',
-                  boxShadow: isCurrent ? '0 0 20px rgba(56, 189, 248, 0.3)' : 'none',
+                  boxShadow: isCurrent ? 'var(--shadow-sm)' : 'none',
                   cursor: isDone ? 'pointer' : 'default',
                   display: 'flex',
                   alignItems: 'center',
@@ -178,8 +178,8 @@ export const TeacherStudioPage: React.FC<Props> = ({
                   width: '26px',
                   height: '26px',
                   borderRadius: '50%',
-                  background: isCurrent ? 'var(--cyan-neon)' : isDone ? 'var(--emerald-neon)' : 'rgba(255, 255, 255, 0.1)',
-                  color: isCurrent ? '#020617' : isDone ? '#020617' : '#94a3b8',
+                  background: isCurrent ? 'var(--accent-primary)' : isDone ? 'var(--accent-primary)' : 'var(--bg-surface)',
+                  color: isCurrent || isDone ? '#ffffff' : 'var(--text-muted)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -197,7 +197,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
         {/* 步骤 1：选择主讲名师 */}
         {currentStep === 1 && (
           <div className="card-impeccable" style={{ padding: '36px' }}>
-            <h3 style={{ fontSize: '1.35rem', color: '#ffffff', marginBottom: '8px', fontWeight: 800 }}>
+            <h3 style={{ fontSize: '1.35rem', color: 'var(--text-main)', marginBottom: '8px', fontWeight: 800 }}>
               第一步：选定微课主讲名师
             </h3>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '28px' }}>
@@ -211,15 +211,15 @@ export const TeacherStudioPage: React.FC<Props> = ({
                   style={{
                     padding: '18px',
                     borderRadius: 'var(--radius-lg)',
-                    border: selectedTeacherId === 'synth' ? '1px solid var(--cyan-neon)' : '1px solid var(--border-glass)',
-                    background: selectedTeacherId === 'synth' ? 'rgba(56, 189, 248, 0.12)' : 'rgba(255, 255, 255, 0.03)',
-                    boxShadow: selectedTeacherId === 'synth' ? '0 0 20px rgba(56, 189, 248, 0.3)' : 'none',
+                    border: selectedTeacherId === 'synth' ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                    background: selectedTeacherId === 'synth' ? 'var(--card-bg)' : 'var(--bg-surface)',
+                    boxShadow: selectedTeacherId === 'synth' ? 'var(--shadow-sm)' : 'none',
                     cursor: 'pointer',
                     transition: 'all var(--trans-fast)'
                   }}
                 >
                   <span className="badge badge-cyan" style={{ marginBottom: '10px' }}>专属定制名师</span>
-                  <div style={{ fontWeight: 800, fontSize: '1.15rem', color: '#ffffff' }}>{synthRecipe.name}</div>
+                  <div style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-main)' }}>{synthRecipe.name}</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>五维基因融合 · 专属自适应</div>
                 </div>
               )}
@@ -231,9 +231,9 @@ export const TeacherStudioPage: React.FC<Props> = ({
                   style={{
                     padding: '18px',
                     borderRadius: 'var(--radius-lg)',
-                    border: selectedTeacherId === t.id ? '1px solid var(--cyan-neon)' : '1px solid var(--border-glass)',
-                    background: selectedTeacherId === t.id ? 'rgba(56, 189, 248, 0.12)' : 'rgba(255, 255, 255, 0.03)',
-                    boxShadow: selectedTeacherId === t.id ? '0 0 20px rgba(56, 189, 248, 0.3)' : 'none',
+                    border: selectedTeacherId === t.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                    background: selectedTeacherId === t.id ? 'var(--card-bg)' : 'var(--bg-surface)',
+                    boxShadow: selectedTeacherId === t.id ? 'var(--shadow-sm)' : 'none',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -246,7 +246,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
                     height: '52px',
                     borderRadius: '14px',
                     overflow: 'hidden',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--bg-surface)',
                     border: '1px solid var(--border-glass)',
                     flexShrink: 0
                   }}>
@@ -258,7 +258,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
                     />
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.98rem', color: '#ffffff' }}>{t.name}</div>
+                    <div style={{ fontWeight: 700, fontSize: '0.98rem', color: 'var(--text-main)' }}>{t.name}</div>
                     <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '2px' }}>{t.subject} · {t.style}</div>
                   </div>
                 </div>
@@ -277,7 +277,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
         {/* 步骤 2：配置数字人形象与课件 */}
         {currentStep === 2 && (
           <div className="card-impeccable" style={{ padding: '36px' }}>
-            <h3 style={{ fontSize: '1.35rem', color: '#ffffff', marginBottom: '8px', fontWeight: 800 }}>
+            <h3 style={{ fontSize: '1.35rem', color: 'var(--text-main)', marginBottom: '8px', fontWeight: 800 }}>
               第二步：配置数字人视频底模与微课主题
             </h3>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '28px' }}>
@@ -287,7 +287,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
             <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px', marginBottom: '36px' }}>
               <div>
                 <div style={{ marginBottom: '24px' }}>
-                  <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 700, marginBottom: '8px', color: 'var(--text-body)' }}>
+                  <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 700, marginBottom: '8px', color: 'var(--text-main)' }}>
                     微课教学主题
                   </label>
                   <input
@@ -300,7 +300,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 700, marginBottom: '8px', color: 'var(--text-body)' }}>
+                  <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 700, marginBottom: '8px', color: 'var(--text-main)' }}>
                     数字人声音与模型库
                   </label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -315,14 +315,14 @@ export const TeacherStudioPage: React.FC<Props> = ({
                         style={{
                           padding: '14px 18px',
                           borderRadius: 'var(--radius-md)',
-                          border: selectedModel === m.id ? '1px solid var(--cyan-neon)' : '1px solid var(--border-glass)',
-                          background: selectedModel === m.id ? 'rgba(56, 189, 248, 0.12)' : 'rgba(255, 255, 255, 0.03)',
-                          boxShadow: selectedModel === m.id ? '0 0 16px rgba(56, 189, 248, 0.25)' : 'none',
+                          border: selectedModel === m.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                          background: selectedModel === m.id ? 'var(--card-bg)' : 'var(--bg-surface)',
+                          boxShadow: selectedModel === m.id ? 'var(--shadow-sm)' : 'none',
                           cursor: 'pointer',
                           transition: 'all var(--trans-fast)'
                         }}
                       >
-                        <div style={{ fontWeight: 700, fontSize: '0.92rem', color: selectedModel === m.id ? 'var(--cyan-neon)' : '#ffffff' }}>{m.name}</div>
+                        <div style={{ fontWeight: 700, fontSize: '0.92rem', color: selectedModel === m.id ? 'var(--accent-primary)' : 'var(--text-main)' }}>{m.name}</div>
                         <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '2px' }}>{m.desc}</div>
                       </div>
                     ))}
@@ -366,7 +366,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
           <div className="card-impeccable" style={{ padding: '36px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <div>
-                <h3 style={{ fontSize: '1.35rem', color: '#ffffff', fontWeight: 800 }}>
+                <h3 style={{ fontSize: '1.35rem', color: 'var(--text-main)', fontWeight: 800 }}>
                   第三步：微课大纲与分段切片 ({segments.length} 个片段)
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginTop: '4px' }}>
@@ -387,12 +387,12 @@ export const TeacherStudioPage: React.FC<Props> = ({
                   style={{
                     padding: '18px 22px',
                     borderRadius: 'var(--radius-md)',
-                    background: 'rgba(255, 255, 255, 0.03)',
+                    background: 'var(--bg-surface)',
                     border: '1px solid var(--border-glass)'
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                    <span style={{ fontWeight: 800, fontSize: '0.96rem', color: '#ffffff' }}>
+                    <span style={{ fontWeight: 800, fontSize: '0.96rem', color: 'var(--text-main)' }}>
                       {seg.title}
                     </span>
                     <span className="badge badge-cyan">{seg.duration}</span>
@@ -427,7 +427,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
         {/* 步骤 4：渲染与微课回放交付 */}
         {currentStep === 4 && (
           <div className="card-impeccable" style={{ padding: '36px' }}>
-            <h3 style={{ fontSize: '1.35rem', color: '#ffffff', marginBottom: '8px', fontWeight: 800 }}>
+            <h3 style={{ fontSize: '1.35rem', color: 'var(--text-main)', marginBottom: '8px', fontWeight: 800 }}>
               第四步：微课视频渲染与交付成品
             </h3>
 
@@ -437,17 +437,17 @@ export const TeacherStudioPage: React.FC<Props> = ({
                   width: '64px',
                   height: '64px',
                   borderRadius: '16px',
-                  background: 'rgba(56, 189, 248, 0.12)',
-                  border: '1px solid rgba(56, 189, 248, 0.3)',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-glass)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto 20px',
-                  color: 'var(--cyan-neon)'
+                  color: 'var(--accent-primary)'
                 }}>
                   <SparklesIcon size={32} />
                 </div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff' }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)' }}>
                   数字人视频渲染合成进行中...
                 </div>
                 <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', marginTop: '8px' }}>
@@ -482,7 +482,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
                 </div>
 
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', marginBottom: '6px' }}>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '6px' }}>
                     微课视频已成功生成
                   </div>
                   <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '28px' }}>

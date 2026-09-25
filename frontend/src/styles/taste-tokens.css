@@ -41,10 +41,19 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(8, 12, 20, 0.82);
+  background: var(--bg-surface-glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-glass);
+  transition: background-color var(--trans-normal), border-color var(--trans-normal);
+}
+
+[data-theme="light"] .ambient-glow-bg::before {
+  background: radial-gradient(ellipse 70% 360px at 50% -40px, rgba(37, 99, 235, 0.07) 0%, rgba(248, 250, 252, 0) 100%);
+}
+
+[data-theme="light"] .ambient-glow-bg::after {
+  background: radial-gradient(ellipse 80% 200px at 50% 100%, rgba(37, 99, 235, 0.03) 0%, transparent 100%);
 }
 
 /* Linear-style Grid Stage */
@@ -76,6 +85,12 @@
   overflow: hidden;
 }
 
+[data-theme="light"] .digital-human-frame {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 20px 48px -12px rgba(15, 23, 42, 0.12), 0 0 24px -4px rgba(37, 99, 235, 0.08);
+}
+
 .digital-human-frame::before {
   content: "";
   position: absolute;
@@ -87,6 +102,10 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+}
+
+[data-theme="light"] .digital-human-frame::before {
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.25) 0%, transparent 60%);
 }
 
 /* Audio Waveform Equalizer Animation */

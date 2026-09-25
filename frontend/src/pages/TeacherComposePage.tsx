@@ -189,7 +189,7 @@ export const TeacherComposePage: React.FC<Props> = ({
             }}>
               <DnaIcon size={20} />
             </div>
-            <h1 className="brand-display" style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.03em' }}>
+            <h1 className="brand-display" style={{ fontSize: '2.1rem', color: 'var(--text-main)', letterSpacing: '-0.03em' }}>
               名师多维教学基因合成工坊
             </h1>
           </div>
@@ -198,7 +198,7 @@ export const TeacherComposePage: React.FC<Props> = ({
           </p>
         </div>
 
-        {/* 核心双栏配置工坊 (宽敞平衡布局，杜绝窄栏挤压) */}
+        {/* 核心双栏配置工坊 */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(0, 1.15fr) minmax(0, 0.85fr)',
@@ -209,7 +209,7 @@ export const TeacherComposePage: React.FC<Props> = ({
           <div className="card-impeccable" style={{ padding: '32px' }}>
             {/* 模式选择切换 */}
             <div style={{ marginBottom: '28px' }}>
-              <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-body)', marginBottom: '12px' }}>
+              <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '12px' }}>
                 合成模式选择
               </label>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
@@ -224,9 +224,9 @@ export const TeacherComposePage: React.FC<Props> = ({
                         padding: '16px 14px',
                         borderRadius: 'var(--radius-md)',
                         textAlign: 'left',
-                        border: isSelected ? '1px solid var(--accent-primary-border)' : '1px solid var(--border-glass)',
-                        background: isSelected ? 'linear-gradient(180deg, rgba(59, 130, 246, 0.16) 0%, rgba(37, 99, 235, 0.06) 100%)' : 'rgba(255, 255, 255, 0.03)',
-                        boxShadow: isSelected ? '0 0 20px rgba(59, 130, 246, 0.25)' : 'none',
+                        border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                        background: isSelected ? 'var(--card-bg)' : 'var(--bg-surface)',
+                        boxShadow: isSelected ? 'var(--shadow-sm)' : 'none',
                         cursor: 'pointer',
                         transition: 'all var(--trans-fast)',
                         display: 'flex',
@@ -235,8 +235,8 @@ export const TeacherComposePage: React.FC<Props> = ({
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Icon size={16} style={{ color: isSelected ? 'var(--cyan-neon)' : 'var(--text-muted)' }} />
-                        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: isSelected ? '#ffffff' : 'var(--text-body)' }}>
+                        <Icon size={16} style={{ color: isSelected ? 'var(--accent-primary)' : 'var(--text-muted)' }} />
+                        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)' }}>
                           {m.label}
                         </span>
                       </div>
@@ -298,7 +298,7 @@ export const TeacherComposePage: React.FC<Props> = ({
                       <span className="badge badge-blue" style={{ fontSize: '0.76rem', fontWeight: 700 }}>
                         {row.label}
                       </span>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#ffffff' }}>
+                      <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
                         {row.trait}
                       </span>
                     </div>
@@ -307,7 +307,7 @@ export const TeacherComposePage: React.FC<Props> = ({
                     </span>
                   </div>
 
-                  {/* 对应名师全宽选择器 (全宽度展开，彻底告别字符挤压) */}
+                  {/* 对应名师全宽选择器 */}
                   <select
                     value={selections[row.key] || 't1'}
                     onChange={e => handleSelectionChange(row.key, e.target.value)}
@@ -317,14 +317,14 @@ export const TeacherComposePage: React.FC<Props> = ({
                       padding: '10px 14px',
                       fontSize: '0.88rem',
                       fontWeight: 600,
-                      color: '#ffffff',
-                      background: '#0b1120',
+                      color: 'var(--text-main)',
+                      background: 'var(--card-bg)',
                       border: '1px solid var(--border-glass)',
                       borderRadius: 'var(--radius-sm)'
                     }}
                   >
                     {catalog.map(t => (
-                      <option key={t.id} value={t.id} style={{ background: '#0b1120', color: '#ffffff' }}>
+                      <option key={t.id} value={t.id} style={{ background: 'var(--card-bg)', color: 'var(--text-main)' }}>
                         {t.name} ({t.subject}) · {t.dimensions?.[row.key]?.value || t.style}
                       </option>
                     ))}
@@ -369,17 +369,17 @@ export const TeacherComposePage: React.FC<Props> = ({
                   width: '64px',
                   height: '64px',
                   borderRadius: '16px',
-                  background: 'rgba(56, 189, 248, 0.1)',
-                  border: '1px solid rgba(56, 189, 248, 0.25)',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-glass)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto',
-                  color: 'var(--cyan-neon)'
+                  color: 'var(--accent-primary)'
                 }}>
                   <DnaIcon size={32} />
                 </div>
-                <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginTop: '18px', fontWeight: 800 }}>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)', marginTop: '18px', fontWeight: 800 }}>
                   专属基因实验室就绪
                 </h3>
                 <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', marginTop: '8px', lineHeight: '1.6' }}>
@@ -391,8 +391,8 @@ export const TeacherComposePage: React.FC<Props> = ({
             {/* 历史合成名师库 */}
             {historySynths.length > 0 && (
               <div className="card-impeccable" style={{ padding: '24px' }}>
-                <div style={{ fontSize: '0.94rem', fontWeight: 800, color: '#ffffff', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <BookOpenIcon size={16} style={{ color: 'var(--cyan-neon)' }} />
+                <div style={{ fontSize: '0.94rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <BookOpenIcon size={16} style={{ color: 'var(--accent-primary)' }} />
                   <span>我已保存的虚拟名师 ({historySynths.length})</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -401,7 +401,7 @@ export const TeacherComposePage: React.FC<Props> = ({
                       key={h.id || i}
                       style={{
                         padding: '12px 16px',
-                        background: 'rgba(255, 255, 255, 0.03)',
+                        background: 'var(--bg-surface)',
                         border: '1px solid var(--border-glass)',
                         borderRadius: 'var(--radius-sm)',
                         display: 'flex',
@@ -410,7 +410,7 @@ export const TeacherComposePage: React.FC<Props> = ({
                       }}
                     >
                       <div>
-                        <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#ffffff' }}>
+                        <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>
                           {h.name}
                         </div>
                         <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '2px' }}>

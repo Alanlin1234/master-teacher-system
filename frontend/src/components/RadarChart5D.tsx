@@ -61,8 +61,8 @@ export const RadarChart5D: React.FC<Props> = ({
           <polygon
             key={idx}
             points={points}
-            fill={idx === gridPaths.length - 1 ? 'rgba(15, 23, 42, 0.65)' : 'none'}
-            stroke="rgba(255, 255, 255, 0.1)"
+            fill={idx === gridPaths.length - 1 ? 'var(--bg-surface)' : 'none'}
+            stroke="var(--border-glass)"
             strokeWidth="1"
             strokeDasharray={idx < 3 ? '2 4' : 'none'}
           />
@@ -78,7 +78,7 @@ export const RadarChart5D: React.FC<Props> = ({
               y1={center}
               x2={x}
               y2={y}
-              stroke="rgba(255, 255, 255, 0.08)"
+              stroke="var(--border-glass)"
               strokeWidth="1"
             />
           );
@@ -106,7 +106,7 @@ export const RadarChart5D: React.FC<Props> = ({
                 cx={x}
                 cy={y}
                 r="4"
-                fill="#ffffff"
+                fill="var(--card-bg)"
                 stroke={highlightColor}
                 strokeWidth="2.5"
               />
@@ -118,10 +118,10 @@ export const RadarChart5D: React.FC<Props> = ({
                   dominantBaseline="central"
                   fontSize="11px"
                   fontWeight="700"
-                  fill="#94a3b8"
+                  fill="var(--text-muted)"
                   letterSpacing="0.02em"
                 >
-                  {dim.label} <tspan fill="#38bdf8">{Math.round(val * 100)}</tspan>
+                  {dim.label} <tspan fill="var(--accent-primary)">{Math.round(val * 100)}</tspan>
                 </text>
               )}
             </g>

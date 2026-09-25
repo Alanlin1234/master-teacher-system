@@ -13,6 +13,8 @@ import {
   CheckIcon,
   VolumeIcon,
   VolumeMuteIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
 } from '../components/Icons';
 
 interface Props {
@@ -41,6 +43,7 @@ export const TeacherChatPage: React.FC<Props> = ({
   const [forceUnmute, setForceUnmute] = useState(false);
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState(getStoredQwenKey());
+  const [isAvatarCollapsed, setIsAvatarCollapsed] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const nativeVoiceTimerRef = useRef<any>(null);
 
@@ -162,7 +165,7 @@ export const TeacherChatPage: React.FC<Props> = ({
               <MessageSquareIcon size={19} />
             </div>
             <div>
-              <h2 className="brand-display" style={{ fontSize: '1.5rem', color: '#ffffff', fontWeight: 800, letterSpacing: '-0.02em' }}>
+              <h2 className="brand-display" style={{ fontSize: '1.5rem', color: 'var(--text-main)', fontWeight: 800, letterSpacing: '-0.02em' }}>
                 {synthRecipe ? synthRecipe.name : teacher ? `${teacher.name} · 1对1深度互动课堂` : '名师伴学'}
               </h2>
               <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
@@ -178,10 +181,11 @@ export const TeacherChatPage: React.FC<Props> = ({
               alignItems: 'center',
               padding: '3px',
               borderRadius: 'var(--radius-full)',
-              background: 'rgba(255, 255, 255, 0.04)',
+              background: 'var(--card-bg)',
               border: '1px solid var(--border-glass)',
               fontSize: '0.78rem',
-              gap: '3px'
+              gap: '3px',
+              boxShadow: 'var(--shadow-sm)'
             }}>
               <button
                 onClick={() => {
@@ -199,8 +203,8 @@ export const TeacherChatPage: React.FC<Props> = ({
                   alignItems: 'center',
                   gap: '5px',
                   fontWeight: voiceMode === 'native' ? 700 : 500,
-                  background: voiceMode === 'native' ? 'rgba(56, 189, 248, 0.18)' : 'transparent',
-                  color: voiceMode === 'native' ? 'var(--cyan-neon)' : 'var(--text-muted)',
+                  background: voiceMode === 'native' ? 'var(--accent-primary)' : 'transparent',
+                  color: voiceMode === 'native' ? '#ffffff' : 'var(--text-muted)',
                   transition: 'all 0.2s'
                 }}
                 title="播放已上传视频中主讲导师的原汁原味真实声线"
@@ -223,8 +227,8 @@ export const TeacherChatPage: React.FC<Props> = ({
                   alignItems: 'center',
                   gap: '5px',
                   fontWeight: voiceMode === 'tts' ? 700 : 500,
-                  background: voiceMode === 'tts' ? 'rgba(56, 189, 248, 0.18)' : 'transparent',
-                  color: voiceMode === 'tts' ? 'var(--cyan-neon)' : 'var(--text-muted)',
+                  background: voiceMode === 'tts' ? 'var(--accent-primary)' : 'transparent',
+                  color: voiceMode === 'tts' ? '#ffffff' : 'var(--text-muted)',
                   transition: 'all 0.2s'
                 }}
                 title="浏览器实时朗读问答板书公式"
@@ -245,8 +249,8 @@ export const TeacherChatPage: React.FC<Props> = ({
                   border: 'none',
                   cursor: 'pointer',
                   fontWeight: voiceMode === 'off' ? 700 : 500,
-                  background: voiceMode === 'off' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-                  color: voiceMode === 'off' ? '#ffffff' : 'var(--text-muted)',
+                  background: voiceMode === 'off' ? 'var(--bg-surface)' : 'transparent',
+                  color: voiceMode === 'off' ? 'var(--text-main)' : 'var(--text-muted)',
                   transition: 'all 0.2s'
                 }}
                 title="静音伴学模式"
@@ -265,14 +269,13 @@ export const TeacherChatPage: React.FC<Props> = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                borderColor: 'var(--border-academic)',
-                color: '#93c5fd',
-                background: 'rgba(59, 130, 246, 0.1)'
+                color: 'var(--text-main)',
+                background: 'var(--card-bg)'
               }}
               title="点击查看/配置阿里云通义千问 API 引擎"
             >
               <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
-              <span>通义千问 (Qwen-Plus) · 已连通</span>
+              <span>Qwen-Plus · 已就绪</span>
               <SlidersIcon size={13} />
             </button>
 
@@ -289,21 +292,23 @@ export const TeacherChatPage: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* 双栏工作台：左侧问答交互流，右侧数字人展台 */}
+        {/* 双栏工作台：响应式宽幅排版，支持一键折叠数字人 */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 370px',
-          gap: '24px',
-          alignItems: 'start'
+          gridTemplateColumns: isAvatarCollapsed ? '1fr 56px' : '1fr 340px',
+          gap: '20px',
+          alignItems: 'start',
+          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
         }}>
           {/* 左侧聊天流 */}
           <div className="card-impeccable" style={{
-            height: '670px',
+            height: '680px',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
             border: '1px solid var(--border-glass)',
-            boxShadow: 'var(--shadow-lg)'
+            boxShadow: 'var(--shadow-lg)',
+            background: 'var(--card-bg)'
           }}>
             {/* 消息滚动区 */}
             <div style={{
@@ -313,7 +318,7 @@ export const TeacherChatPage: React.FC<Props> = ({
               display: 'flex',
               flexDirection: 'column',
               gap: '20px',
-              background: 'rgba(11, 17, 32, 0.5)'
+              background: 'var(--bg-surface)'
             }}>
               {messages.map((m, idx) => (
                 <div
@@ -326,7 +331,7 @@ export const TeacherChatPage: React.FC<Props> = ({
                 >
                   <div style={{
                     fontSize: '0.74rem',
-                    color: 'var(--text-subtle)',
+                    color: 'var(--text-muted)',
                     marginBottom: '6px',
                     padding: '0 4px',
                     display: 'flex',
@@ -337,17 +342,17 @@ export const TeacherChatPage: React.FC<Props> = ({
                   </div>
                   <div
                     style={{
-                      maxWidth: '88%',
+                      maxWidth: '92%',
                       padding: '14px 18px',
                       borderRadius: m.role === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
                       background: m.role === 'user'
-                        ? 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)'
-                        : '#0d1527',
+                        ? 'linear-gradient(135deg, var(--accent-primary) 0%, #1d4ed8 100%)'
+                        : 'var(--card-bg)',
                       border: m.role === 'user'
-                        ? '1px solid rgba(59, 130, 246, 0.4)'
-                        : '1px solid rgba(217, 119, 6, 0.18)',
-                      color: '#ffffff',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                        ? '1px solid rgba(37, 99, 235, 0.4)'
+                        : '1px solid var(--border-glass)',
+                      color: m.role === 'user' ? '#ffffff' : 'var(--text-main)',
+                      boxShadow: 'var(--shadow-md)',
                       wordBreak: 'break-word',
                     }}
                   >
@@ -360,8 +365,8 @@ export const TeacherChatPage: React.FC<Props> = ({
                 </div>
               ))}
               {isLoading && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-gold)', fontSize: '0.86rem', padding: '6px 12px' }}>
-                  <span className="live-pulse-dot" style={{ background: 'var(--accent-gold)' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-primary)', fontSize: '0.86rem', padding: '6px 12px' }}>
+                  <span className="live-pulse-dot" style={{ background: 'var(--accent-primary)' }} />
                   <span>名师正在运笔推演与组织板书…</span>
                 </div>
               )}
@@ -372,7 +377,7 @@ export const TeacherChatPage: React.FC<Props> = ({
             <div style={{
               padding: '10px 16px',
               borderTop: '1px solid var(--border-glass)',
-              background: '#0a0f1d',
+              background: 'var(--card-bg)',
               display: 'flex',
               gap: '8px',
               overflowX: 'auto',
@@ -383,8 +388,8 @@ export const TeacherChatPage: React.FC<Props> = ({
                   key={i}
                   onClick={() => handleSend(pill)}
                   style={{
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border-glass)',
                     borderRadius: '20px',
                     padding: '5px 12px',
                     fontSize: '0.76rem',
@@ -394,12 +399,12 @@ export const TeacherChatPage: React.FC<Props> = ({
                     flexShrink: 0
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.color = 'var(--accent-gold-light)';
-                    e.currentTarget.style.borderColor = 'rgba(217, 119, 6, 0.35)';
+                    e.currentTarget.style.color = 'var(--accent-primary)';
+                    e.currentTarget.style.borderColor = 'var(--accent-primary)';
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.color = 'var(--text-muted)';
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.borderColor = 'var(--border-glass)';
                   }}
                 >
                   {pill}
@@ -411,7 +416,7 @@ export const TeacherChatPage: React.FC<Props> = ({
             <div style={{
               padding: '16px 20px',
               borderTop: '1px solid var(--border-glass)',
-              background: '#090e1b',
+              background: 'var(--card-bg)',
               display: 'flex',
               gap: '12px',
               alignItems: 'center'
@@ -438,40 +443,103 @@ export const TeacherChatPage: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* 右侧数字人演播展台 */}
+          {/* 右侧数字人演播展台（支持折叠） */}
           <div style={{ position: 'sticky', top: '84px' }}>
-            <TeacherDigitalHuman
-              teacherName={synthRecipe?.name || teacher?.name || '王崇林 (特级教师)'}
-              subtitle={teacher?.style || '启发式板书与图景推演'}
-              avatarState={avatarState}
-              modelVideoUrl={teacher?.dh_model_video_url || './demo_videos/merged.mp4'}
-              posterUrl={teacher?.photoUrl ? (teacher.photoUrl.startsWith('/') ? '.' + teacher.photoUrl : teacher.photoUrl) : './demo_videos/merged_poster.jpg'}
-              captionText={caption}
-              forceUnmute={forceUnmute}
-              voiceOn={voiceMode !== 'off'}
-              onToggleVoice={() => {
-                if (nativeVoiceTimerRef.current) clearTimeout(nativeVoiceTimerRef.current);
-                if (voiceMode === 'native') {
-                  if (forceUnmute || avatarState === 'speaking') {
-                    setForceUnmute(false);
-                    setAvatarState('idle');
-                  } else {
-                    speechService.stop();
-                    setForceUnmute(true);
-                    setAvatarState('speaking');
-                  }
-                } else if (voiceMode === 'tts') {
-                  speechService.stop();
-                  setAvatarState('idle');
-                  setVoiceMode('native');
-                  setForceUnmute(true);
-                } else {
-                  setVoiceMode('native');
-                  setForceUnmute(true);
-                }
-              }}
-              onTranscript={text => handleSend(text)}
-            />
+            {isAvatarCollapsed ? (
+              <button
+                onClick={() => setIsAvatarCollapsed(false)}
+                className="card-impeccable"
+                style={{
+                  width: '56px',
+                  height: '420px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '16px',
+                  padding: '16px 0',
+                  cursor: 'pointer',
+                  border: '1px solid var(--border-glass)',
+                  background: 'var(--card-bg)',
+                  transition: 'all 0.2s',
+                  color: 'var(--text-muted)'
+                }}
+                title="展开特级名师数字人演播台"
+              >
+                <ChevronLeftIcon size={18} style={{ color: 'var(--accent-primary)' }} />
+                <span className="live-pulse-dot" style={{ background: avatarState === 'speaking' ? '#10b981' : 'var(--accent-primary)' }} />
+                <span style={{
+                  writingMode: 'vertical-rl',
+                  letterSpacing: '0.2em',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  color: 'var(--text-main)'
+                }}>
+                  展开名师演播室
+                </span>
+              </button>
+            ) : (
+              <div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '2px 6px 8px',
+                }}>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.04em' }}>
+                    数字人演播室
+                  </span>
+                  <button
+                    onClick={() => setIsAvatarCollapsed(true)}
+                    className="btn btn-ghost"
+                    style={{
+                      padding: '2px 8px',
+                      fontSize: '0.74rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      color: 'var(--text-muted)'
+                    }}
+                    title="收起数字人，专注公式推演与板书"
+                  >
+                    <span>收起</span>
+                    <ChevronRightIcon size={14} />
+                  </button>
+                </div>
+                <TeacherDigitalHuman
+                  teacherName={synthRecipe?.name || teacher?.name || '王崇林 (特级教师)'}
+                  subtitle={teacher?.style || '启发式板书与图景推演'}
+                  avatarState={avatarState}
+                  modelVideoUrl={teacher?.dh_model_video_url || './demo_videos/merged.mp4'}
+                  posterUrl={teacher?.photoUrl ? (teacher.photoUrl.startsWith('/') ? '.' + teacher.photoUrl : teacher.photoUrl) : './demo_videos/merged_poster.jpg'}
+                  captionText={caption}
+                  forceUnmute={forceUnmute}
+                  voiceOn={voiceMode !== 'off'}
+                  onToggleVoice={() => {
+                    if (nativeVoiceTimerRef.current) clearTimeout(nativeVoiceTimerRef.current);
+                    if (voiceMode === 'native') {
+                      if (forceUnmute || avatarState === 'speaking') {
+                        setForceUnmute(false);
+                        setAvatarState('idle');
+                      } else {
+                        speechService.stop();
+                        setForceUnmute(true);
+                        setAvatarState('speaking');
+                      }
+                    } else if (voiceMode === 'tts') {
+                      speechService.stop();
+                      setAvatarState('idle');
+                      setVoiceMode('native');
+                      setForceUnmute(true);
+                    } else {
+                      setVoiceMode('native');
+                      setForceUnmute(true);
+                    }
+                  }}
+                  onTranscript={text => handleSend(text)}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -481,8 +549,8 @@ export const TeacherChatPage: React.FC<Props> = ({
         <div style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0, 0, 0, 0.75)',
-          backdropFilter: 'blur(10px)',
+          background: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -492,9 +560,9 @@ export const TeacherChatPage: React.FC<Props> = ({
           <div className="card-impeccable" style={{
             width: '100%',
             maxWidth: '480px',
-            background: '#0d1527',
-            border: '1px solid rgba(217, 119, 6, 0.35)',
-            boxShadow: '0 24px 60px rgba(0, 0, 0, 0.8)',
+            background: 'var(--card-bg)',
+            border: '1px solid var(--border-glass)',
+            boxShadow: 'var(--shadow-xl)',
             padding: '28px',
             borderRadius: '16px',
             position: 'relative'
@@ -514,7 +582,7 @@ export const TeacherChatPage: React.FC<Props> = ({
               <CloseIcon size={20} />
             </button>
 
-            <h3 className="brand-display" style={{ fontSize: '1.3rem', color: '#ffffff', marginBottom: '8px' }}>
+            <h3 className="brand-display" style={{ fontSize: '1.3rem', color: 'var(--text-main)', marginBottom: '8px' }}>
               AI 教学大脑配置
             </h3>
             <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: '1.6' }}>
@@ -522,7 +590,7 @@ export const TeacherChatPage: React.FC<Props> = ({
             </p>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#e2e8f0', marginBottom: '8px', fontWeight: 600 }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-main)', marginBottom: '8px', fontWeight: 600 }}>
                 DashScope API Key (阿里云密钥)
               </label>
               <input
