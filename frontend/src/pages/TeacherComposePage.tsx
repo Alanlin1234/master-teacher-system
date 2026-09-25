@@ -12,12 +12,14 @@ import { GeneDropdown } from '../components/GeneDropdown';
 
 interface Props {
   initialTeacherId?: string;
+  weakKnowledge?: string[];
   onStartChat: (recipe: any) => void;
   onOpenStudio: (recipe: any) => void;
 }
 
 export const TeacherComposePage: React.FC<Props> = ({
   initialTeacherId = 't1',
+  weakKnowledge = [],
   onStartChat,
   onOpenStudio,
 }) => {
@@ -153,6 +155,11 @@ export const TeacherComposePage: React.FC<Props> = ({
   return (
     <div className="ambient-glow-bg" style={{ minHeight: 'calc(100vh - 64px)', padding: '40px 0 64px', position: 'relative' }}>
       <div className="app-container" style={{ position: 'relative', zIndex: 1 }}>
+        {weakKnowledge.length > 0 && (
+          <div className="weak-banner">
+            本次针对薄弱点：{weakKnowledge.join('、')}
+          </div>
+        )}
         {/* 顶部标题区 */}
         <div style={{ marginBottom: '32px' }}>
           <div style={{
@@ -200,12 +207,7 @@ export const TeacherComposePage: React.FC<Props> = ({
         </div>
 
         {/* 核心双栏配置工坊 */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1.15fr) minmax(0, 0.85fr)',
-          gap: '32px',
-          alignItems: 'start'
-        }}>
+        <div className="compose-layout">
           {/* 左侧配置矩阵 */}
           <div className="card-impeccable" style={{ padding: '32px', overflow: 'visible' }}>
             {/* 模式选择切换 */}
@@ -419,6 +421,11 @@ export const TeacherComposePage: React.FC<Props> = ({
               </div>
             )}
           </div>
+        </div>
+        <div className="next-bar">
+          <button type="button" className="btn btn-primary" onClick={() => currentRecipe && onOpenStudio(currentRecipe)}>
+            去微课呈现
+          </button>
         </div>
       </div>
     </div>

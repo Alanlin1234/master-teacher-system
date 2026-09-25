@@ -156,3 +156,266 @@
   0% { transform: scale(1); opacity: 0.7; }
   100% { transform: scale(2.4); opacity: 0; }
 }
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (补全移动端适配)
+   ========================================================================== */
+
+/* Tablet (≤ 960px) */
+@media (max-width: 960px) {
+  .chat-layout,
+  .chat-layout--collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  .compose-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .radar-bench-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .feature-bento {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-bento > :first-child {
+    grid-row: auto;
+  }
+}
+
+/* Small Tablet / Large Phone (≤ 768px) */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 0 16px;
+  }
+
+  .studio-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  h1 { font-size: 1.85rem; }
+  h2 { font-size: 1.5rem; }
+}
+
+/* Mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 0 12px;
+  }
+
+  .studio-steps {
+    grid-template-columns: 1fr;
+  }
+
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.1rem; }
+}
+
+/* ==========================================================================
+   TRANSITION KEYFRAMES (进出场动画)
+   ========================================================================== */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.hero-stage-grid {
+  grid-template-columns: 1.38fr 1fr;
+  gap: 56px;
+  padding: 64px 0 48px;
+}
+
+.flow-rail {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1.15fr 0.75fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.flow-step {
+  padding: 22px 20px 18px;
+  border-top: 1px solid var(--border-glass);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.flow-step button {
+  margin-top: auto;
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  font-weight: 650;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.insight-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: 22px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.insight-split {
+  border-top: 1px solid var(--border-glass);
+  padding-top: 14px;
+}
+
+.mastery-track {
+  height: 6px;
+  background: var(--bg-muted);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.gsap-mastery-bar {
+  height: 100%;
+  transform-origin: left center;
+  border-radius: inherit;
+}
+
+.work-split {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.diag-split {
+  display: grid;
+  grid-template-columns: 0.72fr 1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+.segmented {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  border: 1px solid var(--border-glass);
+}
+
+.segmented button {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  padding: 7px 14px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.segmented button[aria-current="page"] {
+  background: var(--accent-primary);
+  color: #fff;
+}
+
+.teacher-subnav {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.teacher-subnav button {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-weight: 650;
+  font-size: var(--text-base);
+  padding: 8px 2px 12px;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.teacher-subnav button[aria-current="page"] {
+  color: var(--text-main);
+  border-bottom-color: var(--accent-primary);
+}
+
+.next-bar {
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-glass);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.weak-banner {
+  margin-bottom: 22px;
+  padding: 12px 16px;
+  border: 1px solid var(--accent-warm-border);
+  background: var(--accent-warm-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: var(--text-sm);
+}
+
+.monitor-video {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #020617;
+  border-radius: var(--radius-lg);
+  display: block;
+}
+
+.gene-preview {
+  display: grid;
+  grid-template-columns: 1.38fr 1fr;
+  gap: 48px;
+}
+
+.stat-figure {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 960px) {
+  .hero-stage-grid,
+  .flow-rail,
+  .work-split,
+  .diag-split,
+  .gene-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsap-mastery-bar {
+    transition: none;
+  }
+}

@@ -235,12 +235,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
         </div>
 
         {/* 步骤指示条 */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '14px',
-          marginBottom: '36px'
-        }}>
+        <div className="studio-steps">
           {stepsList.map(s => {
             const isDone = currentStep > s.step;
             const isCurrent = currentStep === s.step;

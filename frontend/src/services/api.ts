@@ -2,7 +2,7 @@
 import { EMBEDDED_DEMO_ACCOUNTS, EMBEDDED_TEACHERS, DIMENSION_LABELS } from './embeddedData';
 
 const API_BASE = "http://127.0.0.1:8001";
-const DEFAULT_QWEN_KEY = "sk-f3ca2c7e114f47d88dabf1cf5f4ac527";
+const DEFAULT_QWEN_KEY = "";
 
 export function getStoredQwenKey(): string {
   return localStorage.getItem("qwen_api_key") || DEFAULT_QWEN_KEY;

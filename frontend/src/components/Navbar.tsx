@@ -4,8 +4,6 @@ import { useTheme } from '../store/themeStore';
 import {
   LayoutGridIcon,
   GraduationCapIcon,
-  MessageSquareIcon,
-  DnaIcon,
   VideoCameraIcon,
   SparklesIcon,
   UserIcon,
@@ -23,11 +21,10 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
   const { theme, toggleTheme } = useTheme();
 
   const navItems = [
-    { key: 'home', label: '品牌首页', Icon: LayoutGridIcon },
-    { key: 'library', label: '名师智库', Icon: GraduationCapIcon },
-    { key: 'chat', label: '1对1伴学', Icon: MessageSquareIcon },
-    { key: 'compose', label: '名师合成', Icon: DnaIcon },
-    { key: 'studio', label: '微课工坊', Icon: VideoCameraIcon },
+    { key: 'collect', label: '采集', Icon: LayoutGridIcon },
+    { key: 'diagnose', label: '诊断', Icon: SparklesIcon },
+    { key: 'teachers', label: '名师', Icon: GraduationCapIcon },
+    { key: 'studio', label: '呈现', Icon: VideoCameraIcon },
   ];
 
   return (
@@ -63,7 +60,7 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
         </div>
 
         {/* Linear Segmented Glass Navigation (Zero Emoji) */}
-        <nav style={{
+        <nav aria-label="主导航" style={{
           display: 'flex',
           alignItems: 'center',
           gap: '2px',
@@ -74,41 +71,19 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
           boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.1)'
         }}>
           {navItems.map(item => {
-            const isActive = activeTab === item.key;
+            const isActive = item.key === 'teachers'
+              ? ['teachers', 'library', 'compose', 'chat'].includes(activeTab)
+              : activeTab === item.key;
             const ItemIcon = item.Icon;
             return (
               <button
                 key={item.key}
                 onClick={() => onSelectTab(item.key)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '7px',
-                  padding: '6px 15px',
-                  borderRadius: 'var(--radius-full)',
-                  fontSize: '0.84rem',
-                  fontWeight: isActive ? 700 : 500,
-                  border: isActive ? '1px solid var(--accent-primary-border)' : '1px solid transparent',
-                  cursor: 'pointer',
-                  transition: 'all var(--trans-fast)',
-                  background: isActive ? 'var(--accent-primary-subtle)' : 'transparent',
-                  color: isActive ? 'var(--accent-primary)' : 'var(--text-muted)',
-                  boxShadow: isActive ? '0 0 12px var(--accent-primary-glow)' : 'none'
-                }}
-                onMouseEnter={e => {
-                  if (!isActive) {
-                    (e.currentTarget as HTMLElement).style.color = 'var(--text-main)';
-                    (e.currentTarget as HTMLElement).style.background = 'var(--bg-muted)';
-                  }
-                }}
-                onMouseLeave={e => {
-                  if (!isActive) {
-                    (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
-                    (e.currentTarget as HTMLElement).style.background = 'transparent';
-                  }
-                }}
+                className="nav-tab"
+                aria-current={isActive ? 'page' : undefined}
+                aria-label={item.label}
               >
-                <ItemIcon size={15} style={{ color: isActive ? 'var(--accent-primary)' : 'inherit' }} />
+                <ItemIcon size={15} className="nav-tab-icon" />
                 <span>{item.label}</span>
               </button>
             );

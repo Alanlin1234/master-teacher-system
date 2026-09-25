@@ -40,6 +40,7 @@ export interface TweenVars {
   x?: number;
   y?: number;
   scale?: number;
+  scaleX?: number;
   opacity?: number;
   stagger?: number;
   repeat?: number;
@@ -73,20 +74,30 @@ export class GSAPEngine {
 
       if (el instanceof HTMLElement) {
         if (vars.opacity !== undefined) {
-          startState.opacity = parseFloat(getComputedStyle(el).opacity) || 1;
+          const parsed = parseFloat(getComputedStyle(el).opacity);
+          startState.opacity = Number.isFinite(parsed) ? parsed : 1;
           endState.opacity = vars.opacity;
         }
+        const transformNow = el.style.transform || '';
         if (vars.y !== undefined) {
-          startState.y = 0;
+          const matchY = transformNow.match(/translateY\(([-\d.]+)px\)/);
+          startState.y = matchY ? parseFloat(matchY[1]) : 0;
           endState.y = vars.y;
         }
         if (vars.x !== undefined) {
-          startState.x = 0;
+          const matchX = transformNow.match(/translateX\(([-\d.]+)px\)/);
+          startState.x = matchX ? parseFloat(matchX[1]) : 0;
           endState.x = vars.x;
         }
         if (vars.scale !== undefined) {
-          startState.scale = 1;
+          const matchS = transformNow.match(/scale\(([-\d.]+)\)/);
+          startState.scale = matchS ? parseFloat(matchS[1]) : 1;
           endState.scale = vars.scale;
+        }
+        if (vars.scaleX !== undefined) {
+          const matchSX = transformNow.match(/scaleX\(([-\d.]+)\)/);
+          startState.scaleX = matchSX ? parseFloat(matchSX[1]) : 1;
+          endState.scaleX = vars.scaleX;
         }
       } else if (typeof el === 'object' && el !== null) {
         for (const key of Object.keys(vars)) {
@@ -124,6 +135,10 @@ export class GSAPEngine {
             const currentScale = startState.scale + (endState.scale - startState.scale) * eased;
             transformStr += `scale(${currentScale}) `;
           }
+          if ('scaleX' in startState) {
+            const currentScaleX = startState.scaleX + (endState.scaleX - startState.scaleX) * eased;
+            transformStr += `scaleX(${currentScaleX}) `;
+          }
           if (transformStr) {
             el.style.transform = transformStr.trim();
           }
@@ -131,8 +146,9 @@ export class GSAPEngine {
             el.style.opacity = String(startState.opacity + (endState.opacity - startState.opacity) * eased);
           }
         } else if (typeof el === 'object' && el !== null) {
+          const record = el as unknown as Record<string, number>;
           for (const key of Object.keys(startState)) {
-            el[key] = startState[key] + (endState[key] - startState[key]) * eased;
+            record[key] = startState[key] + (endState[key] - startState[key]) * eased;
           }
         }
 
@@ -167,6 +183,7 @@ export class GSAPEngine {
         if (vars.y !== undefined) transformStr += `translateY(${vars.y}px) `;
         if (vars.x !== undefined) transformStr += `translateX(${vars.x}px) `;
         if (vars.scale !== undefined) transformStr += `scale(${vars.scale}) `;
+        if (vars.scaleX !== undefined) transformStr += `scaleX(${vars.scaleX}) `;
         if (transformStr) el.style.transform = transformStr.trim();
         if (vars.opacity !== undefined) el.style.opacity = String(vars.opacity);
       }
@@ -178,33 +195,38 @@ export class GSAPEngine {
       x: 0,
       y: 0,
       scale: 1,
+      scaleX: vars.scaleX !== undefined ? 1 : undefined,
       opacity: 1,
     });
   }
 
   timeline(defaults: TweenVars = {}) {
     let cumulativeDelay = (defaults.delay || 0);
+    const kills: Array<{ kill: () => void }> = [];
 
     const tl = {
       from: (targets: any, vars: TweenVars, positionOffset = 0) => {
         cumulativeDelay += positionOffset;
-        this.from(targets, {
+        kills.push(this.from(targets, {
           ...defaults,
           ...vars,
           delay: cumulativeDelay + (vars.delay || 0),
-        });
+        }));
         cumulativeDelay += (vars.duration || 0.6);
         return tl;
       },
       to: (targets: any, vars: TweenVars, positionOffset = 0) => {
         cumulativeDelay += positionOffset;
-        this.to(targets, {
+        kills.push(this.to(targets, {
           ...defaults,
           ...vars,
           delay: cumulativeDelay + (vars.delay || 0),
-        });
+        }));
         cumulativeDelay += (vars.duration || 0.6);
         return tl;
+      },
+      kill: () => {
+        kills.forEach((handle) => handle.kill());
       },
     };
     return tl;
@@ -230,11 +252,20 @@ export const gsap = new GSAPEngine();
 /**
  * Hook: Dynamic Counting Up for Statistics
  */
+export function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 export function useCountUp(target: number, duration = 1.4, enabled = true) {
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
     if (!enabled) return;
+    if (prefersReducedMotion()) {
+      setDisplayValue(target);
+      return;
+    }
     const counterObj = { val: 0 };
     const tween = gsap.to(counterObj, {
       val: target,
@@ -282,17 +313,44 @@ export function useFloatingStage(ref: React.RefObject<HTMLElement>, range = 6, d
 /**
  * Hook: Hero Entrance Orchestration
  */
-export function useHeroEntrance(containerRef: React.RefObject<HTMLElement>) {
+export function useHeroEntrance(containerRef: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || prefersReducedMotion()) return;
 
+    const q = (sel: string) => Array.from(container.querySelectorAll(sel));
     const tl = gsap.timeline({ ease: 'power3.out' });
 
-    tl.from(container.querySelector('.gsap-hero-title'), { y: 24, opacity: 0, duration: 0.7 })
-      .from(container.querySelector('.gsap-hero-desc'), { y: 16, opacity: 0, duration: 0.6 }, -0.3)
-      .from(container.querySelectorAll('.gsap-hero-cta'), { y: 16, opacity: 0, stagger: 0.08, duration: 0.5 }, -0.2)
-      .from(container.querySelectorAll('.gsap-hero-stat'), { y: 20, opacity: 0, stagger: 0.1, duration: 0.6 }, -0.2)
-      .from(container.querySelector('.gsap-hero-stage'), { x: 28, opacity: 0, duration: 0.8 }, -0.6);
+    tl.from(q('.gsap-hero-title'), { y: 20, opacity: 0, duration: 0.65 })
+      .from(q('.gsap-hero-desc, .gsap-hero-cta'), { y: 14, opacity: 0, stagger: 0.08, duration: 0.5 }, -0.25)
+      .from(q('.gsap-hero-stage'), { y: 16, opacity: 0, duration: 0.6 }, -0.35)
+      .from(q('.gsap-flow-step'), { y: 16, opacity: 0, stagger: 0.08, duration: 0.5 }, -0.3);
+
+    return () => tl.kill();
   }, [containerRef]);
+}
+
+export function usePageEnter(containerRef: React.RefObject<HTMLElement | null>, token: string) {
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || prefersReducedMotion()) return;
+    const tween = gsap.from(container, { y: 12, opacity: 0, duration: 0.4, ease: 'power3.out' });
+    return () => tween.kill();
+  }, [containerRef, token]);
+}
+
+export function useMasteryReveal(containerRef: React.RefObject<HTMLElement | null>, token: string) {
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || prefersReducedMotion()) return;
+    const bars = Array.from(container.querySelectorAll('.gsap-mastery-bar'));
+    if (!bars.length) return;
+    const tween = gsap.from(bars, {
+      scaleX: 0,
+      duration: 0.5,
+      stagger: 0.06,
+      ease: 'power3.out',
+    });
+    return () => tween.kill();
+  }, [containerRef, token]);
 }

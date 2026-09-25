@@ -19,6 +19,11 @@ export default defineConfig({
       '/demo_videos': {
         target: 'http://127.0.0.1:8001',
         changeOrigin: true
+      },
+      '/edu-api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/edu-api/, '')
       }
     }
   }

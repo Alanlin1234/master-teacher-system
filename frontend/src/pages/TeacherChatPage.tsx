@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { RehearsalBench } from '../components/RehearsalBench';
 import { teachersApi, getStoredQwenKey, setStoredQwenKey } from '../services/api';
 import { speechService } from '../services/speech';
 import { TeacherDigitalHuman, AvatarState } from '../components/TeacherDigitalHuman';
@@ -312,13 +313,7 @@ export const TeacherChatPage: React.FC<Props> = ({
         </div>
 
         {/* 双栏工作台：响应式宽幅排版，支持一键折叠数字人 */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: isAvatarCollapsed ? '1fr 56px' : '1fr 340px',
-          gap: '20px',
-          alignItems: 'start',
-          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-        }}>
+        <div className={isAvatarCollapsed ? 'chat-layout chat-layout--collapsed' : 'chat-layout'}>
           {/* 左侧聊天流 */}
           <div className="card-impeccable" style={{
             height: '680px',
@@ -406,25 +401,7 @@ export const TeacherChatPage: React.FC<Props> = ({
                 <button
                   key={i}
                   onClick={() => handleSend(pill)}
-                  style={{
-                    background: 'var(--bg-surface)',
-                    border: '1px solid var(--border-glass)',
-                    borderRadius: '20px',
-                    padding: '5px 12px',
-                    fontSize: '0.76rem',
-                    color: 'var(--text-muted)',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    flexShrink: 0
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.color = 'var(--accent-primary)';
-                    e.currentTarget.style.borderColor = 'var(--accent-primary)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.color = 'var(--text-muted)';
-                    e.currentTarget.style.borderColor = 'var(--border-glass)';
-                  }}
+                  className="prompt-pill"
                 >
                   {pill}
                 </button>
@@ -568,6 +545,7 @@ export const TeacherChatPage: React.FC<Props> = ({
       </div>
 
       {/* AI 引擎配置抽屉 / 模态框 */}
+      <RehearsalBench />
       {showKeyModal && (
         <div style={{
           position: 'fixed',
@@ -633,8 +611,8 @@ export const TeacherChatPage: React.FC<Props> = ({
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid var(--border-glass)' }}>
               <button
                 onClick={() => {
-                  setStoredQwenKey("sk-f3ca2c7e114f47d88dabf1cf5f4ac527");
-                  setApiKeyInput("sk-f3ca2c7e114f47d88dabf1cf5f4ac527");
+                  setStoredQwenKey("");
+                  setApiKeyInput("");
                   setShowKeyModal(false);
                 }}
                 className="btn btn-ghost"

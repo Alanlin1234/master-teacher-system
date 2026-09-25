@@ -12,6 +12,7 @@ import {
   BookOpenIcon,
   SlidersIcon,
 } from '../components/Icons';
+import { SkeletonCard } from '../components/SkeletonCard';
 
 interface Props {
   onStartChat: (teacherId: string) => void;
@@ -136,9 +137,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
 
         {/* 名师卡片网格 (Impeccable Grid Architecture) */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-muted)' }}>
-            正在加载名师智库档案...
-          </div>
+          <SkeletonCard count={6} />
         ) : filteredTeachers.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-muted)' }}>
             未找到符合条件的名师
