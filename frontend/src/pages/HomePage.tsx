@@ -1,5 +1,6 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { TeacherDigitalHuman } from '../components/TeacherDigitalHuman';
+import { RadarChart5D } from '../components/RadarChart5D';
 import { RichMarkdown } from '../components/RichMarkdown';
 import { speechService } from '../services/speech';
 import { teachersApi } from '../services/api';
@@ -341,6 +342,15 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     [selectedDemoTopic, interactiveScores]
   );
 
+  const archetypeTitle = useMemo(() => {
+    const isRigorous = interactiveScores.style >= 0.82;
+    const isExamTraps = interactiveScores.method >= 0.82;
+    if (isRigorous && isExamTraps) return '公理严密 · 高考压轴领航名师';
+    if (!isRigorous && !isExamTraps) return '苏格拉底 · 几何直观启发导师';
+    if (isRigorous && !isExamTraps) return '公理化探究 · 递进思辨名师';
+    return '数形结合 · 压轴变式建模名师';
+  }, [interactiveScores.style, interactiveScores.method]);
+
   const currentTopicData = DEMO_TOPICS[selectedDemoTopic];
 
   const handleSelectTopic = (key: DemoTopicKey) => {
@@ -667,26 +677,29 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           </div>
         </section>
 
-        {/* 交互式五维能力雷达试验台 */}
+        {/* 交互式五维能力雷达试验台 (紧凑型) */}
         <section style={{
-          marginTop: '72px',
+          marginTop: '36px',
           background: 'var(--card-bg)',
           borderRadius: 'var(--radius-xl)',
-          padding: '40px',
+          padding: '24px 32px',
           border: '1px solid var(--border-glass)',
-          boxShadow: 'var(--shadow-xl)'
+          boxShadow: 'var(--shadow-md)',
         }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: '48px', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr', gap: '36px', alignItems: 'center' }}>
             <div>
-              <h2 style={{ fontSize: '1.75rem', color: 'var(--text-main)', marginBottom: '8px', letterSpacing: '-0.02em', fontWeight: 800 }}>
-                五维教学基因调优试验台
-              </h2>
-              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '22px' }}>
-                调节五维教学参数，右侧能量图谱与下方答疑演练将实时联动；支持输入自定义学术问题并调用大模型验证：
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <SlidersIcon size={16} style={{ color: 'var(--accent-primary)' }} />
+                <h2 style={{ fontSize: '1.45rem', color: 'var(--text-main)', margin: 0, letterSpacing: '-0.02em', fontWeight: 800 }}>
+                  五维教学基因调优试验台
+                </h2>
+              </div>
+              <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '18px' }}>
+                滑动参数调节教学基因，右侧科技雷达图即刻重塑，演练台实时联动验证：
               </p>
 
               {/* 交互滑块组 */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
                 {[
                   { key: 'style', label: '上课风格', sub: '启发式引导 ↔ 严密公理推演' },
                   { key: 'method', label: '教学方法', sub: '苏格拉底追问 ↔ 高考压轴陷阱' },
@@ -694,12 +707,12 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   { key: 'personality', label: '互动温度', sub: '亲切幽默鼓励 ↔ 沉稳学术严谨' },
                   { key: 'communication', label: '表达节奏', sub: '循序铺垫剖析 ↔ 纲举目张精炼' },
                 ].map(item => (
-                  <div key={item.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
-                    <div style={{ width: '220px' }}>
-                      <div style={{ fontSize: '0.84rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                  <div key={item.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px' }}>
+                    <div style={{ width: '210px' }}>
+                      <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
                         {item.label}
                       </div>
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                         {item.sub}
                       </div>
                     </div>
@@ -714,7 +727,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       }}
                       style={{ flex: 1, accentColor: 'var(--accent-primary)', cursor: 'pointer' }}
                     />
-                    <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--accent-primary)', width: '42px', textAlign: 'right' }} className="tabular-nums">
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-primary)', width: '38px', textAlign: 'right' }} className="tabular-nums">
                       {Math.round((interactiveScores as any)[item.key] * 100)}%
                     </span>
                   </div>
@@ -722,397 +735,340 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* 右侧：教学基因能量图谱 (真实 SVG Icon 素材与动态能级矩阵) */}
+            {/* 右侧：升级版科技感五维雷达图 + 基因称号与勋章 */}
             <div style={{
               background: 'var(--bg-glass-subtle)',
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-glass)',
-              padding: '24px',
+              padding: '18px 20px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '16px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
               boxShadow: 'var(--shadow-sm)',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <DnaIcon size={18} style={{ color: 'var(--accent-primary)' }} />
-                  <span style={{ fontSize: '0.96rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                    教学基因能量图谱
+              <RadarChart5D
+                scores={interactiveScores}
+                size={185}
+                showLabels={true}
+                highlightColor="var(--accent-primary)"
+              />
+
+              {/* 动态基因称号与勋章 */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', width: '100%' }}>
+                <div style={{
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  color: 'var(--accent-primary)',
+                  letterSpacing: '0.04em',
+                  background: 'rgba(37, 99, 235, 0.1)',
+                  padding: '4px 12px',
+                  borderRadius: 'var(--radius-full)',
+                  border: '1px solid rgba(37, 99, 235, 0.25)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}>
+                  <SparklesIcon size={12} />
+                  <span>{archetypeTitle}</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <span style={{
+                    fontSize: '0.7rem',
+                    fontWeight: 600,
+                    color: 'var(--text-muted)',
+                    background: 'var(--card-bg)',
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-full)',
+                    border: '1px solid var(--border-glass)',
+                  }}>
+                    ⚡ {interactiveScores.style >= 0.82 ? '公理严密' : '直观隐喻'}
+                  </span>
+                  <span style={{
+                    fontSize: '0.7rem',
+                    fontWeight: 600,
+                    color: 'var(--text-muted)',
+                    background: 'var(--card-bg)',
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-full)',
+                    border: '1px solid var(--border-glass)',
+                  }}>
+                    ⚡ {interactiveScores.method >= 0.82 ? '压轴避坑' : '递进启发'}
+                  </span>
+                  <span style={{
+                    fontSize: '0.7rem',
+                    fontWeight: 600,
+                    color: 'var(--text-muted)',
+                    background: 'var(--card-bg)',
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-full)',
+                    border: '1px solid var(--border-glass)',
+                  }}>
+                    ⚡ {interactiveScores.strengths >= 0.82 ? '高维建模' : '速通口诀'}
                   </span>
                 </div>
-                <span style={{
-                  fontSize: '0.72rem',
-                  fontWeight: 600,
-                  padding: '2px 8px',
-                  borderRadius: 'var(--radius-full)',
-                  background: 'rgba(37, 99, 235, 0.1)',
-                  color: 'var(--accent-primary)',
-                  border: '1px solid rgba(37, 99, 235, 0.25)',
-                }}>
-                  实时能级响应
-                </span>
-              </div>
-
-              {/* 5大基因条目与真实SVG图标 */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {[
-                  {
-                    key: 'style',
-                    label: '上课风格',
-                    Icon: GraduationCapIcon,
-                    val: interactiveScores.style,
-                    highDesc: '公理化严密推演',
-                    lowDesc: '几何直观与生活隐喻',
-                  },
-                  {
-                    key: 'method',
-                    label: '教学方法',
-                    Icon: MessageSquareIcon,
-                    val: interactiveScores.method,
-                    highDesc: '高考压轴陷阱破译',
-                    lowDesc: '苏格拉底递进追问',
-                  },
-                  {
-                    key: 'strengths',
-                    label: '核心特长',
-                    Icon: DnaIcon,
-                    val: interactiveScores.strengths,
-                    highDesc: '高维模型综合建构',
-                    lowDesc: '化简通关解题要诀',
-                  },
-                  {
-                    key: 'personality',
-                    label: '互动温度',
-                    Icon: SparklesIcon,
-                    val: interactiveScores.personality,
-                    highDesc: '学者型沉稳深邃',
-                    lowDesc: '亲切润物细无声',
-                  },
-                  {
-                    key: 'communication',
-                    label: '表达节奏',
-                    Icon: SlidersIcon,
-                    val: interactiveScores.communication,
-                    highDesc: '纲举目张高密精炼',
-                    lowDesc: '循序渐进细节剖析',
-                  },
-                ].map(item => {
-                  const pct = Math.round(item.val * 100);
-                  const isHigh = item.val >= 0.82;
-                  return (
-                    <div key={item.key} style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-main)', fontWeight: 600 }}>
-                          <item.Icon size={14} style={{ color: 'var(--accent-primary)' }} />
-                          <span>{item.label}</span>
-                          <span style={{ fontSize: '0.74rem', color: isHigh ? 'var(--accent-primary)' : 'var(--text-muted)', fontWeight: 500 }}>
-                            ({isHigh ? item.highDesc : item.lowDesc})
-                          </span>
-                        </div>
-                        <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-primary)' }} className="tabular-nums">
-                          {pct}%
-                        </span>
-                      </div>
-
-                      {/* 动态能量进度条 */}
-                      <div style={{
-                        height: '6px',
-                        background: 'var(--bg-glass-active)',
-                        borderRadius: 'var(--radius-full)',
-                        overflow: 'hidden',
-                        position: 'relative',
-                      }}>
-                        <div style={{
-                          width: `${pct}%`,
-                          height: '100%',
-                          background: 'linear-gradient(90deg, var(--accent-primary) 0%, #6366f1 100%)',
-                          borderRadius: 'var(--radius-full)',
-                          transition: 'width 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                          boxShadow: '0 0 8px rgba(37, 99, 235, 0.4)',
-                        }} />
-                      </div>
-                    </div>
-                  );
-                })}
               </div>
             </div>
           </div>
+        </section>
 
-          {/* 动态名师答疑演练视窗 */}
+        {/* 名师答疑演练工作台 (独立大视窗工作台) */}
+        <section style={{
+          marginTop: '20px',
+          background: 'var(--card-bg)',
+          borderRadius: 'var(--radius-xl)',
+          padding: '28px 32px',
+          border: '1px solid var(--border-glass)',
+          boxShadow: 'var(--shadow-xl)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '18px',
+        }}>
+          {/* 顶栏：标题、状态与学科快捷真题 Tabs */}
           <div style={{
-            marginTop: '36px',
-            paddingTop: '28px',
-            borderTop: '1px solid var(--border-glass)',
             display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '14px',
           }}>
-            {/* 顶栏：标题与学科切换 Tabs */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '14px',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: 'var(--radius-md)',
+                background: 'rgba(37, 99, 235, 0.1)',
+                color: 'var(--accent-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <MessageSquareIcon size={17} />
+              </div>
+              <div>
                 <h3 style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 700,
+                  fontSize: '1.35rem',
+                  fontWeight: 800,
                   color: 'var(--text-main)',
                   margin: 0,
                   letterSpacing: '-0.02em',
                 }}>
-                  名师答疑演练台
+                  名师答疑演练工作台
                 </h3>
-                <span style={{
-                  fontSize: '0.72rem',
-                  fontWeight: 600,
-                  padding: '2px 8px',
-                  borderRadius: 'var(--radius-full)',
-                  background: isStreaming
-                    ? 'rgba(245, 158, 11, 0.15)'
-                    : (streamedAnswer ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-glass-active)'),
-                  color: isStreaming
-                    ? '#d97706'
-                    : (streamedAnswer ? '#059669' : 'var(--text-muted)'),
-                  border: '1px solid var(--border-glass)',
-                }}>
-                  {isStreaming ? '正在调用大模型生成...' : (streamedAnswer ? '大模型实时生成' : '教学基因实时联动')}
-                </span>
               </div>
-
-              {/* 演示题目学科切换 Tabs (SVG真实图标) */}
-              <div style={{
-                display: 'inline-flex',
-                background: 'var(--bg-glass-subtle)',
-                padding: '3px',
-                borderRadius: 'var(--radius-lg)',
+              <span style={{
+                fontSize: '0.72rem',
+                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: 'var(--radius-full)',
+                background: isStreaming
+                  ? 'rgba(245, 158, 11, 0.15)'
+                  : (streamedAnswer ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-glass-active)'),
+                color: isStreaming
+                  ? '#d97706'
+                  : (streamedAnswer ? '#059669' : 'var(--text-muted)'),
                 border: '1px solid var(--border-glass)',
-                gap: '4px',
               }}>
-                {(['math', 'physics', 'chinese'] as DemoTopicKey[]).map(tKey => {
-                  const item = DEMO_TOPICS[tKey];
-                  const isSelected = selectedDemoTopic === tKey;
-                  const IconComp = item.Icon;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => handleSelectTopic(item.id)}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        padding: '6px 12px',
-                        borderRadius: 'var(--radius-md)',
-                        fontSize: '0.8rem',
-                        fontWeight: isSelected ? 700 : 500,
-                        color: isSelected ? '#ffffff' : 'var(--text-muted)',
-                        background: isSelected ? 'var(--accent-primary)' : 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        boxShadow: isSelected ? 'var(--shadow-sm)' : 'none',
-                      }}
-                    >
-                      <IconComp size={14} />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+                {isStreaming ? '⚡ 正在调用大模型生成...' : (streamedAnswer ? '✅ 大模型自适应生成就绪' : '✦ 教学基因实时联动')}
+              </span>
             </div>
 
-            {/* 用户自定义问题输入与真实调用 LLM 操作栏 */}
+            {/* 学科快捷真题 Tabs */}
             <div style={{
-              display: 'flex',
-              gap: '10px',
-              alignItems: 'center',
-              background: 'var(--card-bg)',
-              padding: '6px 10px',
+              display: 'inline-flex',
+              background: 'var(--bg-glass-subtle)',
+              padding: '3px',
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-glass)',
-              boxShadow: 'var(--shadow-sm)',
+              gap: '4px',
             }}>
-              <SearchIcon size={16} style={{ color: 'var(--accent-primary)', flexShrink: 0, marginLeft: '4px' }} />
-              <input
-                type="text"
-                value={customQuestion}
-                onChange={e => setCustomQuestion(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') handleRunLLM(); }}
-                placeholder="输入你想测试的高考难点或学术问题（按 Enter 或点击右侧实时调用 LLM）..."
-                style={{
-                  flex: 1,
-                  background: 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  fontSize: '0.86rem',
-                  color: 'var(--text-main)',
-                  padding: '4px 0',
-                }}
-              />
-              <button
-                onClick={handleRunLLM}
-                disabled={isStreaming}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '7px 15px',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--accent-primary)',
-                  color: '#ffffff',
-                  border: 'none',
-                  fontSize: '0.82rem',
-                  fontWeight: 600,
-                  cursor: isStreaming ? 'not-allowed' : 'pointer',
-                  opacity: isStreaming ? 0.7 : 1,
-                  whiteSpace: 'nowrap',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                <SparklesIcon size={14} />
-                <span>{isStreaming ? '正在生成...' : '真实调用 LLM 生成'}</span>
-              </button>
-              {streamedAnswer && (
-                <button
-                  onClick={() => setStreamedAnswer('')}
-                  title="切回预设经典解析"
-                  style={{
-                    padding: '7px 12px',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'var(--bg-glass-subtle)',
-                    color: 'var(--text-muted)',
-                    border: '1px solid var(--border-glass)',
-                    fontSize: '0.78rem',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  切回预设
-                </button>
-              )}
-            </div>
-
-            {/* 精简主导基因标签栏 */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '10px',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                <CheckIcon size={14} style={{ color: 'var(--accent-primary)' }} />
-                <span>当前激活主导特征：</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                {[
-                  {
-                    label: interactiveScores.style >= 0.82 ? '公理化严密推演' : '几何直观与隐喻',
-                    isHigh: interactiveScores.style >= 0.82,
-                  },
-                  {
-                    label: interactiveScores.method >= 0.82 ? '高考压轴陷阱破译' : '苏格拉底递进追问',
-                    isHigh: interactiveScores.method >= 0.82,
-                  },
-                  {
-                    label: interactiveScores.strengths >= 0.82 ? '数形结合高维建模' : '速通解题口诀',
-                    isHigh: interactiveScores.strengths >= 0.82,
-                  },
-                  {
-                    label: interactiveScores.personality >= 0.82 ? '学术沉稳风骨' : '亲切润物解惑',
-                    isHigh: interactiveScores.personality >= 0.82,
-                  },
-                ].map((badge, idx) => (
-                  <span
-                    key={idx}
+              {(['math', 'physics', 'chinese'] as DemoTopicKey[]).map(tKey => {
+                const item = DEMO_TOPICS[tKey];
+                const isSelected = selectedDemoTopic === tKey;
+                const IconComp = item.Icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelectTopic(item.id)}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '4px',
-                      fontSize: '0.72rem',
-                      fontWeight: 600,
-                      padding: '3px 8px',
-                      borderRadius: 'var(--radius-full)',
-                      background: badge.isHigh ? 'rgba(37, 99, 235, 0.1)' : 'var(--bg-glass-subtle)',
-                      color: badge.isHigh ? 'var(--accent-primary)' : 'var(--text-muted)',
-                      border: `1px solid ${badge.isHigh ? 'rgba(37, 99, 235, 0.25)' : 'var(--border-glass)'}`,
+                      gap: '6px',
+                      padding: '7px 14px',
+                      borderRadius: 'var(--radius-md)',
+                      fontSize: '0.82rem',
+                      fontWeight: isSelected ? 700 : 500,
+                      color: isSelected ? '#ffffff' : 'var(--text-muted)',
+                      background: isSelected ? 'var(--accent-primary)' : 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      boxShadow: isSelected ? 'var(--shadow-sm)' : 'none',
                     }}
                   >
-                    <SparklesIcon size={11} />
-                    <span>{badge.label}</span>
-                  </span>
-                ))}
+                    <IconComp size={15} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 演练题目大输入控制台 */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            background: 'var(--bg-glass-subtle)',
+            padding: '16px 18px',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--border-glass)',
+            boxShadow: 'var(--shadow-sm)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: 'var(--text-main)' }}>
+                <SearchIcon size={15} style={{ color: 'var(--accent-primary)' }} />
+                <span>演练题目（支持直接编辑或输入任意学术大题）：</span>
               </div>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                按 Enter 或点击下方按钮调用 LLM
+              </span>
             </div>
 
-            {/* 动态演练 Markdown 回复视窗 */}
-            <div style={{
-              background: 'var(--bg-glass-subtle)',
-              borderRadius: 'var(--radius-lg)',
-              border: '1px solid var(--border-glass)',
-              padding: '22px 26px',
-              minHeight: '260px',
-              maxHeight: '440px',
-              overflowY: 'auto',
-              boxShadow: 'inset 0 2px 6px rgba(0, 0, 0, 0.04)',
-            }}>
-              {isStreaming && !streamedAnswer ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--accent-primary)', fontSize: '0.9rem', padding: '30px 10px' }}>
-                  <SparklesIcon size={18} className="animate-spin" />
-                  <span>特级名师正在依据当前五维教学基因实时推演解析...</span>
-                </div>
-              ) : (
-                <RichMarkdown content={streamedAnswer || liveAnswerMarkdown} />
-              )}
-            </div>
+            <textarea
+              value={customQuestion}
+              onChange={e => setCustomQuestion(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleRunLLM();
+                }
+              }}
+              rows={2}
+              placeholder="输入你想测试的高考难点或学术问题（如：为什么驻点不一定是极值点？并举反例说明）..."
+              style={{
+                width: '100%',
+                minHeight: '68px',
+                padding: '10px 14px',
+                fontSize: '0.92rem',
+                lineHeight: '1.6',
+                color: 'var(--text-main)',
+                background: 'var(--card-bg)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: 'var(--radius-md)',
+                outline: 'none',
+                resize: 'vertical',
+                boxSizing: 'border-box',
+                fontFamily: 'inherit',
+              }}
+            />
 
-            {/* 底部操作条：一键带入 1对1 课堂 */}
+            {/* 操作条 */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              gap: '14px',
+              gap: '12px',
               paddingTop: '4px',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                <CheckIcon size={14} style={{ color: 'var(--accent-primary)' }} />
-                <span>教学基因参数已锁定，可直接带入 1对1 深度答疑。</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                <SparklesIcon size={14} style={{ color: 'var(--accent-primary)' }} />
+                <span>微调上方滑块后，点击“真实调用 LLM 生成”即可见证回答风格与推演逻辑的实时变化。</span>
               </div>
 
-              <button
-                onClick={handleTakeToChat}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '9px 20px',
-                  borderRadius: 'var(--radius-lg)',
-                  background: 'var(--accent-primary)',
-                  color: '#ffffff',
-                  fontSize: '0.86rem',
-                  fontWeight: 700,
-                  border: 'none',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
-                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(37, 99, 235, 0.35)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(37, 99, 235, 0.25)';
-                }}
-              >
-                <span>带入 1对1 课堂深度答疑</span>
-                <ArrowRightIcon size={15} />
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {streamedAnswer && (
+                  <button
+                    onClick={() => setStreamedAnswer('')}
+                    title="切回预设经典解析"
+                    style={{
+                      padding: '7px 14px',
+                      borderRadius: 'var(--radius-md)',
+                      background: 'var(--card-bg)',
+                      color: 'var(--text-muted)',
+                      border: '1px solid var(--border-glass)',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    切回预设
+                  </button>
+                )}
+
+                <button
+                  onClick={handleRunLLM}
+                  disabled={isStreaming}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 18px',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--accent-primary)',
+                    color: '#ffffff',
+                    border: 'none',
+                    fontSize: '0.84rem',
+                    fontWeight: 700,
+                    cursor: isStreaming ? 'not-allowed' : 'pointer',
+                    opacity: isStreaming ? 0.7 : 1,
+                    boxShadow: '0 2px 10px rgba(37, 99, 235, 0.28)',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <SparklesIcon size={15} />
+                  <span>{isStreaming ? '正在生成...' : '真实调用 LLM 生成'}</span>
+                </button>
+
+                <button
+                  onClick={handleTakeToChat}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 16px',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--card-bg)',
+                    color: 'var(--text-main)',
+                    border: '1px solid var(--border-glass)',
+                    fontSize: '0.84rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <span>带入 1对1 课堂</span>
+                  <ArrowRightIcon size={14} />
+                </button>
+              </div>
             </div>
+          </div>
+
+          {/* 宽敞明亮的板书答疑视窗 */}
+          <div style={{
+            background: 'var(--bg-glass-subtle)',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--border-glass)',
+            padding: '24px 28px',
+            minHeight: '340px',
+            maxHeight: '520px',
+            overflowY: 'auto',
+            boxShadow: 'inset 0 2px 6px rgba(0, 0, 0, 0.04)',
+          }}>
+            {isStreaming && !streamedAnswer ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--accent-primary)', fontSize: '0.92rem', padding: '40px 10px', justifyContent: 'center' }}>
+                <SparklesIcon size={20} className="animate-spin" />
+                <span>特级名师正在依据当前五维教学基因实时推演板书解析...</span>
+              </div>
+            ) : (
+              <RichMarkdown content={streamedAnswer || liveAnswerMarkdown} />
+            )}
           </div>
         </section>
       </div>

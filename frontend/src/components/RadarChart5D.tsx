@@ -46,14 +46,26 @@ export const RadarChart5D: React.FC<Props> = ({
     return `${x},${y}`;
   }).join(' ');
 
+  const avg = Object.values(scores).length > 0
+    ? Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length
+    : 0.88;
+  const compositeScore = Math.round(avg * 100);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <svg width={size} height={size} style={{ overflow: 'visible' }}>
         <defs>
           <radialGradient id="neonRadarGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#2563eb" stopOpacity="0.08" />
+            <stop offset="0%" stopColor="var(--accent-primary)" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#6366f1" stopOpacity="0.1" />
           </radialGradient>
+          <filter id="radarVertexGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
 
         {/* 同心微晶网格 */}
@@ -61,10 +73,10 @@ export const RadarChart5D: React.FC<Props> = ({
           <polygon
             key={idx}
             points={points}
-            fill={idx === gridPaths.length - 1 ? 'var(--bg-surface)' : 'none'}
+            fill={idx === gridPaths.length - 1 ? 'var(--bg-glass-subtle)' : 'none'}
             stroke="var(--border-glass)"
             strokeWidth="1"
-            strokeDasharray={idx < 3 ? '2 4' : 'none'}
+            strokeDasharray={idx < 3 ? '2 3' : 'none'}
           />
         ))}
 
@@ -90,15 +102,38 @@ export const RadarChart5D: React.FC<Props> = ({
           fill="url(#neonRadarGlow)"
           stroke={highlightColor}
           strokeWidth="2.5"
-          filter="drop-shadow(0 0 10px rgba(56, 189, 248, 0.6))"
-          style={{ transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)' }}
+          filter="url(#radarVertexGlow)"
+          style={{ transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)' }}
         />
+
+        {/* 中心综合基因指数基底 */}
+        <circle
+          cx={center}
+          cy={center}
+          r={16}
+          fill="var(--card-bg)"
+          stroke={highlightColor}
+          strokeWidth="1.5"
+          filter="drop-shadow(0 0 6px rgba(37, 99, 235, 0.3))"
+        />
+        <text
+          x={center}
+          y={center}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize="10px"
+          fontWeight="800"
+          fill="var(--text-main)"
+          className="tabular-nums"
+        >
+          {compositeScore}
+        </text>
 
         {/* 荧光顶点与外显高精标签 */}
         {DIMENSIONS.map((dim, i) => {
           const val = scores[dim.key] ?? 0.85;
           const { x, y } = getCoordinates(Math.min(1.0, Math.max(0.2, val)), i);
-          const labelCoord = getCoordinates(1.24, i);
+          const labelCoord = getCoordinates(1.22, i);
 
           return (
             <g key={dim.key}>
@@ -109,6 +144,7 @@ export const RadarChart5D: React.FC<Props> = ({
                 fill="var(--card-bg)"
                 stroke={highlightColor}
                 strokeWidth="2.5"
+                filter="url(#radarVertexGlow)"
               />
               {showLabels && (
                 <text
@@ -116,7 +152,7 @@ export const RadarChart5D: React.FC<Props> = ({
                   y={labelCoord.y}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fontSize="11px"
+                  fontSize="10px"
                   fontWeight="700"
                   fill="var(--text-muted)"
                   letterSpacing="0.02em"
