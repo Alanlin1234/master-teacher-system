@@ -11,6 +11,8 @@ import {
   SlidersIcon,
   CloseIcon,
   CheckIcon,
+  VolumeIcon,
+  VolumeMuteIcon,
 } from '../components/Icons';
 
 interface Props {
@@ -35,10 +37,12 @@ export const TeacherChatPage: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [avatarState, setAvatarState] = useState<AvatarState>('idle');
   const [caption, setCaption] = useState('');
-  const [voiceOn, setVoiceOn] = useState(true);
+  const [voiceMode, setVoiceMode] = useState<'native' | 'tts' | 'off'>('native');
+  const [forceUnmute, setForceUnmute] = useState(false);
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState(getStoredQwenKey());
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const nativeVoiceTimerRef = useRef<any>(null);
 
   const promptPills = [
     '请老师用数形结合法推导极限与导数的本质定义',
@@ -65,7 +69,9 @@ export const TeacherChatPage: React.FC<Props> = ({
           : `同学你好！我是你的${res.teacher.subject}老师【${res.teacher.name}】。遇到任何理解卡点或大题推导难点，随时打在公屏上，咱们由浅入深一起攻克！`;
 
         setMessages([{ role: 'assistant', content: greeting }]);
-        if (voiceOn) speechService.speak(greeting);
+        if (voiceMode === 'tts') {
+          speechService.speak(greeting);
+        }
       }
     } catch (e) {
       console.error(e);
@@ -75,6 +81,8 @@ export const TeacherChatPage: React.FC<Props> = ({
   const handleSend = async (textToSend?: string) => {
     const text = textToSend || inputText;
     if (!text.trim() || isLoading) return;
+
+    if (nativeVoiceTimerRef.current) clearTimeout(nativeVoiceTimerRef.current);
 
     const newMsgs: ChatMessage[] = [...messages, { role: 'user', content: text.trim() }];
     setMessages(newMsgs);
@@ -100,10 +108,21 @@ export const TeacherChatPage: React.FC<Props> = ({
       },
       () => {
         setIsLoading(false);
-        setAvatarState('idle');
         setCaption('');
-        if (voiceOn && fullReply) {
+        if (voiceMode === 'native') {
+          // 彻底拒绝默认机器人合成音，使用用户上传 MP4 中的名师真实原声
+          speechService.stop();
+          setForceUnmute(true);
+          setAvatarState('speaking');
+          if (nativeVoiceTimerRef.current) clearTimeout(nativeVoiceTimerRef.current);
+          nativeVoiceTimerRef.current = setTimeout(() => {
+            setForceUnmute(false);
+            setAvatarState('idle');
+          }, 18000);
+        } else if (voiceMode === 'tts' && fullReply) {
           speechService.speak(fullReply.replace(/(\$\$[^$]+\$\$|\$[^$]+\$)/g, '公式推导如屏幕所示'));
+        } else {
+          setAvatarState('idle');
         }
       },
       (err) => {
@@ -153,6 +172,89 @@ export const TeacherChatPage: React.FC<Props> = ({
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* 名师原声 / AI语音 / 静音 交互胶囊 */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '3px',
+              borderRadius: 'var(--radius-full)',
+              background: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid var(--border-glass)',
+              fontSize: '0.78rem',
+              gap: '3px'
+            }}>
+              <button
+                onClick={() => {
+                  speechService.stop();
+                  setVoiceMode('native');
+                  setForceUnmute(true);
+                  setAvatarState('speaking');
+                }}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: 'var(--radius-full)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  fontWeight: voiceMode === 'native' ? 700 : 500,
+                  background: voiceMode === 'native' ? 'rgba(56, 189, 248, 0.18)' : 'transparent',
+                  color: voiceMode === 'native' ? 'var(--cyan-neon)' : 'var(--text-muted)',
+                  transition: 'all 0.2s'
+                }}
+                title="播放已上传视频中主讲导师的原汁原味真实声线"
+              >
+                <VolumeIcon size={13} />
+                <span>名师视频原声</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setForceUnmute(false);
+                  setVoiceMode('tts');
+                }}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: 'var(--radius-full)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  fontWeight: voiceMode === 'tts' ? 700 : 500,
+                  background: voiceMode === 'tts' ? 'rgba(56, 189, 248, 0.18)' : 'transparent',
+                  color: voiceMode === 'tts' ? 'var(--cyan-neon)' : 'var(--text-muted)',
+                  transition: 'all 0.2s'
+                }}
+                title="浏览器实时朗读问答板书公式"
+              >
+                <span>AI 合成朗读</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  speechService.stop();
+                  setForceUnmute(false);
+                  setAvatarState('idle');
+                  setVoiceMode('off');
+                }}
+                style={{
+                  padding: '5px 10px',
+                  borderRadius: 'var(--radius-full)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: voiceMode === 'off' ? 700 : 500,
+                  background: voiceMode === 'off' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                  color: voiceMode === 'off' ? '#ffffff' : 'var(--text-muted)',
+                  transition: 'all 0.2s'
+                }}
+                title="静音伴学模式"
+              >
+                <span>静音</span>
+              </button>
+            </div>
+
             {/* AI 引擎指示器 */}
             <button
               onClick={() => setShowKeyModal(true)}
@@ -342,16 +444,31 @@ export const TeacherChatPage: React.FC<Props> = ({
               teacherName={synthRecipe?.name || teacher?.name || '王崇林 (特级教师)'}
               subtitle={teacher?.style || '启发式板书与图景推演'}
               avatarState={avatarState}
-              modelVideoUrl={teacher?.dh_model_video_url || './demo_videos/model.mp4'}
-              posterUrl={teacher?.photoUrl ? (teacher.photoUrl.startsWith('/') ? '.' + teacher.photoUrl : teacher.photoUrl) : './avatars/t1.svg'}
+              modelVideoUrl={teacher?.dh_model_video_url || './demo_videos/merged.mp4'}
+              posterUrl={teacher?.photoUrl ? (teacher.photoUrl.startsWith('/') ? '.' + teacher.photoUrl : teacher.photoUrl) : './demo_videos/merged_poster.jpg'}
               captionText={caption}
-              voiceOn={voiceOn}
+              forceUnmute={forceUnmute}
+              voiceOn={voiceMode !== 'off'}
               onToggleVoice={() => {
-                if (avatarState === 'speaking') {
+                if (nativeVoiceTimerRef.current) clearTimeout(nativeVoiceTimerRef.current);
+                if (voiceMode === 'native') {
+                  if (forceUnmute || avatarState === 'speaking') {
+                    setForceUnmute(false);
+                    setAvatarState('idle');
+                  } else {
+                    speechService.stop();
+                    setForceUnmute(true);
+                    setAvatarState('speaking');
+                  }
+                } else if (voiceMode === 'tts') {
                   speechService.stop();
                   setAvatarState('idle');
+                  setVoiceMode('native');
+                  setForceUnmute(true);
+                } else {
+                  setVoiceMode('native');
+                  setForceUnmute(true);
                 }
-                setVoiceOn(!voiceOn);
               }}
               onTranscript={text => handleSend(text)}
             />

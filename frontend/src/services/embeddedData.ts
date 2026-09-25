@@ -23,7 +23,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m1-2", title: "立体几何空间向量法思维导图与速记口诀", type: "课件", uploadDate: "2026-03-12" }
     ],
     dh_model_name: "wang_chonglin_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.88, personality: 0.82, strengths: 0.94, method: 0.91, communication: 0.79 }
   },
   {
@@ -41,7 +41,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m2-1", title: "高考议论文思辨框架与高级论据精粹", type: "讲义", uploadDate: "2026-03-14" }
     ],
     dh_model_name: "li_qingyun_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.92, personality: 0.95, strengths: 0.85, method: 0.88, communication: 0.96 }
   },
   {
@@ -59,7 +59,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m3-1", title: "外刊高频熟词生义与写作亮点词汇表", type: "词表", uploadDate: "2026-03-15" }
     ],
     dh_model_name: "zhang_manling_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.90, personality: 0.93, strengths: 0.89, method: 0.85, communication: 0.94 }
   },
   {
@@ -77,7 +77,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m4-1", title: "带电粒子在复合场中运动轨迹20类模型", type: "图解", uploadDate: "2026-03-18" }
     ],
     dh_model_name: "chen_jianguo_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.85, personality: 0.86, strengths: 0.96, method: 0.92, communication: 0.81 }
   },
   {
@@ -95,7 +95,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m5-1", title: "高考有机合成逆推思路终极秘籍", type: "讲义", uploadDate: "2026-03-19" }
     ],
     dh_model_name: "su_peishan_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.87, personality: 0.89, strengths: 0.91, method: 0.90, communication: 0.88 }
   },
   {
@@ -113,7 +113,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m6-1", title: "分子遗传学调节机制全流程图谱", type: "图解", uploadDate: "2026-03-20" }
     ],
     dh_model_name: "lu_hongyuan_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.84, personality: 0.85, strengths: 0.93, method: 0.89, communication: 0.83 }
   },
   {
@@ -131,7 +131,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m7-1", title: "近现代全球化浪潮演进坐标轴与答题论纲", type: "讲义", uploadDate: "2026-03-21" }
     ],
     dh_model_name: "zhou_simin_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.91, personality: 0.90, strengths: 0.88, method: 0.92, communication: 0.87 }
   },
   {
@@ -149,7 +149,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m8-1", title: "全国卷自然地理经典综合题因果链条梳理", type: "课件", uploadDate: "2026-03-22" }
     ],
     dh_model_name: "zhao_tiancheng_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.93, personality: 0.91, strengths: 0.89, method: 0.94, communication: 0.90 }
   },
   {
@@ -167,7 +167,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m9-1", title: "最新中央大政方针考点转化与主观答题术语集", type: "讲义", uploadDate: "2026-03-23" }
     ],
     dh_model_name: "han_xiaofeng_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.86, personality: 0.87, strengths: 0.92, method: 0.91, communication: 0.89 }
   },
   {
@@ -185,7 +185,7 @@ export const EMBEDDED_TEACHERS = [
       { id: "m10-1", title: "圆锥曲线齐次化与设而不求大招合集", type: "秘籍", uploadDate: "2026-03-24" }
     ],
     dh_model_name: "gao_zhiwei_avatar",
-    dh_model_video_url: "./demo_videos/model.mp4",
+    dh_model_video_url: "./demo_videos/merged.mp4",
     dim_scores: { style: 0.97, personality: 0.98, strengths: 0.90, method: 0.86, communication: 0.97 }
   }
 ];

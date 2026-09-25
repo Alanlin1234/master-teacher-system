@@ -39,17 +39,12 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   const countDataSecurity = useCountUp(100, 1.6);
 
   const handleTryAudio = () => {
-    const greeting = "同学你好！欢迎来到循智导学名师智教系统。我是你的AI特级导师王老师。今天咱们攻坚导数切线还是解析几何？随时开启语音，我带你一步步突破思维瓶颈！";
-    setCaption(greeting);
+    // 停止任何合成语音，直接开启 MP4 视频原声播放与字幕协同
+    speechService.stop();
+    const transcriptText = "《德意志意识形态》是唯物史观第一次被完整、系统地写出来的著作。这节课沿着原著原文，把核心原理拆开，再对照当代实践。";
+    setCaption(transcriptText);
     setDemoState('speaking');
     setForceUnmute(true);
-    speechService.speak(
-      greeting,
-      () => setDemoState('speaking'),
-      () => {
-        setDemoState('idle');
-      }
-    );
   };
 
   const featureCards = [
@@ -163,9 +158,10 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 onClick={handleTryAudio}
                 className="btn btn-ghost"
                 style={{ padding: '10px 18px', fontSize: '0.88rem', color: 'var(--text-muted)' }}
+                title="试听上传 MP4 中的特级教师真实原声"
               >
                 <VolumeIcon size={16} style={{ color: 'var(--accent-primary)' }} />
-                <span>试听名师发声</span>
+                <span>试听名师原声</span>
               </button>
             </div>
 
@@ -203,16 +199,18 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           <div className="gsap-hero-stage">
             <TeacherDigitalHuman
               teacherName="王崇林 (特级教师)"
-              subtitle="全国数学竞赛金牌教练 · 启发式引导"
+              subtitle="全国竞赛金牌导师 · 启发式逻辑推演"
               avatarState={demoState}
               captionText={caption}
               forceUnmute={forceUnmute}
-              posterUrl="./avatars/t1.svg"
+              modelVideoUrl="./demo_videos/merged.mp4"
+              posterUrl="./demo_videos/merged_poster.jpg"
               onToggleVoice={() => {
-                if (demoState === 'speaking') {
+                if (demoState === 'speaking' || forceUnmute) {
                   speechService.stop();
                   setDemoState('idle');
                   setForceUnmute(false);
+                  setCaption('');
                 } else {
                   handleTryAudio();
                 }

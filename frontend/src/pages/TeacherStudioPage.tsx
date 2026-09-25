@@ -333,7 +333,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
               {/* 右侧数字人视频预览底模 */}
               <div className="digital-human-frame" style={{ height: '300px' }}>
                 <video
-                  src="./demo_videos/model.mp4"
+                  src="./demo_videos/merged.mp4"
                   autoPlay
                   loop
                   muted

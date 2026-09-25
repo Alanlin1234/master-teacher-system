@@ -166,7 +166,7 @@ function handleStaticFallback<T>(url: string, options: RequestInit = {}): T {
       video: true,
       hint: "数字人微课演播厅就绪 (静态预览模式)",
       models: [
-        { id: "model_default", name: "4K 拟真名师交互底模", previewUrl: "./demo_videos/model.mp4" }
+        { id: "model_default", name: "4K 拟真名师交互底模", previewUrl: "./demo_videos/merged.mp4" }
       ]
     } as unknown as T;
   }
@@ -198,7 +198,7 @@ function handleStaticFallback<T>(url: string, options: RequestInit = {}): T {
       ok: true,
       segment_index: 1,
       status: "rendered",
-      videoUrl: "./demo_videos/fallback-replaced.mp4"
+      videoUrl: "./demo_videos/merged.mp4"
     } as unknown as T;
   }
 

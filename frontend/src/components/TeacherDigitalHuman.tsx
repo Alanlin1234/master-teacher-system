@@ -25,8 +25,17 @@ interface Props {
   posterUrl?: string;
 }
 
+const NATIVE_TRANSCRIPTS = [
+  { start: 0, end: 45, text: "历史究竟是由英雄和思想观念创造，还是由普通人的生产生活创造？《德意志意识形态》是唯物史观第一次被完整、系统地写出来的著作。这节课沿着原著原文，把核心原理拆开，再对照当代实践。" },
+  { start: 45, end: 95, text: "这本书写于1845到1846年，是马克思和恩格斯合著的，标志着唯物史观正式形成。它要清算青年黑格尔派的谬误，划清唯物史观和唯心史观的界限，并为无产阶级革命提供科学理论。" },
+  { start: 95, end: 150, text: "人们为了创造历史，首先要能够生活，所以先要吃喝住穿。不是意识决定存在，而是社会存在决定社会意识。手推磨产生的是封建主的社会，蒸汽磨产生的是工业资本家的社会。" },
+  { start: 150, end: 220, text: "记住这条链：物质生产是起点，社会存在决定社会意识是根本原则，生产力与生产关系的矛盾是发展动力，人的自由全面发展是最终目标。青年要把个人成长放进这个真实的集体里。" }
+];
+
 const cleanMediaUrl = (url?: string) => {
-  if (!url) return './demo_videos/model.mp4';
+  if (!url || url.includes('model.mp4') || url.includes('fallback-replaced.mp4')) {
+    return './demo_videos/merged.mp4';
+  }
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
   if (url.startsWith('/')) return '.' + url;
   return url;
@@ -36,16 +45,17 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
   teacherName = '王崇林 (特级教师)',
   subtitle = '全国数学竞赛金牌教练 · 启发式逻辑推演',
   avatarState = 'idle',
-  modelVideoUrl = './demo_videos/model.mp4',
+  modelVideoUrl = './demo_videos/merged.mp4',
   voiceOn = true,
   onToggleVoice,
   onTranscript,
   captionText = '',
   forceUnmute,
-  posterUrl = './avatars/t1.svg',
+  posterUrl = './demo_videos/merged_poster.jpg',
 }) => {
   const [isListening, setIsListening] = useState(false);
   const [isAudioMuted, setIsAudioMuted] = useState(true);
+  const [syncedSubtitle, setSyncedSubtitle] = useState('');
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoSrc = cleanMediaUrl(modelVideoUrl);
@@ -66,6 +76,8 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
         videoRef.current.muted = !forceUnmute;
         videoRef.current.volume = 1.0;
         if (forceUnmute) {
+          // 停止任何合成语音，确保纯正名师视频原声
+          speechService.stop();
           videoRef.current.play().catch(() => {});
         }
       }
@@ -79,10 +91,22 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
       videoRef.current.muted = nextMuted;
       videoRef.current.volume = 1.0;
       if (!nextMuted) {
+        // 彻底停止可能在朗读的合成TTS，确保真人原声不受干扰
+        speechService.stop();
         videoRef.current.play().catch(err => console.warn('Video audio play error:', err));
       }
       setIsAudioMuted(nextMuted);
       onToggleVoice?.();
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current && !isAudioMuted) {
+      const cur = videoRef.current.currentTime;
+      const seg = NATIVE_TRANSCRIPTS.find(s => cur >= s.start && cur < s.end);
+      if (seg) {
+        setSyncedSubtitle(seg.text);
+      }
     }
   };
 
@@ -179,6 +203,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           loop
           muted={isAudioMuted}
           playsInline
+          onTimeUpdate={handleTimeUpdate}
           style={{
             width: '100%',
             height: '100%',
@@ -222,7 +247,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
             boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
             transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
-          title={isAudioMuted ? '点击开启 MP4 视频原声' : '点击静音'}
+          title={isAudioMuted ? '点击开启 MP4 视频真人原声' : '点击静音'}
         >
           {isAudioMuted ? (
             <>
@@ -232,7 +257,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           ) : (
             <>
               <VolumeIcon size={14} style={{ color: '#ffffff' }} />
-              <span>原声播放中</span>
+              <span>名师原声播放中</span>
             </>
           )}
         </button>
@@ -276,7 +301,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           }}
         >
           {!isAudioMuted ? <VolumeIcon size={15} /> : <VolumeMuteIcon size={15} />}
-          <span>{!isAudioMuted ? '原声已开启' : '语音播报'}</span>
+          <span>{!isAudioMuted ? '名师原声已开启' : '开启视频原声'}</span>
         </button>
 
         {/* 麦克风拾音按钮 */}
@@ -302,7 +327,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
       </div>
 
       {/* 实时滚动智能字幕卡 (精致无杂音) */}
-      {captionText && (
+      {(captionText || (!isAudioMuted && syncedSubtitle)) && (
         <div style={{
           marginTop: '14px',
           background: 'rgba(11, 17, 32, 0.85)',
@@ -321,7 +346,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           alignItems: 'flex-start'
         }}>
           <MessageSquareIcon size={14} style={{ color: 'var(--cyan-neon)', marginTop: '2px' }} />
-          <span>{captionText.slice(0, 120)}...</span>
+          <span>{(captionText || syncedSubtitle).slice(0, 120)}...</span>
         </div>
       )}
     </div>

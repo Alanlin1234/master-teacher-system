@@ -43,7 +43,7 @@ class Teacher(Base):
     agent_prompt: Mapped[str] = mapped_column(Text, default="")
     dh_model_name: Mapped[str] = mapped_column(String(100), default="default_avatar")
     dh_voice_trained: Mapped[bool] = mapped_column(Boolean, default=True)
-    dh_model_video_url: Mapped[str] = mapped_column(String(255), default="/demo_videos/model.mp4")
+    dh_model_video_url: Mapped[str] = mapped_column(String(255), default="/demo_videos/merged.mp4")
     dim_scores: Mapped[Dict[str, float]] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
