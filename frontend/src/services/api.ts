@@ -103,21 +103,47 @@ function handleStaticFallback<T>(url: string, options: RequestInit = {}): T {
     const selectedTeachers = Object.values(selections).map(id => EMBEDDED_TEACHERS.find(t => t.id === id)?.name || "特级教师");
     const uniqueTeachers = Array.from(new Set(selectedTeachers));
 
+    const styleTeacher = EMBEDDED_TEACHERS.find(t => t.id === (selections.style || 't1')) || EMBEDDED_TEACHERS[0];
+    const persTeacher = EMBEDDED_TEACHERS.find(t => t.id === (selections.personality || 't2')) || EMBEDDED_TEACHERS[1];
+    const strenTeacher = EMBEDDED_TEACHERS.find(t => t.id === (selections.strengths || 't4')) || EMBEDDED_TEACHERS[3];
+    const methTeacher = EMBEDDED_TEACHERS.find(t => t.id === (selections.method || 't10')) || EMBEDDED_TEACHERS[9];
+    const commTeacher = EMBEDDED_TEACHERS.find(t => t.id === (selections.communication || 't3')) || EMBEDDED_TEACHERS[2];
+
     const recipe = {
-      id: `synth_${Date.now()}`,
-      name: body.name || "AI多维融合特级教师",
+      id: `synth_${Date.now().toString(16).slice(-8)}`,
+      name: body.name || "学情互补·自适应名师",
       subject: "高中全科",
       avatar: "🧬",
-      photoUrl: "./photos/1.png",
-      mode: body.mode || "free",
+      photoUrl: styleTeacher.photoUrl || "./avatars/t1.svg",
+      mode: body.mode || "user",
       summary: `深度融合了【${uniqueTeachers.join(" + ")}】的核心教学基因，具备严密逻辑体系与启发式点拨能力。`,
-      radar: { style: 0.94, personality: 0.91, strengths: 0.96, method: 0.93, communication: 0.95 },
-      critic: {
-        compatibilityScore: 94,
-        grade: "卓越 (A+)",
-        strengths: "五维基因融合度极高，既保留了严谨的解题模型推演，又兼具幽默亲和的表达张力。",
-        warning: "在极快节奏的大班课中需注意照顾基础偏薄弱学生。"
+      dimensions: {
+        style: { teacher_id: styleTeacher.id, teacher_name: styleTeacher.name, dimension_name: '上课风格', content: styleTeacher.style },
+        personality: { teacher_id: persTeacher.id, teacher_name: persTeacher.name, dimension_name: '人格特征', content: persTeacher.personality },
+        strengths: { teacher_id: strenTeacher.id, teacher_name: strenTeacher.name, dimension_name: '核心优点', content: strenTeacher.strengths?.[0] || '解题破局' },
+        method: { teacher_id: methTeacher.id, teacher_name: methTeacher.name, dimension_name: '教学方法', content: methTeacher.style },
+        communication: { teacher_id: commTeacher.id, teacher_name: commTeacher.name, dimension_name: '沟通方式', content: commTeacher.personality }
       },
+      predicted_radar: {
+        style: styleTeacher.dim_scores?.style || 0.88,
+        personality: persTeacher.dim_scores?.personality || 0.95,
+        strengths: strenTeacher.dim_scores?.strengths || 0.96,
+        method: methTeacher.dim_scores?.method || 0.86,
+        communication: commTeacher.dim_scores?.communication || 0.94
+      },
+      radar: {
+        style: styleTeacher.dim_scores?.style || 0.88,
+        personality: persTeacher.dim_scores?.personality || 0.95,
+        strengths: strenTeacher.dim_scores?.strengths || 0.96,
+        method: methTeacher.dim_scores?.method || 0.86,
+        communication: commTeacher.dim_scores?.communication || 0.94
+      },
+      consistency_score: 0.94,
+      critic_notes: [
+        "多源融合一致性指数：94分 (优秀)，五大维度彼此互补强化。",
+        `上课风格采纳【${styleTeacher.name}】的特点，奠定了扎实的思维深度与教学基调。`,
+        `教学方法融合【${methTeacher.name}】的互动节奏，大幅降低了学生的认知阻抗与畏难心理。`
+      ],
       created_at: new Date().toISOString()
     };
 
