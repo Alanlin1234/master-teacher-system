@@ -55,6 +55,7 @@ export const App: React.FC = () => {
           <HomePage
             onNavigate={(tab, params) => {
               if (params?.teacherId) setChatTeacherId(params.teacherId);
+              if (params?.synthRecipe) setActiveSynthRecipe(params.synthRecipe);
               setActiveTab(tab);
             }}
           />

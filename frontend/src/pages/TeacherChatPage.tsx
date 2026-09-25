@@ -63,6 +63,12 @@ export const TeacherChatPage: React.FC<Props> = ({
   }, [initialTeacherId]);
 
   useEffect(() => {
+    if (synthRecipe?.initialQuestion) {
+      setInputText(synthRecipe.initialQuestion);
+    }
+  }, [synthRecipe]);
+
+  useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 

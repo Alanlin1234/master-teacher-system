@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { TeacherDigitalHuman } from '../components/TeacherDigitalHuman';
 import { RadarChart5D } from '../components/RadarChart5D';
+import { RichMarkdown } from '../components/RichMarkdown';
 import { speechService } from '../services/speech';
 import {
   GraduationCapIcon,
@@ -18,6 +19,300 @@ interface Props {
   onNavigate: (tab: string, params?: any) => void;
 }
 
+type DemoTopicKey = 'math' | 'physics' | 'chinese';
+
+interface DemoTopicInfo {
+  id: DemoTopicKey;
+  label: string;
+  emoji: string;
+  questionTitle: string;
+  question: string;
+}
+
+const DEMO_TOPICS: Record<DemoTopicKey, DemoTopicInfo> = {
+  math: {
+    id: 'math',
+    label: '高中数学',
+    emoji: '📐',
+    questionTitle: '导数极值与驻点本质深度探究',
+    question: '已知函数 $f(x) = \\ln x - ax$ ($a \\in \\mathbb{R}$)，求 $f(x)$ 的单调区间与极值点，并透彻阐释：为什么“导数等于 0”只是极值点的必要条件而非充分条件？',
+  },
+  physics: {
+    id: 'physics',
+    label: '高中物理',
+    emoji: '⚡',
+    questionTitle: '电磁感应双棒动力学与焦耳热分配',
+    question: '水平光滑平行导轨置于匀强磁场 $B$ 中，两棒质量与电阻分别为 $m_1, R_1$ 和 $m_2, R_2$。初速度为 $v_0$ 与 0，求系统稳态速度及双棒总焦耳热分配？',
+  },
+  chinese: {
+    id: 'chinese',
+    label: '高中文科',
+    emoji: '📖',
+    questionTitle: '赤壁赋思辨哲理与文言虚词意象',
+    question: '苏轼在《赤壁赋》中如何由“水与月”的变与不变阐发旷达哲思？其中虚词“之”与“其”在情绪转折中起到了怎样的推波助澜作用？',
+  },
+};
+
+function generateLiveAnswer(
+  topic: DemoTopicKey,
+  scores: { style: number; personality: number; strengths: number; method: number; communication: number }
+): string {
+  const isRigorous = scores.style >= 0.82;
+  const isExamTraps = scores.method >= 0.82;
+  const isHighDim = scores.strengths >= 0.82;
+  const isScholarly = scores.personality >= 0.82;
+  const isStructured = scores.communication >= 0.82;
+
+  if (topic === 'math') {
+    const greeting = isScholarly
+      ? '我们以严密的高等微积分公理体系来审视这一经典导数问题。'
+      : '同学们好！我们今天用直观的几何图像和生动的变化率，把极值与导数的底层关系彻底吃透。';
+
+    const opening = isRigorous
+      ? `### 严格推导与区间单调性分析
+
+函数的定义域必须优先保证：$D = (0, +\\infty)$。对 $f(x) = \\ln x - ax$ 关于 $x$ 求一阶导数：
+
+$$f'(x) = \\frac{1}{x} - a = \\frac{1 - ax}{x} \\quad (x > 0)$$
+
+对参数 $a$ 实施公理化符号分类讨论：
+
+1. **若 $a \\le 0$**：
+   对于任意 $x \\in (0, +\\infty)$，恒有 $-ax \\ge 0$，因此分子 $1 - ax > 0$。分母 $x > 0$，故：
+   $$f'(x) > 0 \\quad (\\forall x > 0)$$
+   函数 $f(x)$ 在定义域 $(0, +\\infty)$ 上**严格单调递增**，无极值点。
+
+2. **若 $a > 0$**：
+   令 $f'(x) = 0$，解得唯一驻点（驻波临界点）：
+   $$x_0 = \\frac{1}{a}$$
+   - 当 $x \\in \\left(0, \\frac{1}{a}\\right)$ 时，$1 - ax > 0 \\implies f'(x) > 0$，$f(x)$ 严格单调递增；
+   - 当 $x \\in \\left(\\frac{1}{a}, +\\infty\\right)$ 时，$1 - ax < 0 \\implies f'(x) < 0$，$f(x)$ 严格单调递减。
+
+   因此，点 $x = \\frac{1}{a}$ 为函数唯一的**严格极大值点**，极大值为：
+   $$f\\left(\\frac{1}{a}\\right) = \\ln\\left(\\frac{1}{a}\\right) - a \\cdot \\frac{1}{a} = -\\ln a - 1$$`
+      : `### 几何切线与函数变化率图解
+
+我们不妨把 $f(x) = \\ln x - ax$ 想象成两股力量的拔河比赛：
+- 前半部分 $\\ln x$ 是不断向上攀爬的自然对数（但随着 $x$ 增大，爬坡的步伐越来越慢）；
+- 后半部分 $-ax$ 是一股匀速往下拉的线性阻尼。
+
+函数的导数 $f'(x)$，正是你在任意时刻脚下的地面坡度（切线斜率）：
+
+$$f'(x) = \\frac{1}{x} - a = \\frac{1 - ax}{x}$$
+
+- 当 $x$ 很小（刚从 0 出发）时，$\\frac{1}{x}$ 极大，对数攀升力压倒阻尼，坡度为正，函数猛烈上冲；
+- 当你爬到 $x = \\frac{1}{a}$ 时，对数上升的力恰好被阻尼抵消，此时切线水平（$f'(x) = 0$）；
+- 一旦越过 $x = \\frac{1}{a}$，阻尼占据上风，切线斜率转为负数，函数开始走下坡路。因此 $x = \\frac{1}{a}$ 是一座天然的山峰最高点！`;
+
+    const callout = isExamTraps
+      ? `> [!IMPORTANT]
+> **🎯 高考命题反套路陷阱：警惕“驻点即极值点”的逻辑误区**
+> 
+> 很多同学常把“导数等于 0 的点”与“极值点”画等号，在考场压轴题中丢分极其惨烈！
+> 
+> 1. **反例直击**：考察经典幂函数 $g(x) = x^3$。在原点处 $g'(0) = 0$（驻点），但观察导数符号：
+>    $$x < 0 \\implies g'(x) = 3x^2 > 0; \\quad x > 0 \\implies g'(x) = 3x^2 > 0$$
+>    导数在驻点左右**未发生正负号跨轴突变**！函数在 $x=0$ 处只是瞬间放平，随后继续昂首向上，因此 $x=0$ 绝非极值点，而是拐点！
+> 2. **充分条件的判定准则**：驻点 $x_0$ 升格为极值点的充要条件是——导函数 $f'(x)$ 在穿过 $x_0$ 时**必须发生符号变号**（由正转负为极大值，由负转正为极小值）；或由二阶导判据 $f''(x_0) \\neq 0$ 确定。`
+      : `> [!NOTE]
+> **✦ 苏格拉底递进启发研讨：思考“导数等于0”的真实几何图景**
+> 
+> 请同学合上笔记本，在草稿纸上想象并动手画一画：
+> 
+> 假设你走在一座连绵起伏的山丘上，某一步你的脚底切线恰好完全水平（斜率为 0）。
+> 请问：你这一刻站着的地方，**一定是山顶或山谷谷底吗？**
+> 
+> 有没有可能，你只是走上了一小段“台阶式的休息平台”，而平台的左右两侧其实全都是向上的坡路？
+> 试着在纸上画出 $h(x) = x - \\sin x$ 在 $x=0$ 附近的切线与走势，看看你能悟出什么！`;
+
+    const modelInsight = isHighDim
+      ? `### 数形结合高维投影：双曲线割线模型
+
+我们将导数方程 $f'(x) = 0$ 升维转化为两条独立几何曲线在第一象限的交点：
+
+$$y_1 = \\frac{1}{x} \\quad (\\text{等轴双曲线分支}) \\qquad y_2 = a \\quad (\\text{参数水平割线})$$
+
+- 当 $a \\le 0$ 时，水平线 $y_2 = a$ 位于 $x$ 轴下方，而双曲线 $y_1$ 严格悬浮于第一象限，两者绝无交点；
+- 当 $a > 0$ 时，水平线必定横截双曲线于唯一几何交点 $\\left(\\frac{1}{a}, a\\right)$，且在交点左侧 $y_1 > y_2$，右侧 $y_1 < y_2$。
+数形结合不仅让导数正负符号的跨轴变迁一目了然，更彻底根除了复杂代数讨论的失误风险！`
+      : `### 名师极速通关口诀
+
+- **一看定义域**：对数函数真数必大于零，切忌漏讨论边界；
+- **二算一阶导**：通分化为标准分式，分子决定正负命运；
+- **三定驻点根**：解方程找导数零点；
+- **四画变号表**：穿针引线看变号，左正右负是山峰，左右同号非极值！`;
+
+    const summary = isStructured
+      ? `### 核心考法与思维导图
+
+| 判定维度 | 必要条件阶段 | 充分条件验证 |
+| :--- | :--- | :--- |
+| **代数判据** | 求解代数方程 $f'(x) = 0$ 获取候选驻点 | 检验驻点邻域 $f'(x_0^-)$ 与 $f'(x_0^+)$ 是否异号 |
+| **几何图像** | 切线斜率 $k = 0$（切线水平） | 曲线在切线两侧呈现峰谷凹凸转折，而非马鞍拐点 |
+| **高考陷阱** | 误把 $f'(x)=0$ 当成极值点充分保证 | 遗漏定义域边界或忽略二阶变号检测 |`
+      : `**名师温润结语**：数学的魅力就在于这种‘看似理所当然、实则步步精微’的逻辑美感。记住，极值的灵魂在于‘峰回路转的变号’，而不仅仅是那平坦的一瞬间。`;
+
+    return `${greeting}\n\n${opening}\n\n${callout}\n\n${modelInsight}\n\n${summary}`;
+  }
+
+  if (topic === 'physics') {
+    const greeting = isScholarly
+      ? '以分析力学动量定理与电磁闭合回路微元积分展开严格推导。'
+      : '同学们，电磁感应双棒问题是高考物理压轴常客，咱们用动力学和能量两条主线，把整个物理过程看透！';
+
+    const opening = isRigorous
+      ? `### 闭合回路微元动力学与系统动量守恒
+
+设任意时刻两棒速度分别为 $v_1, v_2$ ($v_1 > v_2$)，回路瞬时感应电动势与感应电流为：
+
+$$E(t) = BL(v_1 - v_2), \\quad I(t) = \\frac{BL(v_1 - v_2)}{R_1 + R_2}$$
+
+两棒受到的瞬时安培力大小相等、方向相反：
+$$F_A = BIL = \\frac{B^2 L^2 (v_1 - v_2)}{R_1 + R_2}$$
+
+由于水平导轨光滑，两棒构成的系统在水平方向上合外力为零（$\\sum F_{\\text{ext}} = 0$），安培力属于系统内力。对全过程应用**系统动量守恒定律**：
+
+$$m_1 v_0 = (m_1 + m_2) v_{\\infty} \\implies v_{\\infty} = \\frac{m_1}{m_1 + m_2} v_0$$
+
+系统终态相对运动消失（$v_1 = v_2 = v_{\\infty}$），感应电动势 $E = 0$，电流归零，双棒以此稳态速度做终身匀速直线运动。`
+      : `### 物理图像直观引导：非接触式磁性离合器
+
+我们可以把磁场中的双棒形象地看成一个‘磁性联轴器’：
+- 前棒以 $v_0$ 飞出，在匀强磁场中切割磁感线，化身为一个‘运动的小发电机’；
+- 感应电流瞬间流过静止的后棒，使后棒化身为一个‘安培力电动机’，被推着加速往前跑；
+- 前棒受到反向安培力被阻碍减速，后棒被推着加速，直到两者的速度完全拉平；
+- 一旦两棒速度相同，相对切割立刻停止，回路电流熄灭，两棒像紧扣的齿轮一样并排匀速滑行。`;
+
+    const callout = isExamTraps
+      ? `> [!IMPORTANT]
+> **🎯 高考压轴高频失分警示：焦耳热分配的“正比”与“反比”误区**
+> 
+> 很多同学误以为焦耳热公式是 $Q = \\frac{U^2}{R} t$ 从而得出“焦耳热与电阻成反比”的荒谬结论！
+> 
+> 1. **回路拓扑判据**：在这个闭合单回路中，两棒是**标准单串联回路**！在任意瞬时 $t$，流经两根棒的电流 $I(t)$ 处处绝对相等！
+> 2. **精确焦耳热积分**：
+>    $$Q_1 = \\int_0^\\infty I^2(t) R_1 \\, \\mathrm{d}t, \\quad Q_2 = \\int_0^\\infty I^2(t) R_2 \\, \\mathrm{d}t \\implies \\frac{Q_1}{Q_2} = \\frac{R_1}{R_2}$$
+>    焦耳热分配严格与各自电阻成**正比**，谁的电阻大，谁产热就多！
+> 3. **动量守恒适用边界**：若导轨非光滑且两棒质量不等，摩擦力导致的合外力不为零，动量守恒被破坏，必须用动量定理微元求和 $\\int F \\, \\mathrm{d}t$ 联立求解！`
+      : `> [!NOTE]
+> **✦ 苏格拉底物理直觉追问：能量到底流向了哪里？**
+> 
+> 亲爱的同学，请深吸一口气，闭上眼睛追踪能量的足迹：
+> 
+> 初始时刻系统总机械能为 $\\frac{1}{2}m_1 v_0^2$；到了最后终态，系统总机械能变为了 $\\frac{1}{2}(m_1 + m_2) v_{\\infty}^2$。
+> 算一算：损失的这部分机械能跑去哪里了？
+> 它是如何在没有机械碰撞的情况下，通过虚空的磁场转换为金属晶格的热振动的？`;
+
+    const modelInsight = isHighDim
+      ? `### 能量守恒定律与内能耗散解析
+
+全过程动能减少量完全转化为回路焦耳内能：
+
+$$Q_{\\text{total}} = \\Delta E_k = \\frac{1}{2} m_1 v_0^2 - \\frac{1}{2}(m_1 + m_2) v_{\\infty}^2 = \\frac{m_1 m_2}{2(m_1 + m_2)} v_0^2$$
+
+两棒内能耗散精确分配解析式为：
+$$Q_1 = \\frac{R_1}{R_1 + R_2} Q_{\\text{total}}, \\qquad Q_2 = \\frac{R_2}{R_1 + R_2} Q_{\\text{total}}$$`
+      : `### 电磁双棒三步通关要诀
+
+- **一抓相对速度**：求感应电动势 $E = BL \\Delta v$；
+- **二抓合外力为零**：全过程系统动量守恒，直接定死最终匀速；
+- **三抓能量守恒**：动能亏损全变热，串联电阻按比例瓜分焦耳热！`;
+
+    const summary = isStructured
+      ? `### 物理量动态迁移全景表
+
+| 演化阶段 | 感应电流 $I(t)$ | 前棒加速度 $a_1$ | 后棒加速度 $a_2$ | 能量转化核心 |
+| :--- | :--- | :--- | :--- | :--- |
+| **初始态 ($t=0$)** | 达到峰值 $\\frac{BLv_0}{R_1+R_2}$ | 反向最大减速 | 正向最大加速 | 动能开始转化为电磁能量 |
+| **过渡态 ($t>0$)** | 单调指数衰减 | 减速趋势放缓 | 加速趋势放缓 | 焦耳热持续在棒体内累积 |
+| **稳态 ($t \\to \\infty$)** | 严格降为 0 | 加速度归 0 | 加速度归 0 | 机械动能损失全量等于 $Q_1+Q_2$ |`
+      : `**名师温润结语**：物理模型千变万化，但万变不离其宗。只要牢牢抓住“动量守恒看外力，能量守恒看转化”这两根定海神针，电磁感应大题便如探囊取物。`;
+
+    return `${greeting}\n\n${opening}\n\n${callout}\n\n${modelInsight}\n\n${summary}`;
+  }
+
+  // topic === 'chinese'
+  const greeting = isScholarly
+    ? '从文本细读、辩证逻辑结构与古代汉语语法层析展开深入鉴赏。'
+    : '同学们好！让我们一起泛舟元丰五年的赤壁夜江，体悟大文豪苏东坡如何化解人生的大悲与虚无。';
+
+  const opening = isRigorous
+    ? `### 辩证本体论的哲学升华逻辑
+
+苏轼借赤壁之景与客人的悲秋之问，构筑了中国文学史上最深邃的辩证哲学三段论：
+
+1. **立论前提 · 现象界之相对之变**：
+   “自其变者而观之，则天地曾不能以一瞬。”
+   从时间流逝与微观粒子维度看，江水刹那东流，明月每分盈亏，宇宙间无一物不是暂住即逝的客体。
+2. **转折推演 · 本体界之绝对不变**：
+   “自其不变者而观之，则物与我皆无尽也。”
+   从道体永恒与物质循环维度看，逝者如斯而未尝往也，盈虚者如彼而卒莫消长也。江水与月亮从未真正灭失，人作为自然的一部分亦永在天地之间。
+3. **推导结论 · 超然物外的生命解脱**：
+   “且夫天地之间，物各有主……惟江上之清风，与山间之明月……取之无禁，用之不竭，是造物者之无尽藏也，而吾与子之所共适。”
+   苏轼由此彻底超越了客人的感伤，达至精神与造化同游的最高自由境。`
+    : `### 诗意心境唤醒：夜舟主客的情绪戏剧
+
+同学们，试想那是一个怎样的秋夜：
+苏子与客在赤壁下泛舟，清风徐来，水波不兴。
+客人的洞箫吹得呜呜咽咽，如怨如慕，如泣如诉，整个小舟沉浸在‘寄蜉蝣于天地，渺沧海之一粟’的巨大悲哀与无力感中。
+
+就在这悲伤到达顶点的时刻，苏轼突然伸手指向眼前的浩荡江水和天上皎洁的明月：
+**“客亦知夫水与月乎？”**
+这一问，就像浓重黑夜里劈开的一道闪电，瞬间把所有人的心胸从狭隘的个人感伤中，拔高到了浩瀚无垠的宇宙洪荒！`;
+
+  const callout = isExamTraps
+    ? `> [!IMPORTANT]
+> **🎯 高考文言虚词与现代思辨写作迁移**
+> 
+> 1. **虚词“之”的语法功能递进**：
+>    - “自其变者而观**之**”：代词，代指“天地万物之变态”，充当动词“观”的宾语；
+>    - “物与我皆无尽**也**”过渡到“苟非吾**之**所有”：助词“之”，用在主谓之间，取消句子独立性，强化客观理性界限；
+>    - “是造物者**之**无尽藏也”：结构助词“的”，修饰限定词。
+> 2. **虚词“其”的情感语气投射**：
+>    - “**其**声呜呜然”：代词，指箫声；
+>    - “自**其**变者而观之”：指示代词，相当于“那”，引导哲学思辨视角的转换。
+> 3. **高考议论文思辨写作提炼**：
+>    学习苏轼“在无常中体悟永恒，在困顿中拥抱清风”的立意维度，在高考命题探讨“得与失、变与恒、快与慢”时，引用此段辩证逻辑，可瞬间让文章立意突破平庸！`
+    : `> [!NOTE]
+> **✦ 思辨反问研习：东坡的“无尽”是科学还是释怀？**
+> 
+> 同学们，请思考苏轼所说的“物与我皆无尽也”：
+> 这究竟是类似现代物理学的物质不灭与能量守恒，还是他在被贬黄州、政治生命坠入谷底时，为自己灵魂搭建的一座坚不可摧的精神避风港？
+> 
+> 当你遇到人生考场或生活的逆境挫折时，你更愿意从“变”的角度鞭策自己争分夺秒，还是从“不变”的角度包容释怀？`;
+
+  const modelInsight = isHighDim
+    ? `### 文本结构张力图式分析
+
+\`\`\`
+【主客问答三元结构】
+客之悲哀（局限视角）  ──>  哀吾生之须臾，羡长江之无穷 (感性执念，困于形骸)
+        ↓
+苏之启悟（辩证视角）  ──>  盖将自其变者而观之 / 自其不变者而观之 (理性超脱，立于天道)
+        ↓
+终极合一（旷达践行）  ──>  客喜而笑，洗盏更酌，不知东方之既白 (心神两忘，行于当下)
+\`\`\``
+    : `### 经典文言鉴赏四步法
+
+- **一抓意象**：赤壁、明月、长江、清风；
+- **二明对位**：客之悲（哀须臾）对苏之喜（共适造化）；
+- **三品虚词**：观“之”之转换，析“其”之音律；
+- **四悟哲理**：变中见恒，有限中筑永恒！`;
+
+  const summary = isStructured
+    ? `### 虚词释义与哲思结构对照
+
+| 文言虚词 | 语境例句 | 语法作用 | 思辨美学功能 |
+| :--- | :--- | :--- | :--- |
+| **之** (代词) | 自其变者而观之 | 宾语指代变化之态 | 引出客观冷静的观照视角 |
+| **之** (取消独立性) | 苟非吾之所有 | 主谓之间定语化 | 斩断占有欲，树立淡泊界限 |
+| **其** (指示代词) | 自其不变者而观之 | 指示“那一侧面” | 驱动思维从现象向本质跃迁 |
+| **其** (推测语气) | 其必曰：“先天下之忧而忧” | 副词语气舒缓 | 增强主客探究与叩问的韵味 |`
+    : `**名师温润结语**：读《赤壁赋》，不仅是背诵高考文言字词，更是学习东坡先生那种在人生暴风雨中怡然自得的生命定力。愿你们在漫长考学与人生之路上，亦能拥有清风明月般的豁达心胸。`;
+
+  return `${greeting}\n\n${opening}\n\n${callout}\n\n${modelInsight}\n\n${summary}`;
+}
+
 export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   const [demoState, setDemoState] = useState<'idle' | 'speaking'>('idle');
   const [caption, setCaption] = useState('');
@@ -29,6 +324,31 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     method: 0.92,
     communication: 0.86,
   });
+
+  const [selectedDemoTopic, setSelectedDemoTopic] = useState<DemoTopicKey>('math');
+
+  const liveAnswerMarkdown = useMemo(
+    () => generateLiveAnswer(selectedDemoTopic, interactiveScores),
+    [selectedDemoTopic, interactiveScores]
+  );
+
+  const currentTopicData = DEMO_TOPICS[selectedDemoTopic];
+
+  const handleTakeToChat = () => {
+    const synthRecipe = {
+      name: `五维定制特级名师 (${currentTopicData.label})`,
+      title: '特级教学基因定制专家',
+      subject: currentTopicData.label,
+      style: interactiveScores.style > 0.82 ? '公理化严密推演型' : '苏格拉底启发引导型',
+      method: interactiveScores.method > 0.82 ? '典型高考压轴变式剖析' : '问题驱动递进式探究',
+      strengths: interactiveScores.strengths > 0.82 ? '数形结合与高维模型综合建构' : '核心法则化简速通',
+      personality: interactiveScores.personality > 0.82 ? '学者型沉稳深邃' : '亲切润物细无声',
+      communication: interactiveScores.communication > 0.82 ? '纲举目张高密精炼' : '循序渐进细节剖析',
+      dim_scores: { ...interactiveScores },
+      initialQuestion: currentTopicData.question,
+    };
+    onNavigate('chat', { synthRecipe });
+  };
 
   const heroContainerRef = useRef<HTMLDivElement>(null);
 
@@ -325,16 +645,23 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               </p>
 
               {/* 交互滑块组 */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {[
-                  { key: 'style', label: '上课风格 (启发引导 vs 严密推理)' },
-                  { key: 'method', label: '教学方法 (苏格拉底追问 vs 典例变式)' },
-                  { key: 'strengths', label: '核心优点 (数形结合 vs 综合建模)' },
+                  { key: 'style', label: '上课风格', sub: '启发式引导 ↔ 严密公理推演' },
+                  { key: 'method', label: '教学方法', sub: '苏格拉底追问 ↔ 高考压轴陷阱' },
+                  { key: 'strengths', label: '核心特长', sub: '化简速通 ↔ 数形结合高维建模' },
+                  { key: 'personality', label: '互动温度', sub: '亲切幽默鼓励 ↔ 沉稳学术严谨' },
+                  { key: 'communication', label: '表达节奏', sub: '循序铺垫剖析 ↔ 纲举目张精炼' },
                 ].map(item => (
                   <div key={item.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
-                    <span style={{ fontSize: '0.84rem', fontWeight: 600, color: 'var(--text-muted)', width: '220px' }}>
-                      {item.label}
-                    </span>
+                    <div style={{ width: '220px' }}>
+                      <div style={{ fontSize: '0.84rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                        {item.label}
+                      </div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                        {item.sub}
+                      </div>
+                    </div>
                     <input
                       type="range"
                       min="50"
@@ -346,8 +673,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       }}
                       style={{ flex: 1, accentColor: 'var(--accent-primary)', cursor: 'pointer' }}
                     />
-                    <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--accent-primary)', width: '40px', textAlign: 'right' }} className="tabular-nums">
-                      {Math.round((interactiveScores as any)[item.key] * 100)}
+                    <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--accent-primary)', width: '42px', textAlign: 'right' }} className="tabular-nums">
+                      {Math.round((interactiveScores as any)[item.key] * 100)}%
                     </span>
                   </div>
                 ))}
@@ -355,13 +682,248 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             </div>
 
             {/* 右侧荧光动态雷达 */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
               <RadarChart5D
                 scores={interactiveScores}
                 size={290}
                 showLabels={true}
                 highlightColor="var(--accent-primary)"
               />
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+                ✦ 拖动左侧滑块，雷达多边形与下方实测答疑即刻联动态重塑
+              </div>
+            </div>
+          </div>
+
+          {/* 动态名师答疑演练视窗 */}
+          <div style={{
+            marginTop: '36px',
+            paddingTop: '32px',
+            borderTop: '1px solid var(--border-glass)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '18px',
+          }}>
+            {/* 顶栏：标题与学科切换 Tabs */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '16px',
+            }}>
+              <div>
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '0.74rem',
+                  fontWeight: 700,
+                  color: 'var(--accent-primary)',
+                  letterSpacing: '0.08em',
+                  marginBottom: '6px',
+                }}>
+                  <SparklesIcon size={14} />
+                  <span>LIVE TEACHING ADAPTATION SHOWCASE</span>
+                </div>
+                <h3 style={{
+                  fontSize: '1.35rem',
+                  fontWeight: 700,
+                  color: 'var(--text-main)',
+                  margin: 0,
+                  letterSpacing: '-0.02em',
+                }}>
+                  动态名师答疑演练视窗
+                </h3>
+                <p style={{
+                  fontSize: '0.84rem',
+                  color: 'var(--text-muted)',
+                  margin: '4px 0 0 0',
+                }}>
+                  调节上方滑块，下方特级名师的教学用词、公式推导详略、启发追问与考点避坑将实时联动演变
+                </p>
+              </div>
+
+              {/* 演示题目学科切换 Tabs */}
+              <div style={{
+                display: 'inline-flex',
+                background: 'var(--bg-glass-subtle)',
+                padding: '4px',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--border-glass)',
+                gap: '4px',
+              }}>
+                {(['math', 'physics', 'chinese'] as DemoTopicKey[]).map(tKey => {
+                  const item = DEMO_TOPICS[tKey];
+                  const isSelected = selectedDemoTopic === tKey;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setSelectedDemoTopic(item.id)}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '8px 14px',
+                        borderRadius: 'var(--radius-md)',
+                        fontSize: '0.82rem',
+                        fontWeight: isSelected ? 700 : 500,
+                        color: isSelected ? '#ffffff' : 'var(--text-muted)',
+                        background: isSelected ? 'var(--accent-primary)' : 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: isSelected ? 'var(--shadow-sm)' : 'none',
+                      }}
+                    >
+                      <span>{item.emoji}</span>
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 题目说明与当前激活教学基因 Badges */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px',
+              background: 'var(--bg-glass-subtle)',
+              padding: '12px 18px',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-glass)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.84rem', color: 'var(--text-main)', flex: 1, minWidth: '280px' }}>
+                <span style={{
+                  background: 'var(--card-bg)',
+                  padding: '2px 8px',
+                  borderRadius: '4px',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: 'var(--accent-primary)',
+                  border: '1px solid var(--border-glass)',
+                  whiteSpace: 'nowrap',
+                }}>
+                  测试真题
+                </span>
+                <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {currentTopicData.questionTitle}
+                </span>
+              </div>
+
+              {/* 实时响应基因标签 */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                {[
+                  {
+                    label: interactiveScores.style >= 0.82 ? '公理化严密推演' : '几何直观与生活隐喻',
+                    score: Math.round(interactiveScores.style * 100),
+                  },
+                  {
+                    label: interactiveScores.method >= 0.82 ? '高考压轴陷阱剖析' : '苏格拉底递进追问',
+                    score: Math.round(interactiveScores.method * 100),
+                  },
+                  {
+                    label: interactiveScores.strengths >= 0.82 ? '数形结合高维建模' : '核心法则化简速通',
+                    score: Math.round(interactiveScores.strengths * 100),
+                  },
+                  {
+                    label: interactiveScores.personality >= 0.82 ? '学者型深邃严谨' : '润物细无声亲切解惑',
+                    score: Math.round(interactiveScores.personality * 100),
+                  },
+                  {
+                    label: interactiveScores.communication >= 0.82 ? '纲举目张高密精炼' : '循序渐进细节剖析',
+                    score: Math.round(interactiveScores.communication * 100),
+                  },
+                ].map((badge, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      fontSize: '0.73rem',
+                      fontWeight: 600,
+                      padding: '3px 9px',
+                      borderRadius: 'var(--radius-full)',
+                      background: badge.score >= 82
+                        ? 'rgba(37, 99, 235, 0.12)'
+                        : 'var(--card-bg)',
+                      color: badge.score >= 82
+                        ? 'var(--accent-primary)'
+                        : 'var(--text-muted)',
+                      border: `1px solid ${badge.score >= 82 ? 'rgba(37, 99, 235, 0.3)' : 'var(--border-glass)'}`,
+                      transition: 'all 0.25s ease',
+                    }}
+                  >
+                    <span>{badge.score >= 82 ? '⚡' : '✦'}</span>
+                    <span>{badge.label}</span>
+                    <span style={{ opacity: 0.8, fontSize: '0.7rem' }}>({badge.score}%)</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* 动态演练 Markdown 回复视窗 */}
+            <div style={{
+              background: 'var(--bg-glass-subtle)',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--border-glass)',
+              padding: '24px 28px',
+              minHeight: '280px',
+              maxHeight: '480px',
+              overflowY: 'auto',
+              boxShadow: 'inset 0 2px 6px rgba(0, 0, 0, 0.04)',
+              transition: 'background 0.3s ease',
+            }}>
+              <RichMarkdown content={liveAnswerMarkdown} />
+            </div>
+
+            {/* 底部操作条：一键带入 1对1 课堂 */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '16px',
+              paddingTop: '6px',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                <SparklesIcon size={15} style={{ color: 'var(--accent-primary)' }} />
+                <span>当前五维基因组合已生效，点击右侧即可将此特定基因配方的名师部署到你的专属 1对1 答疑课堂。</span>
+              </div>
+
+              <button
+                onClick={handleTakeToChat}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '11px 22px',
+                  borderRadius: 'var(--radius-lg)',
+                  background: 'var(--accent-primary)',
+                  color: '#ffffff',
+                  fontSize: '0.9rem',
+                  fontWeight: 700,
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(37, 99, 235, 0.35)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(37, 99, 235, 0.25)';
+                }}
+              >
+                <span>🚀 一键带入 1对1 课堂实测当前名师</span>
+                <ArrowRightIcon size={16} />
+              </button>
             </div>
           </div>
         </section>
