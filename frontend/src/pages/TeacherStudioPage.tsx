@@ -31,6 +31,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
   const [isGeneratingScript, setIsGeneratingScript] = useState(false);
   const [isRendering, setIsRendering] = useState(false);
   const [mergedVideoUrl, setMergedVideoUrl] = useState('');
+  const [previewFit, setPreviewFit] = useState<'cover' | 'contain'>('contain');
 
   useEffect(() => {
     loadTeachers();
@@ -330,16 +331,92 @@ export const TeacherStudioPage: React.FC<Props> = ({
                 </div>
               </div>
 
-              {/* 右侧数字人视频预览底模 */}
-              <div className="digital-human-frame" style={{ height: '340px' }}>
-                <video
-                  src="./demo_videos/merged.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 8%' }}
-                />
+              {/* 右侧数字人视频预览底模 (严谨黄金比例演播卡片，彻底根除切头与裁眼) */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--border-glass)',
+                borderRadius: 'var(--radius-lg)',
+                padding: '20px 22px',
+              }}>
+                <div style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '14px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      color: '#10b981',
+                      background: 'rgba(16, 185, 129, 0.1)',
+                      padding: '3px 9px',
+                      borderRadius: 'var(--radius-full)'
+                    }}>
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />
+                      LIVE 1080P
+                    </span>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                      数字底模实时演播视窗
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setPreviewFit(f => f === 'cover' ? 'contain' : 'cover')}
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: 'var(--radius-full)',
+                      background: 'var(--card-bg)',
+                      border: '1px solid var(--border-glass)',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      color: 'var(--text-main)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                    title="切换视窗画幅：完整全景 / 聚焦特写"
+                  >
+                    {previewFit === 'cover' ? '切换全景' : '切换特写'}
+                  </button>
+                </div>
+
+                {/* 纵向演播手机画幅容器：居中展示，绝不压扁或剪裁眼睛与额头 */}
+                <div className="digital-human-frame" style={{
+                  width: '240px',
+                  height: '380px',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  background: '#040711',
+                  boxShadow: 'var(--shadow-md)',
+                  position: 'relative'
+                }}>
+                  <video
+                    src="./demo_videos/merged.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: previewFit,
+                      objectPosition: previewFit === 'cover' ? 'center 12%' : 'center center'
+                    }}
+                  />
+                </div>
+
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '14px', textAlign: 'center' }}>
+                  已选定：{selectedModel === 'wang_chonglin_avatar' ? '王崇林·理科名师' : selectedModel === 'li_qingyun_avatar' ? '李清韵·文科名师' : '高志伟·幽默名师'} · 原声声纹微调对齐
+                </div>
               </div>
             </div>
 

@@ -344,6 +344,7 @@ h4 { font-size: 1.1rem; }
   outline: none;
   cursor: pointer;
   transition: all var(--trans-fast);
+  color-scheme: light dark;
 }
 
 .select-luxury:focus {
@@ -351,9 +352,16 @@ h4 { font-size: 1.1rem; }
   box-shadow: 0 0 14px -2px var(--accent-primary-glow);
 }
 
-.select-luxury option {
-  background: var(--bg-surface);
-  color: var(--text-main);
+[data-theme="dark"] .select-luxury,
+[data-theme="dark"] .select-luxury option {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="light"] .select-luxury,
+[data-theme="light"] .select-luxury option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
 }
 
 .textarea-luxury {

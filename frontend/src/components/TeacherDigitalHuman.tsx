@@ -56,7 +56,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
   const [isListening, setIsListening] = useState(false);
   const [isAudioMuted, setIsAudioMuted] = useState(true);
   const [syncedSubtitle, setSyncedSubtitle] = useState('');
-  const [viewFit, setViewFit] = useState<'cover' | 'contain'>('cover');
+  const [viewFit, setViewFit] = useState<'cover' | 'contain'>('contain');
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoSrc = cleanMediaUrl(modelVideoUrl);
@@ -211,6 +211,8 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
       {/* 核心演播视窗 (精准黄金人像取景，完整呈现眼睛、面容与神态) */}
       <div style={{
         height: '380px',
+        maxWidth: '340px',
+        margin: '0 auto',
         borderRadius: 'var(--radius-lg)',
         background: '#020617',
         position: 'relative',
@@ -231,7 +233,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
             width: '100%',
             height: '100%',
             objectFit: viewFit,
-            objectPosition: viewFit === 'cover' ? 'center 8%' : 'center center',
+            objectPosition: viewFit === 'cover' ? 'center 12%' : 'center center',
             filter: avatarState === 'thinking' ? 'brightness(0.9) contrast(1.05)' : 'brightness(1.0)',
             transition: 'object-fit 0.3s ease'
           }}

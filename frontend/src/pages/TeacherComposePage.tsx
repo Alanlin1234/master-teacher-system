@@ -8,6 +8,7 @@ import {
   ChevronRightIcon,
   SlidersIcon,
 } from '../components/Icons';
+import { GeneDropdown } from '../components/GeneDropdown';
 
 interface Props {
   initialTeacherId?: string;
@@ -307,28 +308,13 @@ export const TeacherComposePage: React.FC<Props> = ({
                     </span>
                   </div>
 
-                  {/* 对应名师全宽选择器 */}
-                  <select
+                  {/* 对应名师全宽选择器 (高对比度主题自适应卡片组件，彻底根除白底白字) */}
+                  <GeneDropdown
                     value={selections[row.key] || 't1'}
-                    onChange={e => handleSelectionChange(row.key, e.target.value)}
-                    className="select-luxury"
-                    style={{
-                      width: '100%',
-                      padding: '10px 14px',
-                      fontSize: '0.88rem',
-                      fontWeight: 600,
-                      color: 'var(--text-main)',
-                      background: 'var(--card-bg)',
-                      border: '1px solid var(--border-glass)',
-                      borderRadius: 'var(--radius-sm)'
-                    }}
-                  >
-                    {catalog.map(t => (
-                      <option key={t.id} value={t.id} style={{ background: 'var(--card-bg)', color: 'var(--text-main)' }}>
-                        {t.name} ({t.subject}) · {t.dimensions?.[row.key]?.value || t.style}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={val => handleSelectionChange(row.key, val)}
+                    options={catalog}
+                    dimensionKey={row.key}
+                  />
                 </div>
               ))}
             </div>
