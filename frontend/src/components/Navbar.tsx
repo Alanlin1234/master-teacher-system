@@ -38,22 +38,22 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
             width: '34px',
             height: '34px',
             borderRadius: '10px',
-            background: 'linear-gradient(135deg, #1d4ed8 0%, #0284c7 60%, #38bdf8 100%)',
+            background: 'linear-gradient(135deg, #92400e 0%, #d97706 60%, #fbbf24 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: '#ffffff',
-            boxShadow: '0 0 16px rgba(56, 189, 248, 0.4)',
-            border: '1px solid rgba(255, 255, 255, 0.25)'
+            boxShadow: '0 2px 12px rgba(217, 119, 6, 0.35)',
+            border: '1px solid rgba(251, 191, 36, 0.45)'
           }}>
             <SparklesIcon size={18} />
           </div>
           <div>
-            <div style={{ fontSize: '1.05rem', fontWeight: 800, letterSpacing: '-0.03em', color: '#ffffff' }}>
+            <div className="brand-serif" style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '0.02em', color: '#ffffff' }}>
               循智导学 · 名师智教
             </div>
-            <div style={{ fontSize: '0.64rem', color: 'var(--text-subtle)', fontWeight: 600, letterSpacing: '0.08em' }}>
-              MASTER TEACHER & DIGITAL AVATAR
+            <div style={{ fontSize: '0.64rem', color: 'var(--accent-gold-light)', opacity: 0.85, fontWeight: 600, letterSpacing: '0.08em' }}>
+              MASTER TEACHER & ACADEMIC AVATAR
             </div>
           </div>
         </div>

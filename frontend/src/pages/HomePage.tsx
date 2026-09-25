@@ -98,15 +98,15 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         <section className="hero-stage-grid">
           {/* 左侧宏大叙事与行动中枢 */}
           <div>
-            {/* 精准工业级 Kicker，去除廉价药丸 */}
+            {/* 精准学术名校级 Kicker */}
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
               fontSize: '0.78rem',
               fontWeight: 700,
-              letterSpacing: '0.12em',
-              color: 'var(--cyan-neon)',
+              letterSpacing: '0.14em',
+              color: 'var(--accent-gold)',
               textTransform: 'uppercase',
               marginBottom: '18px'
             }}>
@@ -114,18 +114,19 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                background: 'var(--cyan-neon)',
-                boxShadow: '0 0 8px var(--cyan-neon)'
+                background: 'var(--accent-gold)',
+                boxShadow: '0 0 8px rgba(217, 119, 6, 0.4)'
               }} />
-              <span>ACADEMIC INTELLIGENCE SYSTEM</span>
+              <span>ACADEMIC INTELLIGENCE · 特级名师教研体系</span>
             </div>
 
-            <h1 className="gsap-hero-title" style={{ fontSize: '3.1rem', lineHeight: '1.14', color: '#ffffff', marginBottom: '22px' }}>
+            <h1 className="brand-serif gsap-hero-title" style={{ fontSize: '3.3rem', lineHeight: '1.16', color: '#ffffff', marginBottom: '22px' }}>
               汇聚特级名师教学精粹 <br />
               <span style={{
-                background: 'linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #34d399 100%)',
+                background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 60%, #fde68a 100%)',
                 WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
+                WebkitTextFillColor: 'transparent',
+                fontStyle: 'italic'
               }}>
                 以拟真数字人重构沉浸教育
               </span>

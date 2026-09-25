@@ -62,16 +62,16 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                 width: '36px',
                 height: '36px',
                 borderRadius: '10px',
-                background: 'rgba(56, 189, 248, 0.15)',
-                border: '1px solid rgba(56, 189, 248, 0.3)',
+                background: 'linear-gradient(135deg, rgba(217, 119, 6, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%)',
+                border: '1px solid rgba(217, 119, 6, 0.35)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--cyan-neon)'
+                color: 'var(--accent-gold)'
               }}>
                 <GraduationCapIcon size={20} />
               </div>
-              <h1 style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.035em' }}>
+              <h1 className="brand-serif" style={{ fontSize: '2.1rem', color: '#ffffff', letterSpacing: '-0.02em' }}>
                 全国金牌名师智库
               </h1>
             </div>
@@ -93,7 +93,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                 paddingLeft: '40px'
               }}
             />
-            <span style={{ position: 'absolute', left: '14px', top: '12px', color: 'var(--cyan-neon)' }}>
+            <span style={{ position: 'absolute', left: '14px', top: '12px', color: 'var(--accent-gold)' }}>
               <SearchIcon size={16} />
             </span>
           </div>
@@ -112,12 +112,12 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   borderRadius: 'var(--radius-full)',
                   fontSize: '0.88rem',
                   fontWeight: isSel ? 700 : 500,
-                  border: isSel ? '1px solid rgba(56, 189, 248, 0.5)' : '1px solid var(--border-glass)',
-                  background: isSel ? 'linear-gradient(135deg, #2563eb 0%, #0284c7 100%)' : 'rgba(255, 255, 255, 0.04)',
+                  border: isSel ? '1px solid rgba(251, 191, 36, 0.5)' : '1px solid var(--border-glass)',
+                  background: isSel ? 'linear-gradient(135deg, #b45309 0%, #d97706 100%)' : 'rgba(255, 255, 255, 0.04)',
                   color: isSel ? '#ffffff' : 'var(--text-body)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
-                  boxShadow: isSel ? '0 0 16px rgba(56, 189, 248, 0.35)' : 'none',
+                  boxShadow: isSel ? '0 2px 10px rgba(217, 119, 6, 0.3)' : 'none',
                   transition: 'all var(--trans-fast)'
                 }}
               >

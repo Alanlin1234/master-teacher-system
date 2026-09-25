@@ -37,6 +37,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+frontend_public = BASE_DIR.parent / "frontend" / "public"
 frontend_dist = BASE_DIR.parent / "frontend" / "dist"
 
 # 静态资源挂载：名师肖像与数字人演示视频 (支持 public 或 dist 目录)

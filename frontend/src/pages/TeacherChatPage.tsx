@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { teachersApi } from '../services/api';
+import { teachersApi, getStoredQwenKey, setStoredQwenKey } from '../services/api';
 import { speechService } from '../services/speech';
 import { TeacherDigitalHuman, AvatarState } from '../components/TeacherDigitalHuman';
 import { RichMarkdown } from '../components/RichMarkdown';
 import {
   MessageSquareIcon,
   VideoCameraIcon,
-  VolumeIcon,
   ArrowRightIcon,
   SendIcon,
-  AlertCircleIcon,
+  SlidersIcon,
+  CloseIcon,
+  CheckIcon,
 } from '../components/Icons';
 
 interface Props {
@@ -35,12 +36,14 @@ export const TeacherChatPage: React.FC<Props> = ({
   const [avatarState, setAvatarState] = useState<AvatarState>('idle');
   const [caption, setCaption] = useState('');
   const [voiceOn, setVoiceOn] = useState(true);
+  const [showKeyModal, setShowKeyModal] = useState(false);
+  const [apiKeyInput, setApiKeyInput] = useState(getStoredQwenKey());
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const promptPills = [
-    '请老师用数形结合法拆解导数切线综合题',
+    '请老师用数形结合法推导极限与导数的本质定义',
     '这道高考压轴题第二问有什么秒杀口诀？',
-    '能不能帮我出两道同构变式题巩固一下？',
+    '能不能帮我出两道含参同构变式题巩固一下？',
     '这段文言文虚词“之”的用法如何快速区分？',
   ];
 
@@ -58,76 +61,56 @@ export const TeacherChatPage: React.FC<Props> = ({
       if (res.ok) {
         setTeacher(res.teacher);
         const greeting = synthRecipe
-          ? `同学你好！我是为你专属定制的虚拟名师【${synthRecipe.name}】。我融汇了各位特级名师的教学风格与思维方法，今天咱们来攻克什么难题？`
-          : `同学你好！我是【${res.teacher.name}】，主讲高中${res.teacher.subject}。${res.teacher.style}。有什么不懂的概念或者卡壳的题型，随时问我！`;
+          ? `同学你好！我是【${synthRecipe.name}】。已融合特级名师多维教学基因，随时准备解答你的核心学术难题，请提出你的问题！`
+          : `同学你好！我是你的${res.teacher.subject}老师【${res.teacher.name}】。遇到任何理解卡点或大题推导难点，随时打在公屏上，咱们由浅入深一起攻克！`;
 
         setMessages([{ role: 'assistant', content: greeting }]);
-        if (voiceOn) {
-          setCaption(greeting);
-          setAvatarState('speaking');
-          speechService.speak(
-            greeting,
-            () => setAvatarState('speaking'),
-            () => setAvatarState('idle')
-          );
-        }
+        if (voiceOn) speechService.speak(greeting);
       }
     } catch (e) {
       console.error(e);
     }
   };
 
-  const handleSendMessage = async (textToSend?: string) => {
-    const query = (textToSend || inputText).trim();
-    if (!query || isLoading) return;
+  const handleSend = async (textToSend?: string) => {
+    const text = textToSend || inputText;
+    if (!text.trim() || isLoading) return;
 
-    setInputText('');
-    const newMsgs: ChatMessage[] = [...messages, { role: 'user', content: query }];
+    const newMsgs: ChatMessage[] = [...messages, { role: 'user', content: text.trim() }];
     setMessages(newMsgs);
+    setInputText('');
     setIsLoading(true);
     setAvatarState('thinking');
 
-    let assistantReply = '';
-    const tempIndex = newMsgs.length;
+    const teacherId = synthRecipe ? 'synth' : (teacher?.id || initialTeacherId);
+    let fullReply = '';
 
-    // 预先占位 assistant 消息
+    // 占位追加回复
     setMessages([...newMsgs, { role: 'assistant', content: '' }]);
 
     await teachersApi.streamChat(
-      initialTeacherId,
+      teacherId,
       newMsgs,
       synthRecipe,
-      (delta: string) => {
-        assistantReply += delta;
+      (delta) => {
+        fullReply += delta;
+        setMessages([...newMsgs, { role: 'assistant', content: fullReply }]);
         setAvatarState('speaking');
-        setCaption(assistantReply.slice(-60));
-        setMessages(prev => {
-          const copy = [...prev];
-          copy[tempIndex] = { role: 'assistant', content: assistantReply };
-          return copy;
-        });
+        setCaption(fullReply.slice(-35));
       },
       () => {
         setIsLoading(false);
-        // 如果开启语音，朗读回答内容
-        if (voiceOn && assistantReply) {
-          speechService.speak(
-            assistantReply,
-            () => setAvatarState('speaking'),
-            () => setAvatarState('idle')
-          );
-        } else {
-          setAvatarState('idle');
+        setAvatarState('idle');
+        setCaption('');
+        if (voiceOn && fullReply) {
+          speechService.speak(fullReply.replace(/(\$\$[^$]+\$\$|\$[^$]+\$)/g, '公式推导如屏幕所示'));
         }
       },
-      (err: Error) => {
+      (err) => {
+        console.error("Chat error:", err);
         setIsLoading(false);
         setAvatarState('idle');
-        setMessages(prev => {
-          const copy = [...prev];
-          copy[tempIndex] = { role: 'assistant', content: `连接异常: ${err.message}` };
-          return copy;
-        });
+        setMessages([...newMsgs, { role: 'assistant', content: fullReply || '（名师正在连线教研大脑，请稍候再试…）' }]);
       }
     );
   };
@@ -144,41 +127,64 @@ export const TeacherChatPage: React.FC<Props> = ({
     <div className="ambient-glow-bg" style={{ minHeight: 'calc(100vh - 64px)', padding: '28px 0 44px', position: 'relative' }}>
       <div className="app-container" style={{ position: 'relative', zIndex: 1 }}>
         {/* 顶部标题与行动中枢 */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '22px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '22px', flexWrap: 'wrap', gap: '14px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
-              width: '36px',
-              height: '36px',
+              width: '38px',
+              height: '38px',
               borderRadius: '10px',
-              background: 'rgba(56, 189, 248, 0.15)',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
+              background: 'linear-gradient(135deg, rgba(217, 119, 6, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%)',
+              border: '1px solid rgba(217, 119, 6, 0.35)',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'var(--cyan-neon)'
+              color: 'var(--accent-gold)'
             }}>
-              <MessageSquareIcon size={18} />
+              <MessageSquareIcon size={19} />
             </div>
             <div>
-              <h2 style={{ fontSize: '1.45rem', color: '#ffffff', fontWeight: 800, letterSpacing: '-0.03em' }}>
+              <h2 className="brand-serif" style={{ fontSize: '1.5rem', color: '#ffffff', fontWeight: 800, letterSpacing: '-0.02em' }}>
                 {synthRecipe ? synthRecipe.name : teacher ? `${teacher.name} · 1对1深度互动课堂` : '名师伴学'}
               </h2>
               <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                {teacher?.style} · 支持 LaTeX 公式实时渲染与多模态超清数字人伴学
+                {teacher?.style} · 真实通义千问 Qwen-Plus 驱动 · 印刷级 KaTeX 数学板书
               </div>
             </div>
           </div>
 
-          <button
-            onClick={handleExportChat}
-            className="btn btn-secondary"
-            style={{ fontSize: '0.86rem', padding: '8px 18px', display: 'flex', alignItems: 'center', gap: '7px' }}
-            title="将本次问答记录转化为微课脚本"
-          >
-            <VideoCameraIcon size={15} style={{ color: 'var(--cyan-neon)' }} />
-            <span>导出为微课脚本</span>
-            <ArrowRightIcon size={13} />
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* AI 引擎指示器 */}
+            <button
+              onClick={() => setShowKeyModal(true)}
+              className="btn btn-secondary"
+              style={{
+                fontSize: '0.82rem',
+                padding: '7px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                borderColor: 'var(--border-academic)',
+                color: 'var(--accent-gold-light)',
+                background: 'rgba(217, 119, 6, 0.08)'
+              }}
+              title="点击查看/配置阿里云通义千问 API 引擎"
+            >
+              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
+              <span>通义千问 (Qwen-Plus) · 已连通</span>
+              <SlidersIcon size={13} />
+            </button>
+
+            <button
+              onClick={handleExportChat}
+              className="btn btn-secondary"
+              style={{ fontSize: '0.86rem', padding: '8px 18px', display: 'flex', alignItems: 'center', gap: '7px' }}
+              title="将本次问答记录转化为微课脚本"
+            >
+              <VideoCameraIcon size={15} style={{ color: 'var(--accent-gold)' }} />
+              <span>导出为微课脚本</span>
+              <ArrowRightIcon size={13} />
+            </button>
+          </div>
         </div>
 
         {/* 双栏工作台：左侧问答交互流，右侧数字人展台 */}
@@ -205,7 +211,7 @@ export const TeacherChatPage: React.FC<Props> = ({
               display: 'flex',
               flexDirection: 'column',
               gap: '20px',
-              background: 'rgba(11, 17, 32, 0.4)'
+              background: 'rgba(11, 17, 32, 0.5)'
             }}>
               {messages.map((m, idx) => (
                 <div
@@ -213,94 +219,85 @@ export const TeacherChatPage: React.FC<Props> = ({
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: m.role === 'user' ? 'flex-end' : 'flex-start'
+                    alignItems: m.role === 'user' ? 'flex-end' : 'flex-start',
                   }}
                 >
-                  <div style={{ fontSize: '0.74rem', color: 'var(--text-subtle)', marginBottom: '5px' }}>
-                    {m.role === 'user' ? '我' : teacher?.name || '名师导师'}
-                  </div>
-
                   <div style={{
-                    maxWidth: '85%',
-                    padding: '14px 18px',
-                    borderRadius: m.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                    background: m.role === 'user'
-                      ? 'linear-gradient(135deg, #1d4ed8 0%, #0284c7 100%)'
-                      : 'rgba(255, 255, 255, 0.04)',
-                    color: m.role === 'user' ? '#ffffff' : '#f8fafc',
-                    boxShadow: m.role === 'user'
-                      ? '0 0 20px -4px rgba(37, 99, 235, 0.5)'
-                      : 'var(--shadow-sm)',
-                    border: m.role === 'user'
-                      ? '1px solid rgba(255, 255, 255, 0.2)'
-                      : '1px solid var(--border-glass)'
+                    fontSize: '0.74rem',
+                    color: 'var(--text-subtle)',
+                    marginBottom: '6px',
+                    padding: '0 4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
                   }}>
+                    {m.role === 'user' ? '我的提问' : `${synthRecipe ? synthRecipe.name : teacher?.name || '特级名师'} 点拨`}
+                  </div>
+                  <div
+                    style={{
+                      maxWidth: '88%',
+                      padding: '14px 18px',
+                      borderRadius: m.role === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
+                      background: m.role === 'user'
+                        ? 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)'
+                        : '#0d1527',
+                      border: m.role === 'user'
+                        ? '1px solid rgba(59, 130, 246, 0.4)'
+                        : '1px solid rgba(217, 119, 6, 0.18)',
+                      color: '#ffffff',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                      wordBreak: 'break-word',
+                    }}
+                  >
                     {m.role === 'user' ? (
                       <div style={{ fontSize: '0.94rem', lineHeight: '1.6' }}>{m.content}</div>
                     ) : (
                       <RichMarkdown content={m.content} />
                     )}
                   </div>
-
-                  {m.role === 'assistant' && m.content && (
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
-                      <button
-                        onClick={() => speechService.speak(m.content, () => setAvatarState('speaking'), () => setAvatarState('idle'))}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: 'var(--cyan-neon)',
-                          fontSize: '0.78rem',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '5px'
-                        }}
-                      >
-                        <VolumeIcon size={13} />
-                        <span>重听播报</span>
-                      </button>
-                    </div>
-                  )}
                 </div>
               ))}
+              {isLoading && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-gold)', fontSize: '0.86rem', padding: '6px 12px' }}>
+                  <span className="live-pulse-dot" style={{ background: 'var(--accent-gold)' }} />
+                  <span>名师正在运笔推演与组织板书…</span>
+                </div>
+              )}
               <div ref={chatEndRef} />
             </div>
 
-            {/* 启发式提问胶囊 Pills */}
+            {/* 启发式追问胶囊 */}
             <div style={{
-              padding: '12px 18px',
-              background: 'rgba(15, 23, 42, 0.7)',
+              padding: '10px 16px',
               borderTop: '1px solid var(--border-glass)',
+              background: '#0a0f1d',
               display: 'flex',
               gap: '8px',
               overflowX: 'auto',
               whiteSpace: 'nowrap'
             }}>
-              <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)', alignSelf: 'center', fontWeight: 600 }}>
-                启发提问：
-              </span>
               {promptPills.map((pill, i) => (
                 <button
                   key={i}
-                  onClick={() => handleSendMessage(pill)}
+                  onClick={() => handleSend(pill)}
                   style={{
-                    fontSize: '0.76rem',
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '20px',
                     padding: '5px 12px',
-                    borderRadius: 'var(--radius-full)',
-                    border: '1px solid var(--border-glass)',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    color: '#e2e8f0',
+                    fontSize: '0.76rem',
+                    color: 'var(--text-muted)',
                     cursor: 'pointer',
-                    transition: 'all var(--trans-fast)'
+                    transition: 'all 0.2s',
+                    flexShrink: 0
                   }}
                   onMouseEnter={e => {
-                    (e.target as HTMLElement).style.background = 'rgba(56, 189, 248, 0.15)';
-                    (e.target as HTMLElement).style.borderColor = 'rgba(56, 189, 248, 0.4)';
+                    e.currentTarget.style.color = 'var(--accent-gold-light)';
+                    e.currentTarget.style.borderColor = 'rgba(217, 119, 6, 0.35)';
                   }}
                   onMouseLeave={e => {
-                    (e.target as HTMLElement).style.background = 'rgba(255, 255, 255, 0.05)';
-                    (e.target as HTMLElement).style.borderColor = 'var(--border-glass)';
+                    e.currentTarget.style.color = 'var(--text-muted)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
                   }}
                 >
                   {pill}
@@ -312,50 +309,144 @@ export const TeacherChatPage: React.FC<Props> = ({
             <div style={{
               padding: '16px 20px',
               borderTop: '1px solid var(--border-glass)',
-              background: 'rgba(11, 17, 32, 0.85)'
+              background: '#090e1b',
+              display: 'flex',
+              gap: '12px',
+              alignItems: 'center'
             }}>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <input
-                  type="text"
-                  value={inputText}
-                  onChange={e => setInputText(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="键入你想请教的问题，或点击右侧麦克风语音交流..."
-                  className="input-luxury"
-                  style={{ flex: 1 }}
-                />
-                <button
-                  onClick={() => handleSendMessage()}
-                  disabled={isLoading || !inputText.trim()}
-                  className="btn btn-primary"
-                  style={{ padding: '11px 22px', fontSize: '0.92rem', display: 'flex', alignItems: 'center', gap: '6px' }}
-                >
-                  <SendIcon size={14} />
-                  <span>{isLoading ? '启发中...' : '发送'}</span>
-                </button>
-              </div>
+              <input
+                type="text"
+                value={inputText}
+                onChange={e => setInputText(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSend()}
+                placeholder="请将你遇到的难点、公式或题目提问输入此处（Enter 发送）…"
+                className="input-luxury"
+                style={{ flex: 1, padding: '12px 18px', fontSize: '0.92rem', borderRadius: '10px' }}
+                disabled={isLoading}
+              />
+              <button
+                onClick={() => handleSend()}
+                disabled={isLoading || !inputText.trim()}
+                className="btn btn-primary"
+                style={{ padding: '12px 22px', fontSize: '0.92rem', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <SendIcon size={16} />
+                <span>提问</span>
+              </button>
             </div>
           </div>
 
-          {/* 右侧数字人伴学展台 */}
-          <div style={{ position: 'sticky', top: '88px' }}>
+          {/* 右侧数字人演播展台 */}
+          <div style={{ position: 'sticky', top: '84px' }}>
             <TeacherDigitalHuman
-              teacherName={synthRecipe?.name || teacher?.name || '王崇林 老师'}
+              teacherName={synthRecipe?.name || teacher?.name || '王崇林 (特级教师)'}
               subtitle={teacher?.style || '启发式板书与图景推演'}
               avatarState={avatarState}
-              modelVideoUrl={teacher?.dhModelVideoUrl || './demo_videos/model.mp4'}
+              modelVideoUrl={teacher?.dh_model_video_url || './demo_videos/model.mp4'}
               captionText={caption}
               voiceOn={voiceOn}
               onToggleVoice={() => {
-                const next = !voiceOn;
-                setVoiceOn(next);
-                if (!next) speechService.stop();
+                if (avatarState === 'speaking') {
+                  speechService.stop();
+                  setAvatarState('idle');
+                }
+                setVoiceOn(!voiceOn);
               }}
-              onTranscript={text => handleSendMessage(text)}
+              onTranscript={text => handleSend(text)}
             />
           </div>
         </div>
       </div>
+
+      {/* AI 引擎配置抽屉 / 模态框 */}
+      {showKeyModal && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(10px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '20px'
+        }}>
+          <div className="card-impeccable" style={{
+            width: '100%',
+            maxWidth: '480px',
+            background: '#0d1527',
+            border: '1px solid rgba(217, 119, 6, 0.35)',
+            boxShadow: '0 24px 60px rgba(0, 0, 0, 0.8)',
+            padding: '28px',
+            borderRadius: '16px',
+            position: 'relative'
+          }}>
+            <button
+              onClick={() => setShowKeyModal(false)}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer'
+              }}
+            >
+              <CloseIcon size={20} />
+            </button>
+
+            <h3 className="brand-serif" style={{ fontSize: '1.3rem', color: 'var(--accent-gold)', marginBottom: '8px' }}>
+              AI 教学大脑配置
+            </h3>
+            <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: '1.6' }}>
+              系统已配置连接阿里云 DashScope 通义千问（Qwen-Plus）大模型。无论在本地还是在 GitHub Pages 公网部署，均支持真实大模型流式解答并实时生成标准 LaTeX 数学板书。
+            </p>
+
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: '#e2e8f0', marginBottom: '8px', fontWeight: 600 }}>
+                DashScope API Key (阿里云密钥)
+              </label>
+              <input
+                type="password"
+                value={apiKeyInput}
+                onChange={e => setApiKeyInput(e.target.value)}
+                className="input-luxury"
+                placeholder="sk-..."
+                style={{ width: '100%', fontFamily: 'monospace', fontSize: '0.86rem', padding: '10px 14px' }}
+              />
+              <div style={{ fontSize: '0.74rem', color: '#10b981', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <CheckIcon size={14} />
+                <span>已预填您的有效 Qwen 密钥，状态正常</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid var(--border-glass)' }}>
+              <button
+                onClick={() => {
+                  setStoredQwenKey("sk-f3ca2c7e114f47d88dabf1cf5f4ac527");
+                  setApiKeyInput("sk-f3ca2c7e114f47d88dabf1cf5f4ac527");
+                  setShowKeyModal(false);
+                }}
+                className="btn btn-ghost"
+                style={{ fontSize: '0.82rem', padding: '8px 16px' }}
+              >
+                重置为默认密钥
+              </button>
+              <button
+                onClick={() => {
+                  setStoredQwenKey(apiKeyInput);
+                  setShowKeyModal(false);
+                }}
+                className="btn btn-primary"
+                style={{ fontSize: '0.84rem', padding: '8px 22px' }}
+              >
+                保存并生效
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

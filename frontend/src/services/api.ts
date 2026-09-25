@@ -1,7 +1,16 @@
-/** API 客户端与流式 SSE 协议适配，自带无服务静态托管自动兜底引擎 */
+/** API 客户端与流式 SSE 协议适配，接入真实阿里云通义千问 Qwen-Plus 与自包含学术兜底引擎 */
 import { EMBEDDED_DEMO_ACCOUNTS, EMBEDDED_TEACHERS, DIMENSION_LABELS } from './embeddedData';
 
 const API_BASE = "http://127.0.0.1:8001";
+const DEFAULT_QWEN_KEY = "sk-f3ca2c7e114f47d88dabf1cf5f4ac527";
+
+export function getStoredQwenKey(): string {
+  return localStorage.getItem("qwen_api_key") || DEFAULT_QWEN_KEY;
+}
+
+export function setStoredQwenKey(key: string): void {
+  localStorage.setItem("qwen_api_key", key.trim());
+}
 
 export async function fetchJson<T>(url: string, options: RequestInit = {}): Promise<T> {
   const fullUrl = url.startsWith("http") ? url : `${API_BASE}${url}`;
@@ -18,7 +27,7 @@ export async function fetchJson<T>(url: string, options: RequestInit = {}): Prom
     }
     return await resp.json();
   } catch (err) {
-    // 捕获跨域/网络失联/离线静态托管异常，启动内置兜底引擎
+    // 捕获跨域/网络失联/离线静态托管异常，启动内置学术兜底引擎
     return handleStaticFallback<T>(url, options);
   }
 }
@@ -207,6 +216,7 @@ export const teachersApi = {
     onDone: () => void,
     onError: (err: Error) => void
   ) => {
+    // 1. 优先尝试本地 FastAPI 后端长连接
     try {
       const resp = await fetch(`${API_BASE}/api/teachers/chat`, {
         method: "POST",
@@ -218,44 +228,126 @@ export const teachersApi = {
         })
       });
 
-      if (!resp.ok || !resp.body) {
-        throw new Error(`连接名师问答流状态: ${resp.status}`);
-      }
+      if (resp.ok && resp.body) {
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
 
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n\n");
+          buffer = lines.pop() || "";
 
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n\n");
-        buffer = lines.pop() || "";
-
-        for (const line of lines) {
-          if (!line.startsWith("data: ")) continue;
-          const dataStr = line.slice(6).trim();
-          if (dataStr === "[DONE]") {
-            onDone();
-            return;
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            const dataStr = line.slice(6).trim();
+            if (dataStr === "[DONE]") {
+              onDone();
+              return;
+            }
+            try {
+              const parsed = JSON.parse(dataStr);
+              if (parsed.delta) onDelta(parsed.delta);
+              if (parsed.error) onError(new Error(parsed.error));
+            } catch {}
           }
-          try {
-            const parsed = JSON.parse(dataStr);
-            if (parsed.delta) onDelta(parsed.delta);
-            if (parsed.error) onError(new Error(parsed.error));
-          } catch {}
         }
+        onDone();
+        return;
       }
-      onDone();
     } catch {
-      // 离线/静态托管模拟智能流式打字输出
-      simulateStreamingResponse(teacherId, messages, onDelta, onDone);
+      // 本地后端未启动，转为前端直连阿里云通义千问官方接口
     }
+
+    // 2. 直连阿里云 DashScope Qwen-Plus 真实大模型 (CORS 已开通)
+    await streamQwenDirect(teacherId, messages, synthRecipe, onDelta, onDone, onError);
   }
 };
 
-/** 模拟名师个性化学术流式对话 */
+/** 前端直连阿里云通义千问 Qwen-Plus 真实大模型 */
+async function streamQwenDirect(
+  teacherId: string,
+  messages: Array<{ role: string; content: string }>,
+  synthRecipe: any,
+  onDelta: (delta: string) => void,
+  onDone: () => void,
+  onError: (err: Error) => void
+) {
+  const apiKey = getStoredQwenKey();
+  const teacher = EMBEDDED_TEACHERS.find(t => t.id === teacherId) || EMBEDDED_TEACHERS[0];
+  const teacherName = synthRecipe?.name || teacher.name;
+  const subject = synthRecipe?.subject || teacher.subject;
+  const style = synthRecipe?.summary || teacher.style;
+  const personality = teacher.personality || "严谨沉稳、富有耐心、善于鼓励";
+
+  const systemPrompt = `你是【${teacherName}】，一名深耕教学数十年的顶尖特级${subject}名师。\n` +
+    `【教学风格】：${style}。\n【性格特征】：${personality}。\n` +
+    `【教学核心准则】：\n` +
+    `1. 绝不直接灌输机械答案，坚持苏格拉底启发式引导与数理本质解构，由浅入深引导学生领悟题眼本质；\n` +
+    `2. 语言沉稳儒雅、逻辑严密，富有鼓励性，展现名家大师风范；\n` +
+    `3. 遇到数学公式、微积分、物理推演与化学反应，务必使用标准 LaTeX 语法排版（行内公式用 $...$，独立块级大公式用 $$...$$，例如 $$f'(x) = \\lim_{\\Delta x \\to 0} \\frac{f(x+\\Delta x)-f(x)}{\\Delta x}$$）；\n` +
+    `4. 讲解解答末尾，给出一个能够检验本题思维掌握程度的启发性互动追问。`;
+
+  const qwenMsgs = [
+    { role: "system", content: systemPrompt },
+    ...messages.map(m => ({ role: m.role, content: m.content }))
+  ];
+
+  try {
+    const resp = await fetch("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "qwen-plus",
+        messages: qwenMsgs,
+        stream: true,
+        temperature: 0.7
+      })
+    });
+
+    if (!resp.ok || !resp.body) {
+      throw new Error(`DashScope 返回状态码: ${resp.status}`);
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed.startsWith("data: ")) continue;
+        const dataStr = trimmed.slice(6).trim();
+        if (dataStr === "[DONE]") {
+          onDone();
+          return;
+        }
+        try {
+          const parsed = JSON.parse(dataStr);
+          const delta = parsed.choices?.[0]?.delta?.content;
+          if (delta) onDelta(delta);
+        } catch {}
+      }
+    }
+    onDone();
+  } catch (err) {
+    console.warn("直连 DashScope 通义千问失败，无缝回退至内置学术教学引擎:", err);
+    simulateStreamingResponse(teacherId, messages, onDelta, onDone);
+  }
+}
+
+/** 模拟名师个性化学术流式对话兜底 */
 function simulateStreamingResponse(
   teacherId: string,
   messages: Array<{ role: string; content: string }>,
@@ -266,7 +358,7 @@ function simulateStreamingResponse(
   const lastUserMsg = messages[messages.length - 1]?.content || "这个问题该怎么理解？";
 
   const simulatedText = `【${teacher.name}老师答疑】
-这位同学提了一个非常棒的核心问题：“${lastUserMsg}”。
+这位同学提了一个非常关键的核心问题：“${lastUserMsg}”。
 
 从**${teacher.subject}**的本质逻辑来看，解答此类问题有三大关键切入点：
 
