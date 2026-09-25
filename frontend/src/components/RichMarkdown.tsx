@@ -515,22 +515,48 @@ function parseAcademicBlocks(content: string): AcademicBlock[] {
       let variant: 'think' | 'tip' | 'warning' | 'quote' = 'quote';
       let title = '名师学思录';
 
-      if (fullCombined.includes('启发思考') || fullCombined.includes('思考') || fullCombined.includes('探究') || fullCombined.includes('为何') || fullCombined.includes('假定') || fullCombined.includes('[!THINK]')) {
+      if (
+        fullCombined.includes('启发思考') ||
+        fullCombined.includes('思考') ||
+        fullCombined.includes('探究') ||
+        fullCombined.includes('为何') ||
+        fullCombined.includes('假定') ||
+        /\[!THINK\]/i.test(fullCombined)
+      ) {
         variant = 'think';
         title = '✦ 启发思考 · 深度探究';
-      } else if (fullCombined.includes('易错') || fullCombined.includes('陷阱') || fullCombined.includes('避坑') || fullCombined.includes('注意') || fullCombined.includes('失分') || fullCombined.includes('[!WARNING]')) {
+      } else if (
+        fullCombined.includes('易错') ||
+        fullCombined.includes('陷阱') ||
+        fullCombined.includes('避坑') ||
+        fullCombined.includes('注意') ||
+        fullCombined.includes('失分') ||
+        /\[!(WARNING|IMPORTANT|CAUTION)\]/i.test(fullCombined)
+      ) {
         variant = 'warning';
         title = '⚠️ 易错陷阱 · 考点破译';
-      } else if (fullCombined.includes('名师点拨') || fullCombined.includes('点拨') || fullCombined.includes('技巧') || fullCombined.includes('口诀') || fullCombined.includes('秒杀') || fullCombined.includes('[!NOTE]')) {
+      } else if (
+        fullCombined.includes('名师点拨') ||
+        fullCombined.includes('点拨') ||
+        fullCombined.includes('技巧') ||
+        fullCombined.includes('口诀') ||
+        fullCombined.includes('秒杀') ||
+        /\[!(NOTE|TIP)\]/i.test(fullCombined)
+      ) {
         variant = 'tip';
         title = '🎯 特级名师 · 要点点拨';
       }
+
+      // 剔除裸露的 [!IMPORTANT] 等 GitHub alert 标签，杜绝渲染杂质
+      const cleanedContent = calloutLines
+        .map(line => line.replace(/^\[!(IMPORTANT|NOTE|WARNING|TIP|CAUTION|THINK)\]\s*/i, '').trim())
+        .filter(Boolean);
 
       blocks.push({
         type: 'callout',
         variant,
         title,
-        content: calloutLines.filter(Boolean),
+        content: cleanedContent,
       });
       continue;
     }

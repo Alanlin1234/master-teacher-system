@@ -305,11 +305,22 @@ async function streamQwenDirect(
   const teacher = EMBEDDED_TEACHERS.find(t => t.id === teacherId) || EMBEDDED_TEACHERS[0];
   const teacherName = synthRecipe?.name || teacher.name;
   const subject = synthRecipe?.subject || teacher.subject;
-  const style = synthRecipe?.summary || teacher.style;
-  const personality = teacher.personality || "严谨沉稳、富有耐心、善于鼓励";
+  const style = synthRecipe?.summary || synthRecipe?.style || teacher.style;
+  const personality = synthRecipe?.personality || teacher.personality || "严谨沉稳、富有耐心、善于鼓励";
+
+  const dimScores = synthRecipe?.dim_scores;
+  let dynamicPedagogy = "";
+  if (dimScores) {
+    dynamicPedagogy = `\n【当前五维自适应教学基因调优配置】：\n` +
+      `- 上课风格指标 (${Math.round((dimScores.style || 0.8) * 100)}%): ${dimScores.style > 0.82 ? '采用极高密度的严密公理化证明与数学公理推演，注重定义域、多分支讨论与严格充要条件判定' : '采用生动形象的直观几何切线比喻与生活化隐喻，注重通俗启发'}；\n` +
+      `- 教学方法指标 (${Math.round((dimScores.method || 0.8) * 100)}%): ${dimScores.method > 0.82 ? '必须设置专门的【高考命题反套路陷阱剖析】，列出易错混淆点与典型反例' : '采用苏格拉底递进启发式追问，引导学生自主反思发现矛盾'}；\n` +
+      `- 核心特长指标 (${Math.round((dimScores.strengths || 0.8) * 100)}%): ${dimScores.strengths > 0.82 ? '数形结合与高维模型综合建构，输出高品质 LaTeX 数学公式块卡片' : '提供极速通关口诀与步骤化解题模板'}；\n` +
+      `- 互动温度指标 (${Math.round((dimScores.personality || 0.8) * 100)}%): ${dimScores.personality > 0.82 ? '大师学者型沉稳深邃风范' : '亲切如春风拂面、耐心幽默鼓励'}；\n` +
+      `- 表达节奏指标 (${Math.round((dimScores.communication || 0.8) * 100)}%): ${dimScores.communication > 0.82 ? '输出结构化思维导图或对比表格，语言极其精炼高密' : '娓娓道来循序渐进铺垫展开'}。`;
+  }
 
   const systemPrompt = `你是【${teacherName}】，一名深耕教学数十年的顶尖特级${subject}名师。\n` +
-    `【教学风格】：${style}。\n【性格特征】：${personality}。\n` +
+    `【教学风格】：${style}。\n【性格特征】：${personality}。${dynamicPedagogy}\n` +
     `【教学核心准则】：\n` +
     `1. 绝不直接灌输机械答案，坚持苏格拉底启发式引导与数理本质解构，由浅入深引导学生领悟题眼本质；\n` +
     `2. 语言沉稳儒雅、逻辑严密，富有鼓励性，展现名家大师风范；\n` +
@@ -369,7 +380,7 @@ async function streamQwenDirect(
     onDone();
   } catch (err) {
     console.warn("直连 DashScope 通义千问失败，无缝回退至内置学术教学引擎:", err);
-    simulateStreamingResponse(teacherId, messages, onDelta, onDone);
+    simulateStreamingResponse(teacherId, messages, synthRecipe, onDelta, onDone);
   }
 }
 
@@ -377,32 +388,66 @@ async function streamQwenDirect(
 function simulateStreamingResponse(
   teacherId: string,
   messages: Array<{ role: string; content: string }>,
+  synthRecipe: any,
   onDelta: (delta: string) => void,
   onDone: () => void
 ) {
   const teacher = EMBEDDED_TEACHERS.find(t => t.id === teacherId) || EMBEDDED_TEACHERS[0];
   const lastUserMsg = messages[messages.length - 1]?.content || "这个问题该怎么理解？";
+  const scores = synthRecipe?.dim_scores || { style: 0.9, method: 0.9, strengths: 0.9, personality: 0.85, communication: 0.85 };
 
-  const simulatedText = `【${teacher.name}老师答疑】
-这位同学提了一个非常关键的核心问题：“${lastUserMsg}”。
+  const isRigorous = (scores.style || 0.8) >= 0.82;
+  const isExamTraps = (scores.method || 0.8) >= 0.82;
+  const isHighDim = (scores.strengths || 0.8) >= 0.82;
+  const isScholarly = (scores.personality || 0.8) >= 0.82;
+  const isStructured = (scores.communication || 0.8) >= 0.82;
 
-从**${teacher.subject}**的本质逻辑来看，解答此类问题有三大关键切入点：
+  const teacherTitle = synthRecipe?.name || `${teacher.name}老师`;
 
-1. **核心模型建构**：
-   我们首先建立标准微分方程与函数关系式：
-   $$\\lim_{x \\to 0} \\frac{\\sin(x)}{x} = 1, \\quad f'(x) = \\lim_{\\Delta x \\to 0} \\frac{f(x+\\Delta x) - f(x)}{\\Delta x}$$
-   把握住极限与切线的本质，就不会被表面的复杂参数所迷惑。
+  const simulatedText = `### 【${teacherTitle} · 实时推演】
 
-2. **${teacher.style.split('、')[0]}点拨**：
-   牢记我们的解题口诀：“**图景先行，直击题眼**”。在审题时先画出导数草图与导数正负符号分布区间，单调性与极值点立刻一目了然！
+${isScholarly ? '我们从该学术问题的底层公理与逻辑拓扑出发展开深度剖析。' : '同学你好！针对你提出的这个核心问题，咱们用直观的数理本质拆解清楚。'}
 
-3. **思维迁移升维**：
-   下次在综合大题中遇到含参讨论，先优先检验判别式 $\\Delta$ 以及零点存在性定理。
+关于：“**${lastUserMsg}**”
 
-你试着顺着这个思路再推演下一步，有任何卡点随时跟我说！`;
+${isRigorous
+  ? `#### 1. 严格代数推导与边界条件定义
+首先确定数学对象的合理定义域与存在性条件：
+$$f'(x) = \\lim_{\\Delta x \\to 0} \\frac{f(x+\\Delta x) - f(x)}{\\Delta x}$$
+对关键临界点实施分类讨论，检验充要条件的完备性，避免在推演过程中引入伪解。`
+  : `#### 1. 几何图像直观与变化率图景
+我们不妨把问题映射到坐标系几何图景中：导数就是切线斜率，变化率的符号直接映射了曲线的起伏走势。抓住切线水平这一瞬间的左右符号变化，问题本质就迎刃而解！`
+}
+
+${isExamTraps
+  ? `> [!IMPORTANT]
+> **🎯 高考命题反套路避坑警示**
+> 考场常见失分点：切忌把一阶必要条件与充分条件混为一谈！若导数在临界点左右未发生正负号跨轴突变，该点绝非极值点。务必配合单调性变号表严格核验！`
+  : `> [!NOTE]
+> **✦ 苏格拉底递进反思追问**
+> 试想：当参数趋近于无穷大或零界点时，曲线的几何渐近线会如何移动？你能否在草稿纸上尝试画出这一退化临界状态？`
+}
+
+${isHighDim
+  ? `#### 2. 高维模型升维与能量映射
+$$E(t) = \\int_0^t P(\\tau) \\, \\mathrm{d}\\tau, \\quad \\sum \\mathbf{F} = \\frac{\\mathrm{d}\\mathbf{p}}{\\mathrm{d}t}$$
+通过构造高维守恒量，我们能够绕过繁复的中间瞬态微元，实现宏观直接秒杀。`
+  : `#### 2. 名师极速破题口诀
+- **抓题眼**：先定定义域，再算一阶导；
+- **排陷阱**：找准变号点，分类看边界；
+- **提速度**：数形结合图先行，秒杀复杂参数题！`
+}
+
+${isStructured
+  ? `#### 核心思维导图
+| 分析维度 | 代数必要条件 | 几何充分判定 | 考场警示 |
+| :--- | :--- | :--- | :--- |
+| **判定准则** | 方程导数为零点 | 穿轴左右异号 | 警惕未变号的马鞍拐点 |`
+  : `**名师温润结语**：数学与物理的大道至简，关键在于掌握‘变化之中的不变恒量’。顺着这个思路再推演一步，你一定能彻底通透！`
+}`;
 
   let index = 0;
-  const chunkLength = 3;
+  const chunkLength = 4;
   const timer = setInterval(() => {
     if (index < simulatedText.length) {
       const chunk = simulatedText.slice(index, index + chunkLength);
@@ -412,7 +457,7 @@ function simulateStreamingResponse(
       clearInterval(timer);
       onDone();
     }
-  }, 25);
+  }, 20);
 }
 
 export const composeApi = {
