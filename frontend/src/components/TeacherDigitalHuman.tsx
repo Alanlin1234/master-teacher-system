@@ -56,6 +56,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
   const [isListening, setIsListening] = useState(false);
   const [isAudioMuted, setIsAudioMuted] = useState(true);
   const [syncedSubtitle, setSyncedSubtitle] = useState('');
+  const [viewFit, setViewFit] = useState<'cover' | 'contain'>('cover');
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoSrc = cleanMediaUrl(modelVideoUrl);
@@ -156,7 +157,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
             boxShadow: `0 0 10px ${stateColors[avatarState]}`,
             display: 'inline-block'
           }} />
-          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '0.06em' }}>
+          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-main)', letterSpacing: '0.06em' }}>
             {stateLabels[avatarState]}
           </span>
           {avatarState === 'speaking' && (
@@ -169,30 +170,52 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           )}
         </div>
 
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '3px 10px',
-          borderRadius: 'var(--radius-full)',
-          background: 'rgba(255, 255, 255, 0.05)',
-          border: '1px solid var(--border-glass)',
-          fontSize: '0.72rem',
-          color: 'var(--text-muted)'
-        }}>
-          <VideoCameraIcon size={13} style={{ color: 'var(--cyan-neon)' }} />
-          <span>4K UltraHD</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* 画幅切换按钮 (特写 vs 全景) */}
+          <button
+            type="button"
+            onClick={() => setViewFit(f => f === 'cover' ? 'contain' : 'cover')}
+            style={{
+              padding: '3px 9px',
+              borderRadius: 'var(--radius-full)',
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border-glass)',
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              color: 'var(--text-muted)',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+            title="点击切换：特写人像 / 完整全景"
+          >
+            {viewFit === 'cover' ? '全景模式' : '特写模式'}
+          </button>
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '3px 10px',
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-glass)',
+            fontSize: '0.72rem',
+            color: 'var(--text-muted)'
+          }}>
+            <VideoCameraIcon size={13} style={{ color: 'var(--accent-primary)' }} />
+            <span>4K UltraHD</span>
+          </div>
         </div>
       </div>
 
-      {/* 核心演播视窗 (纯净镜面，无标签药丸遮挡) */}
+      {/* 核心演播视窗 (精准黄金人像取景，完整呈现眼睛、面容与神态) */}
       <div style={{
-        height: '310px',
+        height: '380px',
         borderRadius: 'var(--radius-lg)',
         background: '#020617',
         position: 'relative',
         overflow: 'hidden',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        border: '1px solid var(--border-glass)',
         boxShadow: 'inset 0 0 40px rgba(0,0,0,0.8)'
       }}>
         <video
@@ -207,21 +230,12 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
-            filter: avatarState === 'thinking' ? 'brightness(0.9) contrast(1.05)' : 'brightness(1.0)'
+            objectFit: viewFit,
+            objectPosition: viewFit === 'cover' ? 'center 8%' : 'center center',
+            filter: avatarState === 'thinking' ? 'brightness(0.9) contrast(1.05)' : 'brightness(1.0)',
+            transition: 'object-fit 0.3s ease'
           }}
         />
-
-        {/* 顶部微暗角遮罩 (巧妙遮掩原视频外设角标) */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '40px',
-          background: 'linear-gradient(180deg, rgba(6, 9, 17, 0.6) 0%, transparent 100%)',
-          pointerEvents: 'none'
-        }} />
 
         {/* 浮动原声控制胶囊 (直观显眼，彻底解决'MP4没声音'疑问) */}
         <button
@@ -231,7 +245,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
             position: 'absolute',
             bottom: '12px',
             right: '12px',
-            background: isAudioMuted ? 'rgba(15, 23, 42, 0.88)' : 'rgba(16, 185, 129, 0.92)',
+            background: isAudioMuted ? 'rgba(15, 23, 42, 0.88)' : '#10b981',
             backdropFilter: 'blur(8px)',
             border: isAudioMuted ? '1px solid rgba(255, 255, 255, 0.25)' : '1px solid rgba(52, 211, 153, 0.6)',
             color: '#ffffff',
@@ -265,7 +279,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
 
       {/* 名师身份信息栏 */}
       <div style={{ marginTop: '16px' }}>
-        <div style={{ fontSize: '1.08rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>
+        <div style={{ fontSize: '1.08rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
           {teacherName}
         </div>
         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
@@ -273,7 +287,7 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* 多模态交互控制中枢 (全矢量图标，零 Emoji) */}
+      {/* 多模态交互控制中枢 */}
       <div style={{
         marginTop: '16px',
         paddingTop: '16px',
@@ -289,11 +303,11 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           className="btn"
           style={{
             flex: 1,
-            padding: '7px 12px',
+            padding: '8px 12px',
             fontSize: '0.82rem',
-            background: !isAudioMuted ? 'rgba(56, 189, 248, 0.16)' : 'rgba(255,255,255,0.04)',
-            color: !isAudioMuted ? 'var(--cyan-neon)' : 'var(--text-muted)',
-            border: !isAudioMuted ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid var(--border-glass)',
+            background: !isAudioMuted ? 'var(--accent-primary)' : 'var(--bg-surface)',
+            color: !isAudioMuted ? '#ffffff' : 'var(--text-main)',
+            border: '1px solid var(--border-glass)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -310,11 +324,11 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           className="btn"
           style={{
             flex: 1,
-            padding: '7px 12px',
+            padding: '8px 12px',
             fontSize: '0.82rem',
-            background: isListening ? 'rgba(244, 63, 94, 0.2)' : 'rgba(255,255,255,0.04)',
-            color: isListening ? '#fb7185' : 'var(--text-body)',
-            border: isListening ? '1px solid rgba(244, 63, 94, 0.4)' : '1px solid var(--border-glass)',
+            background: isListening ? '#f43f5e' : 'var(--bg-surface)',
+            color: isListening ? '#ffffff' : 'var(--text-main)',
+            border: '1px solid var(--border-glass)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -326,26 +340,26 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
         </button>
       </div>
 
-      {/* 实时滚动智能字幕卡 (精致无杂音) */}
+      {/* 实时滚动智能字幕卡 */}
       {(captionText || (!isAudioMuted && syncedSubtitle)) && (
         <div style={{
           marginTop: '14px',
-          background: 'rgba(11, 17, 32, 0.85)',
-          backdropFilter: 'blur(12px)',
+          background: 'var(--bg-surface)',
           padding: '10px 14px',
           borderRadius: 'var(--radius-sm)',
           fontSize: '0.82rem',
-          color: '#e2e8f0',
-          borderLeft: '3px solid var(--cyan-neon)',
+          color: 'var(--text-main)',
+          borderLeft: '3px solid var(--accent-primary)',
           borderTop: '1px solid var(--border-glass)',
           borderRight: '1px solid var(--border-glass)',
           borderBottom: '1px solid var(--border-glass)',
           lineHeight: '1.5',
           display: 'flex',
           gap: '8px',
-          alignItems: 'flex-start'
+          alignItems: 'flex-start',
+          boxShadow: 'var(--shadow-sm)'
         }}>
-          <MessageSquareIcon size={14} style={{ color: 'var(--cyan-neon)', marginTop: '2px' }} />
+          <MessageSquareIcon size={14} style={{ color: 'var(--accent-primary)', marginTop: '2px', flexShrink: 0 }} />
           <span>{(captionText || syncedSubtitle).slice(0, 120)}...</span>
         </div>
       )}

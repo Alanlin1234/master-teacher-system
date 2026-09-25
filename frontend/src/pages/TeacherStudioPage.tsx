@@ -331,14 +331,14 @@ export const TeacherStudioPage: React.FC<Props> = ({
               </div>
 
               {/* 右侧数字人视频预览底模 */}
-              <div className="digital-human-frame" style={{ height: '300px' }}>
+              <div className="digital-human-frame" style={{ height: '340px' }}>
                 <video
                   src="./demo_videos/merged.mp4"
                   autoPlay
                   loop
                   muted
                   playsInline
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 8%' }}
                 />
               </div>
             </div>

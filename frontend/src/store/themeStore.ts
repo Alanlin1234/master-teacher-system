@@ -4,14 +4,15 @@ export type Theme = 'light' | 'dark';
 
 export const getStoredTheme = (): Theme => {
   try {
-    const saved = localStorage.getItem('edu_theme');
+    const saved = localStorage.getItem('edu_theme_v2');
     if (saved === 'light' || saved === 'dark') return saved;
   } catch {}
-  return 'dark';
+  return 'light';
 };
 
 export const setStoredTheme = (theme: Theme) => {
   try {
+    localStorage.setItem('edu_theme_v2', theme);
     localStorage.setItem('edu_theme', theme);
   } catch {}
   document.documentElement.setAttribute('data-theme', theme);
