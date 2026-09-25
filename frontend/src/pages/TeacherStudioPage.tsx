@@ -250,7 +250,12 @@ export const TeacherStudioPage: React.FC<Props> = ({
                     border: '1px solid var(--border-glass)',
                     flexShrink: 0
                   }}>
-                    <img src={t.photoUrl || './photos/1.png'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img
+                      src={t.photoUrl ? (t.photoUrl.startsWith('/') ? '.' + t.photoUrl : t.photoUrl) : './avatars/t1.svg'}
+                      alt=""
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg'; }}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '0.98rem', color: '#ffffff' }}>{t.name}</div>

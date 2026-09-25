@@ -18,6 +18,13 @@ interface Props {
   onAddToCompose: (teacherId: string) => void;
 }
 
+const getSafeAvatarUrl = (url?: string, defaultId: string = '1') => {
+  if (!url) return `./avatars/t${defaultId.replace(/\D/g, '') || '1'}.svg`;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('/')) return '.' + url;
+  return url;
+};
+
 export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompose }) => {
   const [teachers, setTeachers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -160,18 +167,23 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                     height: '64px',
                     borderRadius: '16px',
                     overflow: 'hidden',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid var(--border-glass)',
+                    background: 'radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.85))',
+                    border: '1px solid rgba(56, 189, 248, 0.28)',
                     flexShrink: 0,
-                    boxShadow: 'var(--shadow-sm)'
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.35)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '3px'
                   }}>
-                    {t.photoUrl ? (
-                      <img src={t.photoUrl} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--cyan-neon)' }}>
-                        <GraduationCapIcon size={32} />
-                      </div>
-                    )}
+                    <img
+                      src={getSafeAvatarUrl(t.photoUrl, t.id)}
+                      alt={t.name}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg';
+                      }}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
                   </div>
 
                   <div style={{ flex: 1 }}>
@@ -318,16 +330,23 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                   height: '80px',
                   borderRadius: '20px',
                   overflow: 'hidden',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid var(--border-glass)'
+                  background: 'radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.2), rgba(15, 23, 42, 0.9))',
+                  border: '1px solid rgba(56, 189, 248, 0.3)',
+                  flexShrink: 0,
+                  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '4px'
                 }}>
-                  {activeTeacher.photoUrl ? (
-                    <img src={activeTeacher.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--cyan-neon)' }}>
-                      <GraduationCapIcon size={36} />
-                    </div>
-                  )}
+                  <img
+                    src={getSafeAvatarUrl(activeTeacher.photoUrl, activeTeacher.id)}
+                    alt={activeTeacher.name}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg';
+                    }}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  />
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

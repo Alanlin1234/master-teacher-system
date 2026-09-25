@@ -45,6 +45,10 @@ photos_dir = (frontend_public / "photos") if (frontend_public / "photos").exists
 if photos_dir.exists():
     app.mount("/photos", StaticFiles(directory=str(photos_dir)), name="photos")
 
+avatars_dir = (frontend_public / "avatars") if (frontend_public / "avatars").exists() else (frontend_dist / "avatars")
+if avatars_dir.exists():
+    app.mount("/avatars", StaticFiles(directory=str(avatars_dir)), name="avatars")
+
 videos_dir = (frontend_public / "demo_videos") if (frontend_public / "demo_videos").exists() else (frontend_dist / "demo_videos")
 if videos_dir.exists():
     app.mount("/demo_videos", StaticFiles(directory=str(videos_dir)), name="demo_videos")

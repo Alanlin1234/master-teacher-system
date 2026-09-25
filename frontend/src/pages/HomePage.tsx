@@ -21,6 +21,7 @@ interface Props {
 export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   const [demoState, setDemoState] = useState<'idle' | 'speaking'>('idle');
   const [caption, setCaption] = useState('');
+  const [forceUnmute, setForceUnmute] = useState(false);
   const [interactiveScores, setInteractiveScores] = useState({
     style: 0.94,
     personality: 0.88,
@@ -41,10 +42,13 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     const greeting = "同学你好！欢迎来到循智导学名师智教系统。我是你的AI特级导师王老师。今天咱们攻坚导数切线还是解析几何？随时开启语音，我带你一步步突破思维瓶颈！";
     setCaption(greeting);
     setDemoState('speaking');
+    setForceUnmute(true);
     speechService.speak(
       greeting,
       () => setDemoState('speaking'),
-      () => setDemoState('idle')
+      () => {
+        setDemoState('idle');
+      }
     );
   };
 
@@ -202,10 +206,13 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               subtitle="全国数学竞赛金牌教练 · 启发式引导"
               avatarState={demoState}
               captionText={caption}
+              forceUnmute={forceUnmute}
+              posterUrl="./avatars/t1.svg"
               onToggleVoice={() => {
                 if (demoState === 'speaking') {
                   speechService.stop();
                   setDemoState('idle');
+                  setForceUnmute(false);
                 } else {
                   handleTryAudio();
                 }

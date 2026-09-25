@@ -343,6 +343,7 @@ export const TeacherChatPage: React.FC<Props> = ({
               subtitle={teacher?.style || '启发式板书与图景推演'}
               avatarState={avatarState}
               modelVideoUrl={teacher?.dh_model_video_url || './demo_videos/model.mp4'}
+              posterUrl={teacher?.photoUrl ? (teacher.photoUrl.startsWith('/') ? '.' + teacher.photoUrl : teacher.photoUrl) : './avatars/t1.svg'}
               captionText={caption}
               voiceOn={voiceOn}
               onToggleVoice={() => {

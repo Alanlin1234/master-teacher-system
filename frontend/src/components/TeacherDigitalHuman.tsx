@@ -21,6 +21,8 @@ interface Props {
   onToggleVoice?: () => void;
   onTranscript?: (text: string) => void;
   captionText?: string;
+  forceUnmute?: boolean;
+  posterUrl?: string;
 }
 
 const cleanMediaUrl = (url?: string) => {
@@ -39,19 +41,50 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
   onToggleVoice,
   onTranscript,
   captionText = '',
+  forceUnmute,
+  posterUrl = './avatars/t1.svg',
 }) => {
   const [isListening, setIsListening] = useState(false);
+  const [isAudioMuted, setIsAudioMuted] = useState(true);
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoSrc = cleanMediaUrl(modelVideoUrl);
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.muted = true;
+      // 现代浏览器要求自动播放必须初始静音以防被策略拦截
+      videoRef.current.muted = isAudioMuted;
       videoRef.current.defaultMuted = true;
       videoRef.current.play().catch(() => {});
     }
   }, [videoSrc]);
+
+  useEffect(() => {
+    if (forceUnmute !== undefined) {
+      setIsAudioMuted(!forceUnmute);
+      if (videoRef.current) {
+        videoRef.current.muted = !forceUnmute;
+        videoRef.current.volume = 1.0;
+        if (forceUnmute) {
+          videoRef.current.play().catch(() => {});
+        }
+      }
+    }
+  }, [forceUnmute]);
+
+  const toggleVideoAudio = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (videoRef.current) {
+      const nextMuted = !isAudioMuted;
+      videoRef.current.muted = nextMuted;
+      videoRef.current.volume = 1.0;
+      if (!nextMuted) {
+        videoRef.current.play().catch(err => console.warn('Video audio play error:', err));
+      }
+      setIsAudioMuted(nextMuted);
+      onToggleVoice?.();
+    }
+  };
 
   // Wire GSAP subtle floating motion
   useFloatingStage(stageRef, 5, 4.0);
@@ -141,10 +174,10 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
         <video
           ref={videoRef}
           src={videoSrc}
-          poster="./photos/1.png"
+          poster={posterUrl}
           autoPlay
           loop
-          muted
+          muted={isAudioMuted}
           playsInline
           style={{
             width: '100%',
@@ -164,6 +197,45 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
           background: 'linear-gradient(180deg, rgba(6, 9, 17, 0.6) 0%, transparent 100%)',
           pointerEvents: 'none'
         }} />
+
+        {/* 浮动原声控制胶囊 (直观显眼，彻底解决'MP4没声音'疑问) */}
+        <button
+          type="button"
+          onClick={toggleVideoAudio}
+          style={{
+            position: 'absolute',
+            bottom: '12px',
+            right: '12px',
+            background: isAudioMuted ? 'rgba(15, 23, 42, 0.88)' : 'rgba(16, 185, 129, 0.92)',
+            backdropFilter: 'blur(8px)',
+            border: isAudioMuted ? '1px solid rgba(255, 255, 255, 0.25)' : '1px solid rgba(52, 211, 153, 0.6)',
+            color: '#ffffff',
+            padding: '6px 12px',
+            borderRadius: 'var(--radius-full)',
+            fontSize: '0.74rem',
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            cursor: 'pointer',
+            zIndex: 10,
+            boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
+            transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+          title={isAudioMuted ? '点击开启 MP4 视频原声' : '点击静音'}
+        >
+          {isAudioMuted ? (
+            <>
+              <VolumeMuteIcon size={14} style={{ color: '#f87171' }} />
+              <span>开启视频原声</span>
+            </>
+          ) : (
+            <>
+              <VolumeIcon size={14} style={{ color: '#ffffff' }} />
+              <span>原声播放中</span>
+            </>
+          )}
+        </button>
       </div>
 
       {/* 名师身份信息栏 */}
@@ -188,23 +260,23 @@ export const TeacherDigitalHuman: React.FC<Props> = ({
       }}>
         {/* 语音播报开关 */}
         <button
-          onClick={onToggleVoice}
+          onClick={toggleVideoAudio}
           className="btn"
           style={{
             flex: 1,
             padding: '7px 12px',
             fontSize: '0.82rem',
-            background: voiceOn ? 'rgba(56, 189, 248, 0.12)' : 'rgba(255,255,255,0.04)',
-            color: voiceOn ? 'var(--cyan-neon)' : 'var(--text-muted)',
-            border: voiceOn ? '1px solid rgba(56, 189, 248, 0.35)' : '1px solid var(--border-glass)',
+            background: !isAudioMuted ? 'rgba(56, 189, 248, 0.16)' : 'rgba(255,255,255,0.04)',
+            color: !isAudioMuted ? 'var(--cyan-neon)' : 'var(--text-muted)',
+            border: !isAudioMuted ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid var(--border-glass)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '6px'
           }}
         >
-          {voiceOn ? <VolumeIcon size={15} /> : <VolumeMuteIcon size={15} />}
-          <span>{voiceOn ? '语音解说' : '静音模式'}</span>
+          {!isAudioMuted ? <VolumeIcon size={15} /> : <VolumeMuteIcon size={15} />}
+          <span>{!isAudioMuted ? '原声已开启' : '语音播报'}</span>
         </button>
 
         {/* 麦克风拾音按钮 */}
