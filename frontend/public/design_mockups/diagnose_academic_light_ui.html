@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>全景认知诊断与病理透视 · 现代学术微晶 UI 设计 (Style B)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body class="p-8 antialiased selection:bg-sky-100 selection:text-sky-900">
+  
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Top Navigation Bar -->
+    <div class="flex items-center justify-between">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-200/80 text-sky-700 text-xs font-semibold tracking-wide">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
+        认知矩阵 · IRT 循证诊断 (Cognitive Matrix)
+      </div>
+      
+      <div class="text-xs font-medium text-slate-500">
+        依据国际教育测量学（Item Response Theory）三参数逻辑斯蒂模型
+      </div>
+    </div>
+
+    <!-- Header & Controls -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div class="space-y-1">
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+          全景认知诊断与病理透视
+        </h1>
+        <p class="text-slate-500 text-sm max-w-xl">
+          从 Theta 潜能测绘、知识图谱掌握度到错因病理学处方，为名师精准合成提供深度靶向支撑。
+        </p>
+      </div>
+
+      <!-- Action Controls -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <div class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 shadow-sm">
+          📚 学科：<strong>数学</strong> ▾
+        </div>
+        <div class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 shadow-sm">
+          🎓 年级：<strong>高三</strong> ▾
+        </div>
+        <button class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all">
+          重新计算诊断
+        </button>
+        <button class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl shadow-sm transition-all">
+          载入示范样本
+        </button>
+      </div>
+    </div>
+
+    <!-- Top Split: Theta Gauge (Left) + Mastery Matrix (Right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left: Theta Potential Card (5 cols) -->
+      <div class="lg:col-span-5 bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold text-sky-700 tracking-wide uppercase">IRT 认知潜能测绘仪</span>
+            <span class="text-xs text-slate-400">高考数学 · 高三冲刺</span>
+          </div>
+
+          <!-- Dual Ring Display -->
+          <div class="flex items-center gap-6 my-6">
+            <!-- Circular Gauge -->
+            <div class="relative w-28 h-28 flex-shrink-0">
+              <svg viewBox="0 0 120 120" class="w-28 h-28 -rotate-90">
+                <circle cx="60" cy="60" r="50" stroke="#f1f5f9" stroke-width="10" fill="none" />
+                <circle cx="60" cy="60" r="50" stroke="#0284c7" stroke-width="10" fill="none"
+                  stroke-dasharray="314" stroke-dashoffset="56" stroke-linecap="round" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-2xl font-extrabold text-slate-900 leading-none">+1.85σ</span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase mt-1">Theta 潜能</span>
+              </div>
+            </div>
+
+            <!-- Ability & Confidence -->
+            <div class="space-y-1">
+              <div class="text-xs text-slate-500 font-medium">综合能力定位</div>
+              <div class="text-lg font-extrabold text-slate-900">高阶进阶 · 冲刺压轴</div>
+              <div class="text-xs font-bold text-emerald-600 flex items-center gap-1 mt-1">
+                <span>✓</span> 贝叶斯后验置信度：94%
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-4 text-xs text-slate-600 leading-relaxed">
+          <strong>诊断结论提要：</strong>常规概念与运算基本盘稳固，但在<b>导数隐零点多层放缩</b>与<b>空间二面角法向量几何检验</b>处存在明显认知断层，极需定向名师突破。
+        </div>
+      </div>
+
+      <!-- Right: Full Knowledge Mastery Matrix (7 cols) -->
+      <div class="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm space-y-3.5">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-extrabold text-slate-900 uppercase tracking-wide">全景考点掌握度分布矩阵</span>
+          <span class="text-xs text-slate-400">按掌握指数由低到高排列</span>
+        </div>
+
+        <!-- Row 1: Weak -->
+        <div class="space-y-1">
+          <div class="flex justify-between text-xs">
+            <span class="font-bold text-rose-600">⚠ 圆锥曲线焦点弦与离心率</span>
+            <span class="font-extrabold text-rose-600">42% [薄弱待攻克]</span>
+          </div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-amber-500 to-rose-500 rounded-full" style="width: 42%;"></div>
+          </div>
+        </div>
+
+        <!-- Row 2: Weak -->
+        <div class="space-y-1">
+          <div class="flex justify-between text-xs">
+            <span class="font-bold text-amber-600">⚠ 立体几何二面角法向量求法</span>
+            <span class="font-extrabold text-amber-600">54% [薄弱待攻克]</span>
+          </div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full" style="width: 54%;"></div>
+          </div>
+        </div>
+
+        <!-- Row 3: Medium -->
+        <div class="space-y-1">
+          <div class="flex justify-between text-xs">
+            <span class="font-semibold text-slate-700">导数隐零点代换与凹凸反转</span>
+            <span class="font-bold text-sky-600">68%</span>
+          </div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-sky-400 to-sky-600 rounded-full" style="width: 68%;"></div>
+          </div>
+        </div>
+
+        <!-- Row 4: Solid -->
+        <div class="space-y-1">
+          <div class="flex justify-between text-xs">
+            <span class="font-semibold text-slate-700">数列错位相减与裂项求和</span>
+            <span class="font-bold text-emerald-600">85% [稳固]</span>
+          </div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full" style="width: 85%;"></div>
+          </div>
+        </div>
+
+        <!-- Row 5: Mastered -->
+        <div class="space-y-1">
+          <div class="flex justify-between text-xs">
+            <span class="font-semibold text-slate-700">三角恒等变换与正余弦定理</span>
+            <span class="font-bold text-emerald-600">94% [熟练掌握]</span>
+          </div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full" style="width: 94%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pathology Diagnostic Error Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      
+      <!-- Card 1 -->
+      <div class="bg-white border border-slate-200/90 border-l-4 border-l-rose-500 rounded-2xl p-5 shadow-sm space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-extrabold text-slate-900">错因 #1：隐零点未代换导致放缩失效</span>
+          <span class="px-2.5 py-0.5 rounded bg-rose-50 text-rose-600 font-bold text-[11px]">高频 (近3次测验出现2次)</span>
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          <strong>根因透视：</strong>求导后无法直接分解因式求根时，未设立虚拟根 x_0 参与代数恒等变形，导致直接放缩误差过大。
+        </p>
+        <div class="p-2.5 rounded-lg bg-sky-50 border border-sky-100 text-xs text-sky-800 font-semibold">
+          💡 名师处方：匹配【公理严密·压轴破局】型名师，采用“设而不求”三步法攻克。
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white border border-slate-200/90 border-l-4 border-l-amber-500 rounded-2xl p-5 shadow-sm space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-extrabold text-slate-900">错因 #2：空间二面角法向量方向混淆</span>
+          <span class="px-2.5 py-0.5 rounded bg-amber-50 text-amber-600 font-bold text-[11px]">中频 (做题用时偏长)</span>
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          <strong>根因透视：</strong>在右手空间坐标系下法向量指向与二面角平面角钝锐关系判定不准，缺乏立体几何几何直观检验。
+        </p>
+        <div class="p-2.5 rounded-lg bg-sky-50 border border-sky-100 text-xs text-sky-800 font-semibold">
+          💡 名师处方：匹配【高维建模·几何直观】型名师，注入立体建系图形推演基因。
+        </div>
+      </div>
+    </div>
+
+    <!-- Direct Master Teacher Synthesis Action Banner -->
+    <div class="bg-gradient-to-r from-sky-50 to-indigo-50/50 border border-sky-200/90 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_8px_#0ea5e9]"></span>
+          <h3 class="text-base font-extrabold text-slate-900">已根据诊断生成专属名师攻坚方案</h3>
+        </div>
+        <p class="text-xs text-slate-600">
+          锁定薄弱考点：<strong>圆锥曲线焦点弦与离心率</strong>、<strong>立体几何二面角法向量求法</strong>。点击将自动注入知识库与基因参数。
+        </p>
+      </div>
+
+      <button class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-sm rounded-xl shadow-md shadow-sky-600/20 transition-all whitespace-nowrap">
+        依据薄弱点一键合成名师 ➔
+      </button>
+    </div>
+
+  </div>
+
+</body>
+</html>

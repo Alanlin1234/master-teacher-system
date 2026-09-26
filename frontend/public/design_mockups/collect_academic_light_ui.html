@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>多模态学情采集工作台 · 现代学术微晶 UI 设计 (Style B)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .reticle-spin {
+      animation: spin 20s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .beam-sweep {
+      animation: sweep 3s ease-in-out infinite alternate;
+    }
+    @keyframes sweep {
+      0% { top: 8%; opacity: 0.2; }
+      50% { opacity: 0.85; }
+      100% { top: 92%; opacity: 0.2; }
+    }
+    .beacon-pulse {
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+  </style>
+</head>
+<body class="p-8 antialiased selection:bg-sky-100 selection:text-sky-900">
+  
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Top Navigation Bar -->
+    <div class="flex items-center justify-between">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-200/80 text-sky-700 text-xs font-semibold tracking-wide">
+        <span class="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_8px_#0ea5e9]"></span>
+        风格 B · 现代学术微晶设计 (Apple / Swiss Light)
+      </div>
+      
+      <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm text-sm font-semibold text-slate-700">
+        <span>👨‍🎓 学习者：<strong>李同学 (高三冲刺理科)</strong></span>
+        <span class="flex items-center gap-1.5 text-emerald-600 text-xs font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 实时监测在线
+        </span>
+      </div>
+    </div>
+
+    <!-- Header Section -->
+    <div class="space-y-1.5">
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+        多模态学情采集工作台
+      </h1>
+      <p class="text-slate-500 text-sm max-w-2xl leading-relaxed">
+        依托计算机视觉微晶准星监测视线注视度、专注生理波动与行为中断频次，多维解构学习文本的认知难点与考点盲区。
+      </p>
+    </div>
+
+    <!-- Apple-style Segmented Control -->
+    <div class="inline-flex p-1 bg-slate-200/70 border border-slate-300/60 rounded-xl gap-1">
+      <button class="px-5 py-2 rounded-lg bg-white shadow-sm text-slate-900 font-bold text-xs">
+        实时视频遥测 (Vision HUD)
+      </button>
+      <button class="px-5 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-semibold text-xs">
+        感知周期图谱 (Perception Wave)
+      </button>
+      <button class="px-5 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-semibold text-xs">
+        内容难点解构 (Content Parser)
+      </button>
+    </div>
+
+    <!-- Main Workspace (Grid 1.2 : 0.8) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left Column: Video Scanner Reticle Card (7 cols) -->
+      <div class="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        
+        <!-- Scanner Viewport -->
+        <div class="relative w-full h-[330px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+          
+          <!-- Background Grid Overlay -->
+          <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:32px_32px] opacity-25 pointer-events-none"></div>
+
+          <!-- Sweeping Laser Beam -->
+          <div class="beam-sweep absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-sky-400 to-transparent shadow-[0_0_12px_#38bdf8]"></div>
+
+          <!-- Reticle Targeting Rings & Crosshair -->
+          <div class="absolute w-24 h-24 border border-dashed border-sky-400/60 rounded-full reticle-spin pointer-events-none"></div>
+          <div class="absolute w-12 h-12 border border-sky-400/80 rounded-full pointer-events-none"></div>
+          <div class="absolute w-36 h-[1px] bg-sky-400/50 pointer-events-none"></div>
+          <div class="absolute h-36 w-[1px] bg-sky-400/50 pointer-events-none"></div>
+
+          <!-- Top-Left Telemetry Pill -->
+          <div class="absolute top-3.5 left-4 flex items-center gap-2 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/80">
+            <span class="beacon-pulse w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+            <span class="text-xs font-bold text-slate-100">专注沉浸态 · 88 PTS</span>
+          </div>
+
+          <!-- Top-Right Status -->
+          <div class="absolute top-3.5 right-4 font-mono text-xs font-bold text-sky-400 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-700/80">
+            LIVE 30FPS · 12ms 延迟
+          </div>
+
+          <!-- Bottom Telemetry HUD Line -->
+          <div class="absolute bottom-3.5 left-4 font-mono text-[11px] text-slate-400">
+            RETICLE TARGET: 视线中心锁定 (0.51, 0.49) · 瞳孔光斑捕获正常
+          </div>
+        </div>
+
+        <!-- Video Control Bar -->
+        <div class="flex items-center gap-3.5 mt-5">
+          <button class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-md shadow-sky-600/20 transition-all flex items-center gap-2">
+            <span>启动视觉遥测</span>
+          </button>
+          <span class="text-xs text-slate-500">
+            微晶准星算法已就绪，实时计算眼动偏移与面部专注生理波形。
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Column: Metrics & Waveform (5 cols) -->
+      <div class="lg:col-span-5 bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+        
+        <!-- 3 KPIs in Apple Minimalist Style -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-[11px] font-semibold text-slate-500">今日专注累计</div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-1">48<span class="text-xs font-medium text-slate-400 ml-1">分钟</span></div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-[11px] font-semibold text-slate-500">目标达成进度</div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-1">80%</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-[11px] font-semibold text-slate-500">异常中断频次</div>
+            <div class="text-2xl font-extrabold text-slate-900 mt-1">2<span class="text-xs font-medium text-slate-400 ml-1">次</span></div>
+          </div>
+        </div>
+
+        <!-- Waveform Card -->
+        <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex-1 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-700 mb-2">
+            <span>生理注视度波动谱线 (Alpha Attention)</span>
+            <span class="text-sky-600">稳态率 94%</span>
+          </div>
+
+          <!-- SVG Bezier Waveform -->
+          <svg viewBox="0 0 450 140" class="w-full h-28 overflow-visible">
+            <defs>
+              <linearGradient id="appleWaveGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0284c7" stop-opacity="0.28" />
+                <stop offset="100%" stop-color="#0284c7" stop-opacity="0.0" />
+              </linearGradient>
+            </defs>
+            <line x1="0" y1="35" x2="450" y2="35" stroke="#cbd5e1" stroke-dasharray="3 4" stroke-width="0.8" />
+            <line x1="0" y1="70" x2="450" y2="70" stroke="#cbd5e1" stroke-dasharray="3 4" stroke-width="0.8" />
+            <line x1="0" y1="105" x2="450" y2="105" stroke="#cbd5e1" stroke-dasharray="3 4" stroke-width="0.8" />
+            
+            <!-- Area Fill -->
+            <path d="M 0 100 C 60 60, 110 110, 170 40 C 230 -10, 280 80, 340 45 C 390 20, 420 30, 450 25 L 450 140 L 0 140 Z" fill="url(#appleWaveGrad)" />
+            <!-- Line Stroke -->
+            <path d="M 0 100 C 60 60, 110 110, 170 40 C 230 -10, 280 80, 340 45 C 390 20, 420 30, 450 25" fill="none" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" />
+            <!-- Active Indicator Marker -->
+            <circle cx="450" cy="25" r="4.5" fill="#ffffff" stroke="#0284c7" stroke-width="2.5" />
+          </svg>
+
+          <div class="text-[11px] text-slate-500 mt-2">
+            视线漂移标准差 &lt; 0.03，注意力持续保持在高效认知流状态。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Content Parser Banner -->
+    <div class="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="text-xs font-bold text-slate-500">学习文本难点解构已完成</div>
+        <div class="text-base font-extrabold text-slate-900">数学·导数极值与隐零点模型分析</div>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <span class="px-3 py-1 bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold rounded-full">#导数隐零点代换</span>
+        <span class="px-3 py-1 bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold rounded-full">#构造辅助函数放缩</span>
+        <span class="px-3 py-1 bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold rounded-full">#极值点单调性判定</span>
+      </div>
+
+      <button class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-sm transition-all whitespace-nowrap">
+        前往全景认知诊断 ➔
+      </button>
+    </div>
+
+  </div>
+
+</body>
+</html>

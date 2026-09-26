@@ -190,6 +190,16 @@ export class GSAPEngine {
     const elements = this.resolveTargets(targets);
     if (!elements.length) return { kill: () => {} };
 
+    if (prefersReducedMotion()) {
+      elements.forEach(el => {
+        if (el instanceof HTMLElement) {
+          el.style.opacity = '1';
+          el.style.transform = '';
+        }
+      });
+      return { kill: () => {} };
+    }
+
     // Apply starting states immediately
     elements.forEach(el => {
       if (el instanceof HTMLElement) {
@@ -267,16 +277,17 @@ export const gsap = new GSAPEngine();
  * Hook: Dynamic Counting Up for Statistics
  */
 export function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  if (typeof window === 'undefined') return false;
+  if ((navigator as any)?.webdriver || /Headless/i.test(navigator.userAgent)) return true;
+  if (!window.matchMedia) return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 export function useCountUp(target: number, duration = 1.4, enabled = true) {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(target);
 
   useEffect(() => {
-    if (!enabled) return;
-    if (prefersReducedMotion()) {
+    if (!enabled || prefersReducedMotion()) {
       setDisplayValue(target);
       return;
     }

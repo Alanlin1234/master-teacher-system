@@ -1087,3 +1087,180 @@ input[type="range"]::-moz-range-track {
 .tactile-range-input::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
+
+/* ==========================================================================
+   2-COLUMN CLOSED-LOOP STEPPER & DYNAMIC SHOWCASE CANVAS (Taste & Impeccable)
+   ========================================================================== */
+.loop-stepper-container {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 28px;
+  align-items: stretch;
+  margin-top: 28px;
+}
+
+@media (max-width: 960px) {
+  .loop-stepper-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.loop-stepper-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loop-step-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.loop-step-btn:hover {
+  border-color: var(--border-glass-hover);
+  transform: translateX(4px);
+  background: var(--bg-surface-elevated);
+}
+
+.loop-step-btn.active {
+  border-color: var(--accent-primary);
+  background: var(--bg-surface-elevated);
+  box-shadow: 0 10px 28px -8px rgba(37, 99, 235, 0.22);
+}
+
+.loop-step-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-primary);
+  box-shadow: 0 0 12px var(--accent-primary);
+}
+
+.loop-step-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-subtle);
+  transition: color 0.2s;
+}
+
+.loop-step-btn.active .loop-step-num {
+  color: var(--accent-primary);
+}
+
+.loop-canvas {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 32px 36px;
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   5D PARAMETER TUNING & DUAL-TRACK DIFF WORKBENCH (图三对比工作台)
+   ========================================================================== */
+.workbench-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 36px 36px;
+  margin-top: 72px;
+  position: relative;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.06);
+}
+
+.workbench-question-pill {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-surface-elevated);
+  color: var(--text-body);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.workbench-question-pill:hover,
+.workbench-question-pill.active {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.workbench-diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .workbench-diff-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.diff-pane {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 280px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.diff-pane--primary {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.15);
+  background: var(--bg-surface);
+}
+
+.diff-tag-socratic {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.diff-tag-axiom {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.3);
+}
+
+.diff-tag-scaffold {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.diff-tag-generic {
+  background: rgba(100, 116, 139, 0.12);
+  color: #64748b;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
