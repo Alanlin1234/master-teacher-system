@@ -767,3 +767,323 @@ input[type="range"]::-moz-range-track {
 [data-theme="light"] .card-impeccable {
   border-top: 1px solid rgba(255, 255, 255, 0.8);
 }
+
+/* ==========================================================================
+   AWARD-WINNING TELEMETRY & SCIENTIFIC LAB STYLES (Taste & Impeccable)
+   ========================================================================== */
+
+/* Scientific Telemetry HUD Card */
+.telemetry-hud {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  transition: border-color var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.telemetry-hud:hover {
+  border-color: var(--border-focus);
+  box-shadow: 0 20px 48px -12px rgba(14, 165, 233, 0.15), 0 0 0 1px var(--border-focus);
+}
+
+/* Scientific Corner Brackets */
+.telemetry-hud::before,
+.telemetry-hud::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.telemetry-hud::before {
+  top: 8px;
+  left: 8px;
+  border-top: 2px solid var(--accent-primary);
+  border-left: 2px solid var(--accent-primary);
+}
+
+.telemetry-hud::after {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 2px solid var(--accent-primary);
+  border-right: 2px solid var(--accent-primary);
+}
+
+/* Telemetry Header Badge */
+.telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: rgba(14, 165, 233, 0.1);
+  color: var(--accent-primary);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+}
+
+/* Pulse Beacon Animation */
+.beacon-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 8px var(--accent-primary);
+  display: inline-block;
+  animation: beacon-pulse 2.2s infinite ease-in-out;
+}
+
+.beacon-dot.success {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.beacon-dot.warning {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+.beacon-dot.danger {
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+}
+
+@keyframes beacon-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+}
+
+/* Lab Video Scanner & Crosshair */
+.video-scanner-viewport {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background: #030712;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+}
+
+.video-scanner-viewport video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scanline-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.25) 51%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.scanner-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  box-shadow: 0 0 12px var(--accent-primary);
+  animation: scan-sweep 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes scan-sweep {
+  0% { top: 4%; opacity: 0.2; }
+  50% { opacity: 0.8; }
+  100% { top: 94%; opacity: 0.2; }
+}
+
+.reticle-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 64px;
+  height: 64px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.reticle-crosshair::before,
+.reticle-crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--accent-primary);
+}
+
+.reticle-crosshair::before {
+  top: 0; bottom: 0; left: 50%; width: 1px; transform: translateX(-50%);
+}
+
+.reticle-crosshair::after {
+  left: 0; right: 0; top: 50%; height: 1px; transform: translateY(-50%);
+}
+
+.reticle-ring {
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed var(--accent-primary);
+  border-radius: 50%;
+  animation: reticle-spin 16s linear infinite;
+}
+
+@keyframes reticle-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 4-Phase Pipeline Rail with Glowing Track */
+.pipeline-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 900px) {
+  .pipeline-track {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pipeline-card {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-3);
+  transition: transform var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+}
+
+.pipeline-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 28px -8px rgba(14, 165, 233, 0.2);
+}
+
+.pipeline-card-num {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-subtle);
+  letter-spacing: -0.04em;
+  opacity: 0.5;
+  transition: color var(--duration-fast), opacity var(--duration-fast);
+}
+
+.pipeline-card:hover .pipeline-card-num {
+  color: var(--accent-primary);
+  opacity: 1;
+}
+
+/* Dual Ring Potential Theta Gauge */
+.theta-gauge-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+
+.theta-circle-svg {
+  width: 96px;
+  height: 96px;
+  transform: rotate(-90deg);
+  flex-shrink: 0;
+}
+
+.theta-circle-bg {
+  stroke: var(--bg-muted);
+}
+
+.theta-circle-bar {
+  stroke: var(--accent-primary);
+  transition: stroke-dashoffset 1s var(--ease-out);
+}
+
+/* Pathology Diagnostic Cards */
+.pathology-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-left: 3px solid var(--accent-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-3);
+  transition: transform var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+}
+
+.pathology-card:hover {
+  transform: translateX(4px);
+  border-color: var(--border-focus);
+}
+
+.pathology-card.high-frequency {
+  border-left-color: #ef4444;
+}
+
+.pathology-card.medium-frequency {
+  border-left-color: #f59e0b;
+}
+
+.pathology-card.low-frequency {
+  border-left-color: #10b981;
+}
+
+/* High contrast range slider with ticks */
+.tactile-range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--bg-muted);
+  outline: none;
+  transition: background var(--duration-fast);
+}
+
+.tactile-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.6);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.tactile-range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
