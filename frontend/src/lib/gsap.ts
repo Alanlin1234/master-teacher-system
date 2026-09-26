@@ -346,10 +346,9 @@ export function useHeroEntrance(containerRef: React.RefObject<HTMLElement | null
     const q = (sel: string) => Array.from(container.querySelectorAll(sel));
     const tl = gsap.timeline({ ease: 'power3.out' });
 
-    tl.from(q('.gsap-hero-title'), { y: 20, opacity: 0, duration: 0.65 })
-      .from(q('.gsap-hero-desc, .gsap-hero-cta'), { y: 14, opacity: 0, stagger: 0.08, duration: 0.5 }, -0.25)
-      .from(q('.gsap-hero-stage'), { y: 16, opacity: 0, duration: 0.6 }, -0.35)
-      .from(q('.gsap-flow-step'), { y: 16, opacity: 0, stagger: 0.08, duration: 0.5 }, -0.3);
+    tl.from(q('.gsap-hero-title'), { y: 20, opacity: 0, duration: 0.6 })
+      .from(q('.gsap-hero-desc, .gsap-hero-cta'), { y: 12, opacity: 0, stagger: 0.06, duration: 0.45 }, -0.3)
+      .from(q('.gsap-chapter'), { y: 12, opacity: 0, stagger: 0.08, duration: 0.45 }, -0.15);
 
     return () => tl.kill();
   }, [containerRef]);

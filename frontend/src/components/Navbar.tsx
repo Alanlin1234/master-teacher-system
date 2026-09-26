@@ -53,7 +53,7 @@ export const Navbar: React.FC<Props> = ({ activeTab, onSelectTab }) => {
             <div className="brand-display" style={{ fontSize: '1.08rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
               循智导学 · 名师智教
             </div>
-            <div style={{ fontSize: '0.62rem', color: 'var(--accent-primary)', fontWeight: 700, letterSpacing: '0.1em' }}>
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--accent-primary)', fontWeight: 700, letterSpacing: '0.1em' }}>
               MASTER TEACHER & ACADEMIC AVATAR
             </div>
           </div>

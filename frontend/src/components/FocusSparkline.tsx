@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { easings, prefersReducedMotion } from '../lib/gsap';
 
 interface Props {
@@ -16,15 +16,10 @@ export const FocusSparkline: React.FC<Props> = ({
 }) => {
   const pathRef = useRef<SVGPathElement>(null);
   const areaRef = useRef<SVGPathElement>(null);
-  const strokeGradId = useId();
-  const areaGradId = useId();
-
-  const effectiveValues = values.length >= 2 ? values : [70, 75, 72, 78, 85, 82, 88, 92];
-  const isDemo = values.length < 2;
 
   useEffect(() => {
     const path = pathRef.current;
-    if (!path) return;
+    if (!path || values.length < 2) return;
     const length = path.getTotalLength();
     if (prefersReducedMotion() || !length) {
       path.style.strokeDasharray = '';
@@ -37,7 +32,7 @@ export const FocusSparkline: React.FC<Props> = ({
     if (areaRef.current) areaRef.current.style.opacity = '0';
 
     const start = performance.now();
-    const duration = 850;
+    const duration = 700;
     let frame = 0;
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
@@ -51,6 +46,10 @@ export const FocusSparkline: React.FC<Props> = ({
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [values]);
+
+  if (values.length < 2) return null;
+
+  const effectiveValues = values;
 
   const w = 340;
   const h = height;
@@ -90,12 +89,7 @@ export const FocusSparkline: React.FC<Props> = ({
     <div style={{ position: 'relative', width: '100%', marginTop: 6, marginBottom: 6 }}>
       {label && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>{label}</span>
-          {isDemo && (
-            <span style={{ fontSize: '10px', color: 'var(--accent-primary)', opacity: 0.8, letterSpacing: '0.04em' }}>
-              [示范波形]
-            </span>
-          )}
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{label}</span>
         </div>
       )}
       <svg
@@ -105,40 +99,17 @@ export const FocusSparkline: React.FC<Props> = ({
         style={{ display: 'block', overflow: 'visible' }}
         aria-hidden="true"
       >
-        <defs>
-          <linearGradient id={strokeGradId} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#0284c7" />
-            <stop offset="50%" stopColor="#0ea5e9" />
-            <stop offset="100%" stopColor="#38bdf8" />
-          </linearGradient>
-          <linearGradient id={areaGradId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.28" />
-            <stop offset="80%" stopColor="#0ea5e9" stopOpacity="0.03" />
-            <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
-          </linearGradient>
-          <filter id={`glow-${strokeGradId}`} x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2.5" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
-
-        {/* Subtle Background Guide Grid Lines */}
         <line x1="0" y1={h * 0.25} x2={w} y2={h * 0.25} stroke="var(--border-glass)" strokeDasharray="3 4" strokeWidth="0.8" opacity="0.6" />
         <line x1="0" y1={h * 0.75} x2={w} y2={h * 0.75} stroke="var(--border-glass)" strokeDasharray="3 4" strokeWidth="0.8" opacity="0.6" />
-
-        {/* Gradient Fill Area */}
-        <path ref={areaRef} d={areaD} fill={`url(#${areaGradId})`} />
-
-        {/* High-Definition Bezier Waveform */}
+        <path ref={areaRef} d={areaD} fill="var(--accent-primary)" opacity="0.12" />
         <path
           ref={pathRef}
           d={lineD}
           fill="none"
-          stroke={`url(#${strokeGradId})`}
-          strokeWidth="2.2"
+          stroke="var(--accent-primary)"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          filter={`url(#glow-${strokeGradId})`}
         />
 
         {/* Dynamic Telemetry Marker */}

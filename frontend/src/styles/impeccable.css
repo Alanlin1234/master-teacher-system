@@ -1265,3 +1265,324 @@ input[type="range"]::-moz-range-track {
   color: #64748b;
   border: 1px solid rgba(100, 116, 139, 0.3);
 }
+
+/* ==========================================================================
+   APPLE SPATIAL CENTERPIECE HERO & TELEMETRY STAGE (苹果级去模板化空间展台)
+   ========================================================================== */
+.apple-hero-wrap {
+  text-align: center;
+  padding: 48px 0 36px;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.apple-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-glass);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin-bottom: 24px;
+  backdrop-filter: blur(12px);
+}
+
+.apple-hero-title {
+  font-size: clamp(3rem, 5.5vw, 4.4rem);
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+  color: var(--text-main);
+  margin-bottom: 20px;
+}
+
+.apple-hero-title span {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.apple-hero-subtitle {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: var(--text-body);
+  max-width: 680px;
+  margin: 0 auto 36px;
+  line-height: 1.6;
+}
+
+.apple-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.apple-spatial-stage {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 32px 36px;
+  box-shadow: var(--shadow-lg), 0 0 40px -10px var(--accent-primary-glow);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+
+.apple-stage-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.2fr;
+  gap: 28px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .apple-stage-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stage-hud-card {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  text-align: left;
+}
+
+/* ==========================================================================
+   DYNAMIC 4-PHASE INTERACTIVE VIEWPORT (四维全息动态演进视窗)
+   ========================================================================== */
+.phase-timeline-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 28px 0 24px;
+}
+
+.phase-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  color: var(--text-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--trans-normal);
+}
+
+.phase-pill-btn.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 18px -2px var(--accent-primary-glow);
+}
+
+.dynamic-viewport-stage {
+  min-height: 380px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   5D WORKBENCH & REAL-TIME SPLIT DIFF (5D 双栏实时对比工作台)
+   ========================================================================== */
+.workbench-wrap {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .workbench-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workbench-controls {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 28px 26px;
+  box-shadow: var(--shadow-md);
+}
+
+.preset-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.preset-chip {
+  padding: 6px 13px;
+  border-radius: 9999px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-glass);
+  color: var(--text-body);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+}
+
+.preset-chip.active {
+  background: var(--accent-primary-subtle);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.workbench-diff-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .workbench-diff-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workbench-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.workbench-card--master {
+  border-color: var(--accent-primary-border);
+  box-shadow: 0 10px 30px -10px var(--accent-primary-glow);
+}
+
+/* ==========================================================================
+   KNOWLEDGE MASTERY HEATMAP (认知掌握度矩阵热力图)
+   ========================================================================== */
+.heatmap-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 32px 34px;
+  box-shadow: var(--shadow-md);
+}
+
+.heatmap-domain-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.heatmap-domain-row:last-child {
+  border-bottom: none;
+}
+
+.heatmap-domain-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.heatmap-cell-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.heatmap-cell {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--trans-normal);
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 64px;
+}
+
+.heatmap-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Mastery Color Tiers */
+.heatmap-cell--critical {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #ef4444;
+}
+
+.heatmap-cell--warning {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #d97706;
+}
+
+.heatmap-cell--good {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #10b981;
+}
+
+.heatmap-cell--mastered {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.35);
+  color: #2563eb;
+}
+
+/* ==========================================================================
+   MULTIMODAL TRACKS (多模态解析三轨)
+   ========================================================================== */
+.multimodal-tracks-nav {
+  display: inline-flex;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  padding: 4px;
+  border-radius: 9999px;
+  margin-bottom: 24px;
+}
+
+.multimodal-track-btn {
+  padding: 8px 20px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--text-body);
+  cursor: pointer;
+  transition: all var(--trans-fast);
+}
+
+.multimodal-track-btn.active {
+  background: var(--bg-surface);
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+}

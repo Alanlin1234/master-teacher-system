@@ -5,6 +5,7 @@ interface Props {
   size?: number;
   highlightColor?: string;
   showLabels?: boolean;
+  showComposite?: boolean;
 }
 
 const DIMENSIONS = [
@@ -20,6 +21,7 @@ export const RadarChart5D: React.FC<Props> = ({
   size = 280,
   highlightColor = '#38bdf8',
   showLabels = true,
+  showComposite = true,
 }) => {
   const center = size / 2;
   const radius = (size / 2) * 0.7;
@@ -106,28 +108,30 @@ export const RadarChart5D: React.FC<Props> = ({
           style={{ transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)' }}
         />
 
-        {/* 中心综合基因指数基底 */}
-        <circle
-          cx={center}
-          cy={center}
-          r={16}
-          fill="var(--card-bg)"
-          stroke={highlightColor}
-          strokeWidth="1.5"
-          filter="drop-shadow(0 0 6px rgba(37, 99, 235, 0.3))"
-        />
-        <text
-          x={center}
-          y={center}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fontSize="10px"
-          fontWeight="800"
-          fill="var(--text-main)"
-          className="tabular-nums"
-        >
-          {compositeScore}
-        </text>
+        {showComposite && (
+          <>
+            <circle
+              cx={center}
+              cy={center}
+              r={16}
+              fill="var(--card-bg)"
+              stroke={highlightColor}
+              strokeWidth="1.5"
+            />
+            <text
+              x={center}
+              y={center}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize="12px"
+              fontWeight="800"
+              fill="var(--text-main)"
+              className="tabular-nums"
+            >
+              {compositeScore}
+            </text>
+          </>
+        )}
 
         {/* 荧光顶点与外显高精标签 */}
         {DIMENSIONS.map((dim, i) => {
@@ -152,7 +156,7 @@ export const RadarChart5D: React.FC<Props> = ({
                   y={labelCoord.y}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fontSize="10px"
+                  fontSize="12px"
                   fontWeight="700"
                   fill="var(--text-body)"
                   letterSpacing="0.02em"

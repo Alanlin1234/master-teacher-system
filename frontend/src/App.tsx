@@ -13,26 +13,51 @@ import { usePageEnter } from './lib/gsap';
 const TEACHER_TABS = ['library', 'compose', 'chat'];
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('home');
+  const getInitialTab = () => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#/', '').replace('#', '');
+      if (['collect', 'diagnose', 'library', 'compose', 'chat', 'studio', 'auth'].includes(hash)) {
+        return hash;
+      }
+    }
+    return 'home';
+  };
+
+  const [activeTab, setActiveTab] = useState<string>(getInitialTab);
   const [chatTeacherId, setChatTeacherId] = useState<string>('t1');
   const [composeTeacherId, setComposeTeacherId] = useState<string>('t1');
   const [activeSynthRecipe, setActiveSynthRecipe] = useState<any | null>(null);
   const [studioTopic, setStudioTopic] = useState<string>('导数切线与综合大题破局');
   const [studioScript, setStudioScript] = useState<string>('');
   const [weakKnowledge, setWeakKnowledge] = useState<string[]>([]);
+  const [collectSegment, setCollectSegment] = useState<'monitor' | 'perception' | 'analysis'>('monitor');
   const pageRef = useRef<HTMLDivElement>(null);
 
   usePageEnter(pageRef, activeTab);
 
-  const openTab = (tab: string, params?: { teacherId?: string; synthRecipe?: any; weakKnowledge?: string[] }) => {
+  React.useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace('#/', '').replace('#', '');
+      if (['home', 'collect', 'diagnose', 'library', 'compose', 'chat', 'studio', 'auth'].includes(hash)) {
+        setActiveTab(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  const openTab = (tab: string, params?: { teacherId?: string; synthRecipe?: any; weakKnowledge?: string[]; collectSegment?: 'monitor' | 'perception' | 'analysis' }) => {
     if (params?.teacherId) setChatTeacherId(params.teacherId);
     if (params?.synthRecipe) setActiveSynthRecipe(params.synthRecipe);
     if (params?.weakKnowledge) setWeakKnowledge(params.weakKnowledge);
+    if (params?.collectSegment) setCollectSegment(params.collectSegment);
     if (tab === 'teachers') {
       setActiveTab('library');
+      if (typeof window !== 'undefined') window.location.hash = '#/library';
       return;
     }
     setActiveTab(tab);
+    if (typeof window !== 'undefined') window.location.hash = `#/${tab}`;
   };
 
   const teacherSection = TEACHER_TABS.includes(activeTab);
@@ -44,7 +69,9 @@ export const App: React.FC = () => {
         <div ref={pageRef}>
           {activeTab === 'home' && <HomePage onNavigate={openTab} />}
           {activeTab === 'auth' && <AuthPage onSuccess={() => setActiveTab('home')} />}
-          {activeTab === 'collect' && <CollectPage onDiagnose={() => setActiveTab('diagnose')} />}
+          {activeTab === 'collect' && (
+            <CollectPage initialSegment={collectSegment} onDiagnose={() => setActiveTab('diagnose')} />
+          )}
           {activeTab === 'diagnose' && (
             <DiagnosePage onCompose={(weak) => openTab('compose', { weakKnowledge: weak })} />
           )}
