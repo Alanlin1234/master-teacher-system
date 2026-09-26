@@ -287,18 +287,33 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               {/* Display Core Canvas */}
               <div style={{ padding: '24px 28px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24, alignItems: 'center' }}>
                 
-                {/* Left: Neural AST Scaffolding */}
-                <div style={{ textAlign: 'left' }}>
-                  <div style={{ fontSize: '11px', color: '#64748b', marginBottom: 6, fontFamily: 'monospace' }}>
-                    // COGNITIVE COMPILER AST
+                {/* Left: Apple Math Notes Thought Scaffolding */}
+                <div className="apple-math-note-scaffold">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--accent-primary)', letterSpacing: '0.06em' }}>
+                      MATH NOTES · 名师解题思维阶梯
+                    </span>
+                    <span className="badge badge-emerald" style={{ fontSize: '11px', padding: '2px 8px' }}>
+                      自适应 99.4%
+                    </span>
                   </div>
-                  <div style={{ fontSize: '16px', fontWeight: 700, color: '#f8fafc', marginBottom: 12 }}>
-                    {weakPoint}
-                  </div>
-                  <div className="font-mono-telemetry" style={{ fontSize: '12px', lineHeight: 1.8, color: '#94a3b8', background: 'rgba(255,255,255,0.03)', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <div>&gt; SCAFFOLD: <span style={{ color: '#60a5fa' }}>{selectedPreset.toUpperCase()}_TEACHER</span></div>
-                    <div>&gt; INJECT: <span style={{ color: '#38bdf8' }}>F(x) = f(x) - f(2x₀ - x)</span></div>
-                    <div>&gt; ADAPTIVE: <span style={{ color: '#10b981' }}>99.4% 精准匹配</span></div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '13px' }}>
+                      <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(0,113,227,0.2)', color: 'var(--accent-primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>1</span>
+                      <span style={{ color: '#cbd5e1' }}>构造对称差函数：</span>
+                      <span style={{ color: '#38bdf8', fontFamily: 'monospace', fontWeight: 650 }}>F(x) = f(x) - f(2x₀ - x)</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '13px' }}>
+                      <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(52,199,89,0.2)', color: '#34c759', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>2</span>
+                      <span style={{ color: '#cbd5e1' }}>一阶求导单调判定：</span>
+                      <span style={{ color: '#34d399', fontFamily: 'monospace', fontWeight: 650 }}>F'(x) = f'(x) + f'(2x₀ - x)</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '13px' }}>
+                      <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(255,149,0,0.2)', color: '#ff9500', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>3</span>
+                      <span style={{ color: '#cbd5e1' }}>单峰性质降维破局：</span>
+                      <span style={{ color: '#ffb340', fontSize: '12px' }}>化二元为一元，直破极值约束</span>
+                    </div>
                   </div>
                 </div>
 
@@ -381,15 +396,15 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
       <section id="tour-stage-section" className="apple-fullbleed-band apple-fullbleed-band--dark">
         <div className="apple-stage-container">
           
-          <div className="apple-pro-eyebrow" style={{ color: '#93c5fd' }}>
+          <div className="apple-pro-eyebrow">
             <Zap size={14} />
             <span>COGNITIVE CLOSED LOOP · 因果循迹全息闭环</span>
           </div>
 
-          <h2 className="apple-monumental-headline" style={{ color: '#ffffff', fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)', marginBottom: 12, textWrap: 'balance' }}>
+          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)', marginBottom: 12, textWrap: 'balance' }}>
             从草稿专注阻滞，到专属名师微课生成
           </h2>
-          <p className="apple-pro-subtitle" style={{ color: '#94a3b8', marginBottom: 40, textWrap: 'balance' }}>
+          <p className="apple-pro-subtitle" style={{ marginBottom: 40, textWrap: 'balance' }}>
             四大核心感知与认知计算模块，一气呵成。
           </p>
 
@@ -418,8 +433,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* The High-End Instrument Stage */}
-          <div className="apple-instrument-bay" style={{ minHeight: 380 }}>
+          {/* The Apple Pro Display Hardware Stage */}
+          <div className="apple-pro-display-frame" style={{ minHeight: 380 }}>
             
             {/* STAGE 01: 毫米级学情感知舱 */}
             {activeStep === 0 && (
@@ -459,12 +474,20 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   </div>
 
                   <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 20, border: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
-                    <svg viewBox="0 0 160 100" style={{ width: '100%', height: 95 }}>
-                      <ellipse cx="80" cy="50" rx="64" ry="40" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
-                      <circle cx="80" cy="50" r="22" fill="none" stroke="#38bdf8" strokeWidth="2" strokeDasharray="4 2" />
-                      <circle cx={`${80 + Math.sin(waveOffset) * 8}`} cy={`${50 + Math.cos(waveOffset) * 5}`} r="8" fill="#38bdf8" />
-                      <text x="80" y="96" textAnchor="middle" fill="#10b981" fontSize="10" fontWeight="600" fontFamily="sans-serif">
-                        视线锁定 · 草稿第3步凝滞捕获
+                    <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: 6, display: 'flex', justifyContent: 'space-between' }}>
+                      <span>视网膜草稿注视热点</span>
+                      <span style={{ color: '#38bdf8', fontFamily: 'monospace', fontSize: '11px' }}>X: 184 · Y: 312</span>
+                    </div>
+                    <svg viewBox="0 0 180 85" style={{ width: '100%', height: 85 }}>
+                      <line x1="10" y1="20" x2="170" y2="20" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 3" />
+                      <line x1="10" y1="42" x2="170" y2="42" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 3" />
+                      <line x1="10" y1="65" x2="170" y2="65" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 3" />
+                      <text x="20" y="38" fill="rgba(255,255,255,0.25)" fontSize="11" fontFamily="monospace">f'(x) = 2x - a/x ... ?</text>
+                      <ellipse cx="120" cy="40" rx="35" ry="22" fill="none" stroke="rgba(56,189,248,0.25)" strokeWidth="1.5" />
+                      <circle cx="120" cy="40" r="14" fill="none" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="3 2" />
+                      <circle cx={`${120 + Math.sin(waveOffset) * 6}`} cy={`${40 + Math.cos(waveOffset) * 4}`} r="5" fill="#ef4444" />
+                      <text x="90" y="78" fill="#34d399" fontSize="10" fontWeight="600" fontFamily="sans-serif">
+                        ● 视线锁定：草稿第3步放缩阻滞
                       </text>
                     </svg>
                   </div>
@@ -758,6 +781,9 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                         value={val}
                         onChange={(e) => handleSliderChange(axis.key, Number(e.target.value))}
                         className="apple-ios-slider"
+                        style={{
+                          background: `linear-gradient(to right, #0071e3 0%, #0071e3 ${val * 100}%, #e5e5ea ${val * 100}%, #e5e5ea 100%)`
+                        }}
                       />
                     </div>
                   );
@@ -887,13 +913,13 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           ================================================================= */}
       <section className="apple-fullbleed-band" style={{ padding: '40px 0 80px' }}>
         <div className="apple-stage-container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24, background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', borderRadius: '28px', padding: '36px 24px', boxShadow: 'var(--shadow-sm)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 32, padding: '24px 0' }}>
             <div className="apple-keynote-stat">
               <div className="apple-keynote-stat-val highlight">0.1 mm</div>
               <div className="apple-keynote-stat-label">专注微震捕捉精度</div>
             </div>
             <div className="apple-keynote-stat">
-              <div className="apple-keynote-stat-val">&lt; 1.2 s</div>
+              <div className="apple-keynote-stat-val">&lt; 1.2s</div>
               <div className="apple-keynote-stat-label">IRT 认知潜能推断收敛</div>
             </div>
             <div className="apple-keynote-stat">
