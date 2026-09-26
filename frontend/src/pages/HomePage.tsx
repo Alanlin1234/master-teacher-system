@@ -50,19 +50,19 @@ const PRESETS: Preset[] = [
   {
     id: 'socratic',
     name: '苏格拉底启发型',
-    prompt: '高三理科 · 极值点偏移压轴题 · 编译苏格拉底递进反问名师...',
+    prompt: 'K12 思维进阶 · 抽象函数与极值构造 · 编译苏格拉底递进反问名师...',
     scores: { style: 0.25, method: 0.35, strengths: 0.92, personality: 0.88, communication: 0.3 },
   },
   {
     id: 'olympiad',
     name: '竞赛公理破局型',
-    prompt: '全国联赛 · 导数与零点放缩 · 编译竞赛公理极简证明名师...',
+    prompt: '数学素养 · 几何统一与公理化证明 · 编译极简破局特级名师...',
     scores: { style: 0.95, method: 0.92, strengths: 0.88, personality: 0.55, communication: 0.9 },
   },
   {
-    id: 'gaokao',
-    name: '高三压轴冲刺型',
-    prompt: '一模压轴 · 圆锥曲线联立弦长 · 编译模板切片快速破法名师...',
+    id: 'deepthink',
+    name: '思维进阶突破型',
+    prompt: '难点攻坚 · 知识迁移与数形转化 · 编译多维启发名师...',
     scores: { style: 0.75, method: 0.88, strengths: 0.45, personality: 0.72, communication: 0.82 },
   },
 ];
@@ -166,7 +166,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     }
   };
 
-  const learnerName = getLearnerName() || '林同学 (高三理科冲刺)';
+  const learnerName = getLearnerName() || '林同学 (K12 思维进阶)';
   const weakPoint = diagnosis?.weakKnowledge?.[0] || '极值点偏移与对数均值不等式';
 
   // Decluttered High-Impact Cognitive Diff
@@ -212,7 +212,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
       masterFormula: "f(x_2) - f(x_1) = f'(\\xi)(x_2 - x_1) > 0 \\quad (x_1 < \\xi < x_2)",
       masterQuote: '“正命题由中值定理严密实证；逆命题想一想 y = x³ 在原点处的切线斜率！”',
       baselineFormula: "f'(x) > 0 \\iff f(x) \\uparrow \\quad [忽略零点边界条件]",
-      baselineCritique: '“倒果为因，漏掉‘在任意区间不恒为0’的边界检验，高考丢分率极高。”',
+      baselineCritique: '“倒果为因，漏掉‘在任意区间不恒为0’的边界检验，考试丢分率极高。”',
       masterMetric: '避坑率 100%',
       baselineMetric: '边界漏判率 68%',
       steps: [
@@ -248,12 +248,12 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
           {/* Book Editorial Pullquote */}
           <div className="apple-editorial-pullquote">
-            “每个在压轴题前停滞的学生，缺少的从不是更多的公式硬套，而是一位懂得他卡在第几步的专属名师。”
+            “每个在思维瓶颈前停滞的学生，缺少的从不是更多的公式硬套，而是一位懂得他卡在第几步的专属名师。”
           </div>
 
           {/* Precision Subtitle */}
           <p className="apple-pro-subtitle" style={{ maxWidth: 740, margin: '0 auto 36px', textWrap: 'balance' }}>
-            一本专为高三理科生与特级名师编写的实时认知解构手册。基于毫米级多模态专注流与 IRT 认知穿透，即席重构特级名师专属解题基因。
+            一本专为 K12 全学段学生与特级名师编写的实时认知解构手册。基于毫米级多模态专注流与 IRT 认知穿透，即席重构特级名师专属解题基因。
           </p>
 
           {/* Apple Dual CTA Cluster */}
@@ -292,7 +292,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600 }}>
                   <BookOpen size={14} style={{ color: 'var(--accent-primary)' }} />
-                  <span>THE COGNITIVE FOLIO · 高三理科压轴题现场解构 · 林同学 (冲刺实测)</span>
+                  <span>THE COGNITIVE FOLIO · K12 核心考点现场解构 · 林同学 (学情实测)</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>
                   <span className="apple-status-dot apple-status-dot--primary" />
@@ -304,7 +304,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               <div style={{ display: 'flex', alignItems: 'stretch', flexWrap: 'wrap' }}>
                 
                 {/* Left Page (Page 01 · 困惑草稿) */}
-                <div style={{ flex: '1 1 340px', padding: '24px 28px' }}>
+                <div className="apple-interactive-lift" style={{ flex: '1 1 340px', padding: '24px 28px', borderRadius: 16 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                     <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
                       PAGE 01 · 学生真实演算草稿断层 (STUDENT DRAFT)
@@ -338,7 +338,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 </div>
 
                 {/* Right Page (Page 02 · 名师点睛) */}
-                <div style={{ flex: '1 1 360px', padding: '24px 28px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div className="apple-interactive-lift" style={{ flex: '1 1 360px', padding: '24px 28px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRadius: 16 }}>
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                       <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--accent-primary)', letterSpacing: '0.05em' }}>
@@ -501,10 +501,11 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
           {/* The Apple Pro Display Hardware Stage */}
           <div className="apple-pro-display-frame" style={{ minHeight: 380 }}>
-            
-            {/* STAGE 01: 毫米级学情感知舱 */}
-            {activeStep === 0 && (
-              <div>
+            <div key={activeStep} className="apple-stage-transition">
+              
+              {/* STAGE 01: 毫米级学情感知舱 */}
+              {activeStep === 0 && (
+                <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
                   <div>
                     <span className="badge badge-blue">POD 01 · 毫米级视觉学情感知舱</span>
@@ -562,7 +563,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       <div style={{ position: 'absolute', right: 20, top: 20 }}>
                         <svg viewBox="0 0 100 60" style={{ width: 100, height: 60 }}>
                           <ellipse cx="50" cy="30" rx="36" ry="20" fill="none" stroke="rgba(0,113,227,0.2)" strokeWidth="1.5" />
-                          <circle cx="50" cy="30" r="14" fill="none" stroke="var(--accent-primary)" strokeWidth="1.5" strokeDasharray="3 2" />
+                          <circle cx="50" cy="30" r="14" fill="none" stroke="var(--accent-primary)" strokeWidth="1.5" strokeDasharray="3 2" className="apple-gaze-pulse-ring" />
                           <circle cx={`${50 + Math.sin(waveOffset * 0.7) * 2}`} cy={`${30 + Math.cos(waveOffset * 0.6) * 1.5}`} r="5" fill="var(--accent-primary)" />
                         </svg>
                       </div>
@@ -773,6 +774,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               </div>
             )}
 
+            </div>
           </div>
 
           {/* Bottom Stage Pagination */}
@@ -1071,8 +1073,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
             <div className="apple-keynote-tile">
               <div className="apple-keynote-stat-val highlight">+88%</div>
-              <div className="apple-keynote-stat-title">压轴题思维留存</div>
-              <div className="apple-keynote-stat-desc">启发式支架引导，彻底解决考场变式卡点</div>
+              <div className="apple-keynote-stat-title">核心思维留存率</div>
+              <div className="apple-keynote-stat-desc">启发式支架引导，彻底突破各学段变式瓶颈</div>
             </div>
 
           </div>

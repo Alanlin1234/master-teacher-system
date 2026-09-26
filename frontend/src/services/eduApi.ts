@@ -106,7 +106,7 @@ function getFallbackData<T>(path: string, options: RequestInit): T {
 
   if (path.includes('/api/analysis/analyze')) {
     return {
-      summary: '针对导数与极值点偏移压轴题，能够熟练写出一阶导数与切线斜率方程，但在隐零点代换与对数均值不等式放缩时出现思维受阻。',
+      summary: '针对核心数学思维大题，能够熟练写出基础关系式与方程，但在隐零点代换与对称不等式放缩时出现思维受阻。',
       difficulties: [
         '极值点偏移中构造对称差函数 F(x) = f(x) - f(2x₀ - x) 的单调性判定受阻',
         '指数放缩 e^x ≥ x + 1 与对数放缩 ln(x) ≤ x - 1 的相切等号临界点讨论不完整',

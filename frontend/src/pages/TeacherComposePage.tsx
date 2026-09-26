@@ -141,7 +141,7 @@ export const TeacherComposePage: React.FC<Props> = ({
   const dimensionRows = [
     { key: 'style', label: '上课风格', trait: '教学叙事基调', hint: '决定授课节奏、思维脉络与语言基调' },
     { key: 'personality', label: '人格特征', trait: '情绪与共情力', hint: '决定答题卡顿时的耐心、幽默与共情态度' },
-    { key: 'strengths', label: '核心优点', trait: '解题破局专长', hint: '决定压轴大题与综合题型的模型破局视角' },
+    { key: 'strengths', label: '核心优点', trait: '解题破局专长', hint: '决定核心难题与综合题型的模型破局视角' },
     { key: 'method', label: '教学方法', trait: '认知启发体系', hint: '决定追问启发、数形结合还是逆向秒杀' },
     { key: 'communication', label: '沟通方式', trait: '师生交互频次', hint: '决定是温和鼓励，还是严谨学术探讨' },
   ];

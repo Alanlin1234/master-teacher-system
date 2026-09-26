@@ -5,7 +5,7 @@ import { cognitiveApi } from '../services/eduApi';
 import { getLearnerId, getLearnerName, writeDiagnosis, type StoredDiagnosis } from '../services/learnerStore';
 
 const SUBJECTS = ['数学', '物理', '化学', '语文', '英语'];
-const GRADES = ['高三', '高二', '高一', '初三', '初二'];
+const GRADES = ['全学段通用', '高中 (9-12年级)', '初中 (6-8年级)', '小学高段 (4-5年级)'];
 
 interface HeatmapTopic {
   name: string;
@@ -77,7 +77,7 @@ interface Props {
 
 export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
   const [subject, setSubject] = useState('数学');
-  const [grade, setGrade] = useState('高三');
+  const [grade, setGrade] = useState('全学段通用');
   const [busy, setBusy] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<HeatmapTopic | null>(HEATMAP_DOMAINS[4].topics[2]); // Default to 极值点偏移
   const [abilityLevel, setAbilityLevel] = useState('Level A+ (高阶思维层)');
@@ -243,7 +243,7 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
         <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', borderRadius: 24, padding: '28px 30px', marginBottom: 32, boxShadow: 'var(--shadow-md)' }}>
           <div style={{ marginBottom: 20 }}>
             <strong style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 700 }}>
-              高考数学考点掌握矩阵 · 单击单元格下钻 IRT 深度诊断
+              学科核心知识掌握矩阵 · 单击单元格下钻 IRT 深度诊断
             </strong>
           </div>
 
@@ -336,7 +336,7 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
               <div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>题项难度系数 (IRT b)</div>
                 <div style={{ fontSize: '18px', fontWeight: 750, color: 'var(--text-main)', fontFamily: 'monospace', margin: '4px 0 2px' }}>b = {selectedTopic.irtB}</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>压轴难度高阶考点</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>核心进阶高阶考点</div>
               </div>
               <div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>区分度指数 (IRT a)</div>

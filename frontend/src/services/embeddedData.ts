@@ -38,7 +38,7 @@ export const EMBEDDED_TEACHERS = [
     strengths: ["善于以文史典故点亮现代作文构思", "经典文本沉浸式细读与意象剖析", "提升思辨表达深度"],
     weaknesses: ["考点应试拆分偏少", "注重情感体验"],
     materials: [
-      { id: "m2-1", title: "高考议论文思辨框架与高级论据精粹", type: "讲义", uploadDate: "2026-03-14" }
+      { id: "m2-1", title: "学科议论文思辨框架与高级论据精粹", type: "讲义", uploadDate: "2026-03-14" }
     ],
     dh_model_name: "li_qingyun_avatar",
     dh_model_video_url: "./demo_videos/merged.mp4",
@@ -92,7 +92,7 @@ export const EMBEDDED_TEACHERS = [
     strengths: ["以电子云转移视角通透解读反应机理", "工业流程图解构破题四部法", "易错考点矩阵对比"],
     weaknesses: ["板书容量大，需学生全神贯注"],
     materials: [
-      { id: "m5-1", title: "高考有机合成逆推思路终极秘籍", type: "讲义", uploadDate: "2026-03-19" }
+      { id: "m5-1", title: "中学有机合成逆推思路精析", type: "讲义", uploadDate: "2026-03-19" }
     ],
     dh_model_name: "su_peishan_avatar",
     dh_model_video_url: "./demo_videos/merged.mp4",

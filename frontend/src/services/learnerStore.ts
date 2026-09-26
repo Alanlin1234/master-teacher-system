@@ -74,15 +74,15 @@ export function getLearnerId(): number {
   const raw = localStorage.getItem(LEARNER_KEY);
   const id = raw ? Number(raw) : NaN;
   if (Number.isFinite(id) && id > 0) return id;
-  // Default to built-in high school learner 101
-  setLearner(101, '林同学 (高三理科冲刺)');
+  // Default to built-in learner 101
+  setLearner(101, '林同学 (K12 思维进阶)');
   return 101;
 }
 
 export function getLearnerName(): string {
   const name = localStorage.getItem(LEARNER_NAME_KEY);
   if (name) return name;
-  return '林同学 (高三理科冲刺)';
+  return '林同学 (K12 思维进阶)';
 }
 
 export function setLearner(id: number, name: string) {

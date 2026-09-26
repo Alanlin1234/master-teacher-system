@@ -185,9 +185,9 @@ function handleStaticFallback<T>(url: string, options: RequestInit = {}): T {
       ok: true,
       topic,
       segments: [
-        { index: 1, title: "导入与核心问题聚焦", script: `同学们好！我是${teacherName}。今天我们要用高维视角来彻底攻克【${topic}】这个核心压轴难点。` },
+        { index: 1, title: "导入与核心问题聚焦", script: `同学们好！我是${teacherName}。今天我们要用高维视角来彻底攻克【${topic}】这个核心思维难点。` },
         { index: 2, title: "底层思维图谱与模型解构", script: `首先大家注意观察函数变化率的本质：当自变量增量 $\\Delta x \\to 0$ 时，割线的极限即为切线。这就是导数的几何灵魂。` },
-        { index: 3, title: "经典高考真题破局与秒杀技巧", script: `面对复杂的综合大题，我们牢记四字口诀：'设而不求，齐次化构造'。先立足几何对称性，快速锁定临界点！` },
+        { index: 3, title: "经典题型破局与思维进阶", script: `面对复杂的综合大题，我们牢记四字口诀：'设而不求，齐次化构造'。先立足几何对称性，快速锁定临界点！` },
         { index: 4, title: "思维升维与课后演练指南", script: `掌握了这一本质，同类题目便可迎刃而解。请大家在课后利用配套讲义完成两道迁移巩固题，我们下节课见！` }
       ]
     } as unknown as T;
@@ -313,7 +313,7 @@ async function streamQwenDirect(
   if (dimScores) {
     dynamicPedagogy = `\n【当前五维自适应教学基因调优配置】：\n` +
       `- 上课风格指标 (${Math.round((dimScores.style || 0.8) * 100)}%): ${dimScores.style > 0.82 ? '采用极高密度的严密公理化证明与数学公理推演，注重定义域、多分支讨论与严格充要条件判定' : '采用生动形象的直观几何切线比喻与生活化隐喻，注重通俗启发'}；\n` +
-      `- 教学方法指标 (${Math.round((dimScores.method || 0.8) * 100)}%): ${dimScores.method > 0.82 ? '必须设置专门的【高考命题反套路陷阱剖析】，列出易错混淆点与典型反例' : '采用苏格拉底递进启发式追问，引导学生自主反思发现矛盾'}；\n` +
+      `- 教学方法指标 (${Math.round((dimScores.method || 0.8) * 100)}%): ${dimScores.method > 0.82 ? '必须设置专门的【核心命题反套路陷阱剖析】，列出易错混淆点与典型反例' : '采用苏格拉底递进启发式追问，引导学生自主反思发现矛盾'}；\n` +
       `- 核心特长指标 (${Math.round((dimScores.strengths || 0.8) * 100)}%): ${dimScores.strengths > 0.82 ? '数形结合与高维模型综合建构，输出高品质 LaTeX 数学公式块卡片' : '提供极速通关口诀与步骤化解题模板'}；\n` +
       `- 互动温度指标 (${Math.round((dimScores.personality || 0.8) * 100)}%): ${dimScores.personality > 0.82 ? '大师学者型沉稳深邃风范' : '亲切如春风拂面、耐心幽默鼓励'}；\n` +
       `- 表达节奏指标 (${Math.round((dimScores.communication || 0.8) * 100)}%): ${dimScores.communication > 0.82 ? '输出结构化思维导图或对比表格，语言极其精炼高密' : '娓娓道来循序渐进铺垫展开'}。`;
@@ -421,7 +421,7 @@ $$f'(x) = \\lim_{\\Delta x \\to 0} \\frac{f(x+\\Delta x) - f(x)}{\\Delta x}$$
 
 ${isExamTraps
   ? `> [!IMPORTANT]
-> **🎯 高考命题反套路避坑警示**
+> **🎯 核心命题反套路避坑警示**
 > 考场常见失分点：切忌把一阶必要条件与充分条件混为一谈！若导数在临界点左右未发生正负号跨轴突变，该点绝非极值点。务必配合单调性变号表严格核验！`
   : `> [!NOTE]
 > **✦ 苏格拉底递进反思追问**

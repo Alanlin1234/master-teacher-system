@@ -74,7 +74,7 @@ export const CollectPage: React.FC<Props> = ({ onDiagnose, initialSegment = 'mon
     weakKnowledge: string[];
     recommendations: string[];
   }>({
-    summary: '针对导数与极值点偏移压轴题，能够熟练写出一阶导数与切线斜率方程，但在隐零点代换与对数均值不等式放缩时出现思维受阻。',
+    summary: '针对核心数学思维大题，能够熟练写出基础关系式与方程，但在隐零点代换与对称不等式放缩时出现思维受阻。',
     difficulties: [
       '极值点偏移中构造对称差函数 F(x) = f(x) - f(2x₀ - x) 的单调性判定受阻',
       '指数放缩 e^x ≥ x + 1 与对数放缩 ln(x) ≤ x - 1 的相切等号临界点讨论不完整',
@@ -311,7 +311,7 @@ export const CollectPage: React.FC<Props> = ({ onDiagnose, initialSegment = 'mon
                         {dash.progress}%
                       </div>
                       <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: 4 }}>
-                        已完成 4 组导数压轴题解构
+                        已完成 4 组核心思维难点解构
                       </div>
                     </div>
                     {/* Ring Gauge */}
@@ -393,7 +393,7 @@ export const CollectPage: React.FC<Props> = ({ onDiagnose, initialSegment = 'mon
                 <div style={{ background: 'var(--bg-surface-elevated)', borderRadius: 18, padding: '20px 22px', border: '1px solid var(--border-glass)' }}>
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: 4, fontWeight: 600 }}>累计有效学时</div>
                   <div className="apple-keynote-stat-val" style={{ fontSize: '2.4rem', margin: 0 }}>{perceptionData.totalHours} <span style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: 500 }}>小时</span></div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: 4 }}>涵盖数学/物理压轴专题</div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: 4 }}>涵盖数学/科学等 K12 核心专题</div>
                 </div>
                 <div style={{ background: 'var(--bg-surface-elevated)', borderRadius: 18, padding: '20px 22px', border: '1px solid var(--border-glass)' }}>
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: 4, fontWeight: 600 }}>有效推导学习会话</div>
@@ -596,10 +596,10 @@ export const CollectPage: React.FC<Props> = ({ onDiagnose, initialSegment = 'mon
                           )}
                         </div>
                         <strong style={{ fontSize: '14px', color: 'var(--text-main)' }}>
-                          {imageUploaded ? '已载入高三一模数学试卷压轴题.jpg' : '点击上传试卷照片或错题草稿纸'}
+                          {imageUploaded ? '已载入K12数学核心难点草稿解析.jpg' : '点击上传试卷照片或错题草稿纸'}
                         </strong>
                         <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: 4 }}>
-                          {imageUploaded ? 'OCR 算法已识别：导数压轴公式与手写草稿第 4 处推导断层' : '支持 JPG, PNG, PDF，自动检测手写公式与几何作图痕迹'}
+                          {imageUploaded ? 'OCR 算法已识别：核心公式与手写草稿第 4 处推导断层' : '支持 JPG, PNG, PDF，自动检测手写公式与几何作图痕迹'}
                         </p>
                       </div>
                     </div>
