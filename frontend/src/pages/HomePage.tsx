@@ -18,6 +18,7 @@ import {
   Search,
   BookOpen,
   CheckCircle2,
+  Award,
 } from 'lucide-react';
 import { RadarChart5D } from '../components/RadarChart5D';
 import { prefersReducedMotion, useHeroEntrance } from '../lib/gsap';
@@ -116,30 +117,35 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     });
   }, []);
 
-  // Waveform and EQ Animation
+  // Waveform and EQ Animation (Calm, Serene, High-End Apple Breathing Flow)
   useEffect(() => {
     if (prefersReducedMotion()) return;
     let animId: number;
     let t = 0;
     const loop = () => {
-      t += 0.05;
+      t += 0.008; // 6x slower: calm, meditative, luxury breathing rhythm
       setWaveOffset(t);
-      if (Math.random() < 0.25) {
-        setEqLevels([
-          12 + Math.random() * 24,
-          20 + Math.random() * 26,
-          16 + Math.random() * 28,
-          24 + Math.random() * 24,
-          18 + Math.random() * 30,
-          28 + Math.random() * 20,
-          14 + Math.random() * 22,
-          10 + Math.random() * 18,
-        ]);
-      }
       animId = requestAnimationFrame(loop);
     };
     animId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(animId);
+
+    const eqTimer = setInterval(() => {
+      setEqLevels([
+        14 + Math.random() * 16,
+        22 + Math.random() * 18,
+        18 + Math.random() * 20,
+        26 + Math.random() * 16,
+        20 + Math.random() * 22,
+        24 + Math.random() * 16,
+        16 + Math.random() * 14,
+        12 + Math.random() * 12,
+      ]);
+    }, 1200);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      clearInterval(eqTimer);
+    };
   }, []);
 
   const handlePresetSelect = (preset: Preset) => {
@@ -221,15 +227,17 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     <div className="page-shell" style={{ overflowX: 'hidden', padding: 0 }}>
 
       {/* =================================================================
-          ACT I: APPLE MONUMENTAL HERO & STUDIO DISPLAY
+          ACT I: THE PROLOGUE & THE COGNITIVE FOLIO (序章 · 沉浸式对开书卷展台)
           ================================================================= */}
       <section ref={heroRef} className="apple-fullbleed-band apple-fullbleed-band--hero">
         <div className="apple-stage-container">
           
-          {/* Eyebrow */}
-          <div className="apple-pro-eyebrow">
-            <span className="apple-status-dot apple-status-dot--primary" />
-            <span>名师智教 · 全息认知编译架构</span>
+          {/* Book Chapter Ribbon */}
+          <div style={{ textAlign: 'center' }}>
+            <div className="apple-chapter-ribbon">
+              <span className="apple-status-dot apple-status-dot--primary" />
+              <span>PROLOGUE · 卷首语 · 认知编译范式转移</span>
+            </div>
           </div>
 
           {/* Monumental Headline */}
@@ -238,9 +246,14 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             <span>再决定由哪位名师来讲</span>
           </h1>
 
+          {/* Book Editorial Pullquote */}
+          <div className="apple-editorial-pullquote">
+            “每个在压轴题前停滞的学生，缺少的从不是更多的公式硬套，而是一位懂得他卡在第几步的专属名师。”
+          </div>
+
           {/* Precision Subtitle */}
-          <p className="apple-pro-subtitle" style={{ textWrap: 'balance' }}>
-            拒绝通用 AI 的生搬硬套。基于毫米级多模态专注流与 IRT 认知穿透，即席重构特级名师专属解题基因。
+          <p className="apple-pro-subtitle" style={{ maxWidth: 740, margin: '0 auto 36px', textWrap: 'balance' }}>
+            一本专为高三理科生与特级名师编写的实时认知解构手册。基于毫米级多模态专注流与 IRT 认知穿透，即席重构特级名师专属解题基因。
           </p>
 
           {/* Apple Dual CTA Cluster */}
@@ -261,12 +274,12 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 el?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              <span>调谐 5D 认知工作台</span>
+              <span>翻开 5D 认知对决工作台</span>
               <ChevronRight size={16} />
             </button>
           </div>
 
-          {/* Apple Studio Display Bezel (一体化微晶极简硬件展台) */}
+          {/* Apple Studio Display Bezel: The Cognitive Folio (对开书卷硬件展台) */}
           <div className="apple-studio-bezel">
             <div className="apple-studio-bezel-inner">
               
@@ -279,7 +292,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600 }}>
                   <BookOpen size={14} style={{ color: 'var(--accent-primary)' }} />
-                  <span>Apple Math Notes · {learnerName} · 压轴题思维阶梯</span>
+                  <span>THE COGNITIVE FOLIO · 高三理科压轴题现场解构 · 林同学 (冲刺实测)</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>
                   <span className="apple-status-dot apple-status-dot--primary" />
@@ -287,88 +300,117 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 </div>
               </div>
 
-              {/* Display Core Canvas */}
-              <div style={{ padding: '28px 32px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 28, alignItems: 'center' }}>
+              {/* Folio Spread Canvas (对开双页思想交锋) */}
+              <div style={{ display: 'flex', alignItems: 'stretch', flexWrap: 'wrap' }}>
                 
-                {/* Left: Apple Math Notes Thought Scaffolding */}
-                <div className="apple-math-note-scaffold">
+                {/* Left Page (Page 01 · 困惑草稿) */}
+                <div style={{ flex: '1 1 340px', padding: '24px 28px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                    <span style={{ fontSize: '12px', fontWeight: 750, color: 'var(--accent-primary)', letterSpacing: '0.04em' }}>
-                      名师解题思维阶梯 (MATH NOTES)
+                    <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
+                      PAGE 01 · 学生真实演算草稿断层 (STUDENT DRAFT)
                     </span>
-                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--text-muted)', borderRadius: 9999, fontSize: '11px', padding: '2px 10px', fontWeight: 600 }}>
-                      自适应 99.4%
+                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--text-muted)', borderRadius: 9999, fontSize: '11px', padding: '2px 8px' }}>
+                      坐标 X:184 · Y:312
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '13px' }}>
-                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>01</span>
-                      <div>
-                        <div style={{ fontWeight: 650, color: 'var(--text-main)', marginBottom: 2 }}>构造对称差函数：</div>
-                        <div style={{ color: 'var(--accent-primary)', fontFamily: 'monospace', fontWeight: 700, fontSize: '13px' }}>
-                          F(x) = f(x) - f(2x₀ - x)
-                        </div>
+                  <div className="apple-draft-paper" style={{ padding: '20px 22px', minHeight: 180, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--text-body)', lineHeight: 1.8 }}>
+                      <div>f'(x) = 2x - a/x = (2x² - a)/x</div>
+                      <div style={{ color: 'var(--accent-primary)', fontWeight: 'bold' }}>令 f'(x) = 0 =&gt; x₀ = √(a/2)</div>
+                      <div style={{ color: 'var(--text-main)', fontWeight: 'bold', background: 'rgba(0,113,227,0.06)', padding: '2px 6px', borderRadius: 4, display: 'inline-block' }}>
+                        第3步: 对称差放缩阻滞... (思维停顿 18.4s)
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '13px' }}>
-                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>02</span>
-                      <div>
-                        <div style={{ fontWeight: 650, color: 'var(--text-main)', marginBottom: 2 }}>一阶求导单调判定：</div>
-                        <div style={{ color: 'var(--text-main)', fontFamily: 'monospace', fontWeight: 700, fontSize: '13px' }}>
-                          F'(x) = f'(x) + f'(2x₀ - x)
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '13px' }}>
-                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>03</span>
-                      <div>
-                        <div style={{ fontWeight: 650, color: 'var(--text-main)', marginBottom: 2 }}>单峰性质降维破局：</div>
-                        <div style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 500 }}>
-                          化二元极值为一元单调性，直破考点死结
-                        </div>
-                      </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600, marginTop: 14, paddingTop: 10, borderTop: '1px solid var(--border-glass)' }}>
+                      <span className="apple-status-dot apple-status-dot--primary" />
+                      <span>视线锁定：在极值点偏移放缩临界点停留 18.4 秒</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Right: Live Dynamic Math Chalkboard & Voice Frequency */}
-                <div style={{ background: 'var(--bg-surface-elevated)', borderRadius: 18, padding: '20px 24px', border: '1px solid var(--border-glass)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                    <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 650, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                      <Ruler size={13} style={{ color: 'var(--accent-primary)' }} />
-                      <span>LIVE MATH CHALKBOARD</span>
-                    </span>
-                    <div className="acoustic-eq-bar-wrap">
-                      {eqLevels.map((lvl, idx) => (
-                        <div key={idx} className="acoustic-eq-bar" style={{ height: `${lvl * 0.7}px`, background: 'var(--accent-primary)' }} />
-                      ))}
+                {/* Cognitive Folio Spine (双页装订线与因果连接) */}
+                <div className="apple-folio-spine">
+                  <div className="apple-folio-spine-pill">
+                    <span>COGNITIVE BRIDGE</span>
+                  </div>
+                </div>
+
+                {/* Right Page (Page 02 · 名师点睛) */}
+                <div style={{ flex: '1 1 360px', padding: '24px 28px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                      <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--accent-primary)', letterSpacing: '0.05em' }}>
+                        PAGE 02 · 特级名师启发式思维阶梯 (MASTER INSIGHT)
+                      </span>
+                      <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--accent-primary)', borderRadius: 9999, fontSize: '11px', padding: '2px 8px', fontWeight: 600 }}>
+                        自适应 99.4%
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '12px' }}>
+                        <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>01</span>
+                        <div>
+                          <span style={{ color: 'var(--text-muted)' }}>构造对称差函数：</span>
+                          <span style={{ color: 'var(--accent-primary)', fontFamily: 'monospace', fontWeight: 700, marginLeft: 6 }}>F(x) = f(x) - f(2x₀ - x)</span>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '12px' }}>
+                        <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>02</span>
+                        <div>
+                          <span style={{ color: 'var(--text-muted)' }}>一阶求导单调判定：</span>
+                          <span style={{ color: 'var(--text-main)', fontFamily: 'monospace', fontWeight: 700, marginLeft: 6 }}>F'(x) = f'(x) + f'(2x₀ - x)</span>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '12px' }}>
+                        <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>03</span>
+                        <div>
+                          <span style={{ color: 'var(--text-muted)' }}>单峰性质降维破局：</span>
+                          <span style={{ color: 'var(--text-main)', fontWeight: 600, marginLeft: 6 }}>化二元极值为一元单调性</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Math Curve Canvas */}
-                  <svg viewBox="0 0 360 110" style={{ width: '100%', height: 110 }}>
-                    <line x1="20" y1="95" x2="340" y2="95" stroke="var(--border-glass)" strokeWidth="1" />
-                    <line x1="50" y1="10" x2="50" y2="105" stroke="var(--border-glass)" strokeWidth="1" />
-                    <path
-                      d={`M 50 85 Q 150 15 280 ${55 + Math.sin(waveOffset) * 6}`}
-                      fill="none"
-                      stroke="var(--accent-primary)"
-                      strokeWidth="2.5"
-                    />
-                    <path
-                      d={`M 280 85 Q 190 15 50 ${55 + Math.cos(waveOffset) * 6}`}
-                      fill="none"
-                      stroke="rgba(0, 113, 227, 0.35)"
-                      strokeWidth="2"
-                      strokeDasharray="4 3"
-                    />
-                    <circle cx="165" cy="40" r="4" fill="var(--accent-primary)" />
-                    <line x1="165" y1="40" x2="165" y2="95" stroke="var(--accent-primary)" strokeWidth="1" strokeDasharray="3 3" />
-                    <text x="165" y="105" textAnchor="middle" fill="var(--accent-primary)" fontSize="10" fontFamily="monospace" fontWeight="bold">x₀</text>
-                    <text x="250" y="45" fill="var(--accent-primary)" fontSize="11" fontFamily="monospace" fontWeight="bold">y = f(x)</text>
-                    <text x="75" y="45" fill="var(--text-muted)" fontSize="10" fontFamily="monospace" fontWeight="bold">y = f(2x₀ - x)</text>
-                  </svg>
+                  {/* Live Math Chalkboard SVG */}
+                  <div style={{ background: 'var(--bg-surface-elevated)', borderRadius: 14, padding: '12px 16px', border: '1px solid var(--border-glass)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                      <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 650, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                        <Ruler size={12} style={{ color: 'var(--accent-primary)' }} />
+                        <span>LIVE MATH CHALKBOARD</span>
+                      </span>
+                      <div className="acoustic-eq-bar-wrap">
+                        {eqLevels.map((lvl, idx) => (
+                          <div key={idx} className="acoustic-eq-bar" style={{ height: `${lvl * 0.55}px`, background: 'var(--accent-primary)' }} />
+                        ))}
+                      </div>
+                    </div>
+
+                    <svg viewBox="0 0 360 85" style={{ width: '100%', height: 85 }}>
+                      <line x1="20" y1="75" x2="340" y2="75" stroke="var(--border-glass)" strokeWidth="1" />
+                      <line x1="50" y1="10" x2="50" y2="80" stroke="var(--border-glass)" strokeWidth="1" />
+                      <path
+                        d={`M 50 68 Q 150 15 280 ${48 + Math.sin(waveOffset) * 4}`}
+                        fill="none"
+                        stroke="var(--accent-primary)"
+                        strokeWidth="2.5"
+                      />
+                      <path
+                        d={`M 280 68 Q 190 15 50 ${48 + Math.cos(waveOffset) * 4}`}
+                        fill="none"
+                        stroke="rgba(0, 113, 227, 0.35)"
+                        strokeWidth="1.8"
+                        strokeDasharray="4 3"
+                      />
+                      <circle cx="165" cy="35" r="3.5" fill="var(--accent-primary)" />
+                      <line x1="165" y1="35" x2="165" y2="75" stroke="var(--accent-primary)" strokeWidth="1" strokeDasharray="3 3" />
+                      <text x="165" y="83" textAnchor="middle" fill="var(--accent-primary)" fontSize="9" fontFamily="monospace" fontWeight="bold">x₀</text>
+                      <text x="250" y="38" fill="var(--accent-primary)" fontSize="10" fontFamily="monospace" fontWeight="bold">y = f(x)</text>
+                      <text x="75" y="38" fill="var(--text-muted)" fontSize="9" fontFamily="monospace" fontWeight="bold">y = f(2x₀ - x)</text>
+                    </svg>
+                  </div>
                 </div>
 
               </div>
@@ -416,14 +458,18 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
       <section id="tour-stage-section" className="apple-fullbleed-band apple-fullbleed-band--dark">
         <div className="apple-stage-container">
           
-          <div className="apple-pro-eyebrow">
-            <Zap size={14} />
-            <span>COGNITIVE CLOSED LOOP · 因果循迹全息闭环</span>
+          <div className="apple-chapter-ribbon">
+            <BookOpen size={13} />
+            <span>CHAPTER 01 · 循迹 · 四幕因果全息剧场 (THE CAUSAL LOOP)</span>
           </div>
 
-          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)', marginBottom: 12, textWrap: 'balance' }}>
-            从草稿专注阻滞，到专属名师微课生成
+          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)', marginBottom: 16 }}>
+            从草稿纸专注阻滞<br />
+            <span>到专属名师微课即席生成</span>
           </h2>
+          <div className="apple-editorial-pullquote" style={{ maxWidth: 680, marginBottom: 32 }}>
+            “翻开第 1 章：从学生笔尖停顿的 18.4 秒，到特级名师微课的即席诞生。”
+          </div>
           <p className="apple-pro-subtitle" style={{ marginBottom: 40, textWrap: 'balance' }}>
             四大核心感知与认知计算模块，一气呵成。
           </p>
@@ -483,7 +529,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       </div>
                       <svg viewBox="0 0 300 70" style={{ width: '100%', height: 75, overflow: 'visible' }}>
                         <path
-                          d={`M 0 35 Q 40 ${35 + Math.sin(waveOffset) * 20} 80 35 T 160 35 T 240 ${35 + Math.cos(waveOffset) * 18} T 300 35`}
+                          d={`M 0 35 Q 40 ${35 + Math.sin(waveOffset) * 12} 80 35 T 160 35 T 240 ${35 + Math.cos(waveOffset) * 10} T 300 35`}
                           fill="none"
                           stroke="var(--accent-primary)"
                           strokeWidth="3.5"
@@ -517,7 +563,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                         <svg viewBox="0 0 100 60" style={{ width: 100, height: 60 }}>
                           <ellipse cx="50" cy="30" rx="36" ry="20" fill="none" stroke="rgba(0,113,227,0.2)" strokeWidth="1.5" />
                           <circle cx="50" cy="30" r="14" fill="none" stroke="var(--accent-primary)" strokeWidth="1.5" strokeDasharray="3 2" />
-                          <circle cx={`${50 + Math.sin(waveOffset) * 4}`} cy={`${30 + Math.cos(waveOffset) * 3}`} r="5" fill="var(--accent-primary)" />
+                          <circle cx={`${50 + Math.sin(waveOffset * 0.7) * 2}`} cy={`${30 + Math.cos(waveOffset * 0.6) * 1.5}`} r="5" fill="var(--accent-primary)" />
                         </svg>
                       </div>
                     </div>
@@ -767,14 +813,18 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
       <section id="workbench-section" className="apple-fullbleed-band apple-fullbleed-band--light">
         <div className="apple-stage-container">
           
-          <div className="apple-pro-eyebrow">
-            <Sliders size={14} />
-            <span>INTERACTIVE COGNITIVE WORKBENCH · 5D 实时演练中枢</span>
+          <div className="apple-chapter-ribbon">
+            <Sliders size={13} />
+            <span>CHAPTER 02 · 破局 · 5D 认知基因调谐工作台 (THE WORKBENCH)</span>
           </div>
 
-          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)', maxWidth: 840, marginBottom: 12, textWrap: 'balance' }}>
-            自主调节 5D 认知基因，实时透视生成差距
+          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)', maxWidth: 880, marginBottom: 16 }}>
+            自主调节 5D 认知基因<br />
+            <span>实时透视生成差距</span>
           </h2>
+          <div className="apple-editorial-pullquote" style={{ maxWidth: 700, marginBottom: 32 }}>
+            “翻开第 2 章：自由调谐名师基因，亲手见证启发式教育与暴力硬灌的本质鸿沟。”
+          </div>
           <p className="apple-pro-subtitle" style={{ maxWidth: 680, marginBottom: 36, textWrap: 'balance' }}>
             轻拉滑块或输入您关心的考题，同屏直击特级名师启发支架与通用大模型的死板结论。
           </p>
@@ -988,6 +1038,17 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           ================================================================= */}
       <section className="apple-fullbleed-band" style={{ padding: '60px 0 100px' }}>
         <div className="apple-stage-container">
+          
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <div className="apple-chapter-ribbon" style={{ margin: '0 auto 16px' }}>
+              <Zap size={13} />
+              <span>EPILOGUE · 终章 · 毫米级实证跃迁 (THE EVIDENCE)</span>
+            </div>
+            <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2rem, 3.6vw, 2.8rem)', margin: 0, textWrap: 'balance' }}>
+              实证数据，写下认知的真实跃迁
+            </h2>
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 24 }}>
             
             <div className="apple-keynote-tile">
