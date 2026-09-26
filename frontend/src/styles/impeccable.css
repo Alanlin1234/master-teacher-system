@@ -2122,3 +2122,302 @@ input[type="range"]::-moz-range-track {
   border-color: rgba(37, 99, 235, 0.4);
   box-shadow: 0 12px 36px -12px rgba(37, 99, 235, 0.22);
 }
+
+/* ==========================================================================
+   6. APPLE PRO FULL-BLEED STAGE & STUDIO SYSTEM (真苹果大舞台与一体化硬件)
+   ========================================================================== */
+
+/* Full-bleed stage bands to break container claustrophobia */
+.apple-fullbleed-band {
+  width: 100%;
+  position: relative;
+  padding: 80px 0;
+}
+
+.apple-fullbleed-band--hero {
+  padding: 96px 0 64px;
+  background: radial-gradient(circle at 50% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+}
+
+.apple-fullbleed-band--dark {
+  background: linear-gradient(180deg, #070b13 0%, #04060a 100%);
+  color: #f8fafc;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.apple-fullbleed-band--light {
+  background: var(--bg-app);
+}
+
+.apple-stage-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 768px) {
+  .apple-stage-container {
+    padding: 0 40px;
+  }
+}
+
+/* Apple Monumental Typography */
+.apple-monumental-headline {
+  font-size: clamp(2.5rem, 5.2vw, 4.4rem);
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--text-main);
+  margin: 0 auto 18px;
+  max-width: 960px;
+  text-align: center;
+}
+
+.apple-monumental-headline span {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.apple-pro-eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  margin-bottom: 16px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.apple-pro-subtitle {
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 740px;
+  margin: 0 auto 36px;
+  text-align: center;
+  font-weight: 450;
+}
+
+/* Apple CTA Clusters */
+.apple-cta-cluster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 56px;
+  flex-wrap: wrap;
+}
+
+.apple-btn-pill-primary {
+  height: 48px;
+  padding: 0 32px;
+  border-radius: 9999px;
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 650;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transition: all var(--trans-normal);
+  text-decoration: none;
+}
+
+.apple-btn-pill-primary:hover {
+  background: var(--accent-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+}
+
+.apple-btn-pill-primary:active {
+  transform: scale(0.98);
+}
+
+.apple-btn-link {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  transition: all var(--trans-fast);
+}
+
+.apple-btn-link:hover {
+  background: var(--accent-primary-subtle);
+  color: var(--accent-primary-hover);
+}
+
+/* Apple Studio Display Bezel (一体化深空钛金硬件展台) */
+.apple-studio-bezel {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #1b2333 0%, #0d131f 100%);
+  padding: 12px;
+  box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.apple-studio-bezel-inner {
+  border-radius: 20px;
+  background: #070b13;
+  color: #f8fafc;
+  overflow: hidden;
+  box-shadow: inset 0 2px 14px rgba(0, 0, 0, 0.8);
+}
+
+.apple-studio-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 12px;
+}
+
+.apple-studio-dots {
+  display: flex;
+  gap: 7px;
+}
+
+.apple-studio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.apple-studio-dot--red { background: #ff5f56; }
+.apple-studio-dot--yellow { background: #ffbd2e; }
+.apple-studio-dot--green { background: #27c93f; }
+
+/* Apple Segmented Capsule Bar (iOS 级胶囊切换器) */
+.apple-segmented-capsule-bar {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(20px);
+  border-radius: 9999px;
+  padding: 5px;
+  gap: 4px;
+}
+
+[data-theme="dark"] .apple-segmented-capsule-bar {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.apple-segmented-capsule-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 22px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--trans-normal);
+  white-space: nowrap;
+}
+
+.apple-segmented-capsule-item:hover {
+  color: var(--text-main);
+}
+
+.apple-segmented-capsule-item.active {
+  background: var(--bg-surface);
+  color: var(--text-main);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .apple-segmented-capsule-item.active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Apple iOS Slider Control */
+.apple-ios-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--bg-muted);
+  outline: none;
+  transition: background var(--trans-fast);
+}
+
+.apple-ios-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  transition: transform var(--trans-fast), box-shadow var(--trans-fast);
+}
+
+.apple-ios-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.4);
+}
+
+.apple-ios-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Apple Keynote Stat Figures */
+.apple-keynote-stat {
+  text-align: center;
+  padding: 24px 16px;
+}
+
+.apple-keynote-stat-val {
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.apple-keynote-stat-val.highlight {
+  color: var(--accent-primary);
+}
+
+.apple-keynote-stat-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
