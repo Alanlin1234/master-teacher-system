@@ -2167,22 +2167,36 @@ input[type="range"]::-moz-range-track {
   max-width: 1120px;
   margin: 0 auto;
   border-radius: 28px;
-  background: linear-gradient(180deg, #1b2333 0%, #0b111c 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08);
-  padding: 32px 36px;
-  color: #f8fafc;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 24px 70px -15px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(0, 0, 0, 0.03);
+  padding: 36px 40px;
+  color: var(--text-main);
   position: relative;
   overflow: hidden;
+  transition: all var(--trans-normal);
+}
+
+[data-theme="dark"] .apple-pro-display-frame {
+  background: linear-gradient(180deg, #1b2333 0%, #0b111c 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  color: #f8fafc;
 }
 
 /* Apple Math Notes Thought Scaffolding */
 .apple-math-note-scaffold {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: 20px 22px;
+  text-align: left;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] .apple-math-note-scaffold {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 18px 20px;
-  text-align: left;
 }
 
 .apple-stage-container {
@@ -2264,7 +2278,7 @@ input[type="range"]::-moz-range-track {
   gap: 8px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35);
   transition: all var(--trans-normal);
   text-decoration: none;
 }
@@ -2272,7 +2286,7 @@ input[type="range"]::-moz-range-track {
 .apple-btn-pill-primary:hover {
   background: var(--accent-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 113, 227, 0.45);
 }
 
 .apple-btn-pill-primary:active {
@@ -2299,35 +2313,54 @@ input[type="range"]::-moz-range-track {
   color: var(--accent-primary-hover);
 }
 
-/* Apple Studio Display Bezel (一体化深空钛金硬件展台) */
+/* Apple Studio Display Bezel (一体化微晶极简硬件展台) */
 .apple-studio-bezel {
   width: 100%;
-  max-width: 1080px;
+  max-width: 1100px;
   margin: 0 auto;
   border-radius: 28px;
-  background: linear-gradient(180deg, #1b2333 0%, #0d131f 100%);
-  padding: 12px;
-  box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background: linear-gradient(180deg, #ffffff 0%, #edf1f7 100%);
+  padding: 10px;
+  box-shadow: 0 30px 90px -20px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 1);
   position: relative;
   overflow: hidden;
+  transition: all var(--trans-normal);
+}
+
+[data-theme="dark"] .apple-studio-bezel {
+  background: linear-gradient(180deg, #1b2333 0%, #0d131f 100%);
+  box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .apple-studio-bezel-inner {
   border-radius: 20px;
+  background: #ffffff;
+  color: var(--text-main);
+  overflow: hidden;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .apple-studio-bezel-inner {
   background: #070b13;
   color: #f8fafc;
-  overflow: hidden;
   box-shadow: inset 0 2px 14px rgba(0, 0, 0, 0.8);
+  border: none;
 }
 
 .apple-studio-topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
+  padding: 12px 22px;
+  background: #f8f9fa;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 12px;
+}
+
+[data-theme="dark"] .apple-studio-topbar {
   background: rgba(255, 255, 255, 0.03);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  font-size: 12px;
 }
 
 .apple-studio-dots {
@@ -2393,6 +2426,88 @@ input[type="range"]::-moz-range-track {
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
 }
 
+/* Apple Simulated Draft Paper (高中仿真演算草稿纸) */
+.apple-draft-paper {
+  background-color: #fafbfc;
+  background-image: 
+    linear-gradient(rgba(0, 113, 227, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 113, 227, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 113, 227, 0.12);
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] .apple-draft-paper {
+  background-color: #0b111c;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Apple Spotlight Input Capsule (工作台极简交互输入) */
+.apple-spotlight-wrap {
+  position: relative;
+  max-width: 820px;
+  margin: 0 auto 28px;
+}
+
+.apple-spotlight-input {
+  width: 100%;
+  height: 54px;
+  padding: 0 110px 0 48px;
+  font-size: 15px;
+  font-weight: 550;
+  color: var(--text-main);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 9999px;
+  box-shadow: 0 6px 24px -4px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 113, 227, 0.08);
+  outline: none;
+  transition: all var(--trans-fast);
+}
+
+.apple-spotlight-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px -4px rgba(0, 113, 227, 0.2), 0 0 0 3px var(--accent-primary-subtle);
+}
+
+.apple-spotlight-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.apple-spotlight-btn {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  bottom: 6px;
+  padding: 0 18px;
+  border-radius: 9999px;
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 650;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--trans-fast);
+}
+
+.apple-spotlight-btn:hover {
+  background: var(--accent-primary-hover);
+}
+
 /* Apple iOS Slider Control */
 .apple-ios-slider {
   -webkit-appearance: none;
@@ -2412,13 +2527,13 @@ input[type="range"]::-moz-range-track {
   border-radius: 50%;
   background: #ffffff;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.06);
   transition: transform var(--trans-fast), box-shadow var(--trans-fast);
 }
 
 .apple-ios-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 3px 12px rgba(0, 113, 227, 0.4);
 }
 
 .apple-ios-slider::-moz-range-thumb {
@@ -2428,13 +2543,23 @@ input[type="range"]::-moz-range-track {
   background: #ffffff;
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
 }
 
-/* Apple Keynote Stat Figures */
-.apple-keynote-stat {
+/* Apple Keynote Stat Tiles (发布会级微晶展牌) */
+.apple-keynote-tile {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 32px 24px;
   text-align: center;
-  padding: 24px 16px;
+  box-shadow: 0 6px 24px -4px rgba(0, 0, 0, 0.04);
+  transition: transform var(--trans-normal), box-shadow var(--trans-normal);
+}
+
+.apple-keynote-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px -4px rgba(0, 113, 227, 0.12);
 }
 
 .apple-keynote-stat-val {
@@ -2444,15 +2569,22 @@ input[type="range"]::-moz-range-track {
   line-height: 1;
   font-family: "JetBrains Mono", monospace;
   color: var(--text-main);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .apple-keynote-stat-val.highlight {
   color: var(--accent-primary);
 }
 
-.apple-keynote-stat-label {
-  font-size: 13px;
-  font-weight: 600;
+.apple-keynote-stat-title {
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.apple-keynote-stat-desc {
+  font-size: 12px;
   color: var(--text-muted);
+  line-height: 1.5;
 }
