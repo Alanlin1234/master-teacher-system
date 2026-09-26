@@ -1871,83 +1871,145 @@ input[type="range"]::-moz-range-track {
 }
 
 /* ==========================================================================
-   APPLE SF DESIGN SYSTEM & PROGRESSIVE CONNECTING CONDUIT SPINE
+   APPLE SF DESIGN SYSTEM, TYPOGRAPHY HIERARCHY & CINEMATIC MORPHING BRIDGE
    ========================================================================== */
-.apple-conduit-spine {
+
+/* 1. Typography Hierarchy (Apple Taste Skill) */
+.font-editorial {
+  font-family: "Georgia", "Cambria", "Times New Roman", "Source Han Serif SC", "Noto Serif SC", serif;
+  letter-spacing: -0.01em;
+}
+
+.font-mono-telemetry {
+  font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* 2. Apple Cinematic Morphing Bridge (视觉动态衔接大展桥) */
+.apple-cinematic-bridge {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 48px auto;
+  margin: 64px auto 36px;
   text-align: center;
-  max-width: 800px;
+  max-width: 960px;
 }
 
-.apple-spine-line {
-  width: 2px;
-  height: 48px;
-  background: linear-gradient(180deg, var(--accent-primary) 0%, rgba(37, 99, 235, 0.15) 100%);
-  margin: 0 auto;
+.apple-bridge-beam {
+  width: 3px;
+  height: 60px;
+  background: linear-gradient(180deg, var(--accent-primary) 0%, #38bdf8 50%, rgba(37, 99, 235, 0.1) 100%);
+  margin: 0 auto 16px;
   position: relative;
+  border-radius: 9999px;
+  box-shadow: 0 0 14px var(--accent-primary-glow);
 }
 
-.apple-spine-dot {
-  width: 8px;
-  height: 8px;
+.apple-bridge-particle {
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--accent-primary);
-  box-shadow: 0 0 12px 2px var(--accent-primary-glow);
+  background: #ffffff;
+  border: 2px solid var(--accent-primary);
+  box-shadow: 0 0 16px 4px var(--accent-primary-glow);
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  animation: pulseSpine 2s infinite ease-in-out;
+  animation: bridgeDrop 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-@keyframes pulseSpine {
-  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-  50% { transform: translateX(-50%) scale(1.4); opacity: 1; box-shadow: 0 0 16px 4px var(--accent-primary-glow); }
+@keyframes bridgeDrop {
+  0% { top: 0; opacity: 0; transform: translateX(-50%) scale(0.6); }
+  20% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+  80% { opacity: 1; transform: translateX(-50%) scale(1); }
+  100% { top: 100%; opacity: 0; transform: translateX(-50%) scale(0.4); }
 }
 
-.apple-spine-badge {
+.apple-bridge-kicker {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.apple-bridge-title {
+  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  font-weight: 850;
+  letter-spacing: -0.035em;
+  color: var(--text-main);
+  margin-bottom: 20px;
+}
+
+.apple-bridge-flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.apple-flow-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 18px;
+  padding: 8px 18px;
   border-radius: 9999px;
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-glass);
   box-shadow: var(--shadow-sm);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-body);
-  margin-top: 12px;
-  backdrop-filter: blur(16px);
-}
-
-.apple-spine-narrative {
   font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 8px;
-  max-width: 620px;
-  line-height: 1.6;
+  font-weight: 650;
+  color: var(--text-body);
+  transition: all var(--trans-normal);
+  cursor: pointer;
 }
 
+.apple-flow-pill:hover, .apple-flow-pill.active {
+  background: var(--bg-surface);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 4px 18px -3px var(--accent-primary-glow);
+  transform: translateY(-2px);
+}
+
+.apple-flow-arrow {
+  color: var(--text-subtle);
+  font-weight: 700;
+}
+
+/* 3. Apple Hardware Dark Instrument Bay (深空钛金精密仪表舱) */
+.apple-instrument-bay {
+  background: linear-gradient(145deg, #0b121e 0%, #06090f 100%);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 20px;
+  box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.7), 0 14px 36px -10px rgba(0, 0, 0, 0.35);
+  padding: 24px;
+  color: #f8fafc;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 4. Apple Product Tour Full Stage */
 .apple-product-stage {
   background: var(--bg-surface);
   border: 1px solid var(--border-glass);
-  border-radius: 24px;
-  padding: 32px 36px;
-  box-shadow: var(--shadow-md), 0 0 40px -15px var(--accent-primary-glow);
+  border-radius: 28px;
+  padding: 36px 40px;
+  box-shadow: 0 20px 60px -15px rgba(15, 23, 42, 0.08), 0 0 40px -10px var(--accent-primary-glow);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(190%);
 }
 
 .apple-stage-step-bar {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 14px;
   margin-bottom: 28px;
 }
 
@@ -1961,8 +2023,8 @@ input[type="range"]::-moz-range-track {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 12px 16px;
-  border-radius: 14px;
+  padding: 14px 18px;
+  border-radius: 16px;
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-glass);
   cursor: pointer;
@@ -1978,7 +2040,7 @@ input[type="range"]::-moz-range-track {
 .apple-stage-step-btn.active {
   background: var(--bg-surface);
   border-color: var(--accent-primary);
-  box-shadow: 0 4px 20px -4px var(--accent-primary-glow);
+  box-shadow: 0 8px 24px -6px var(--accent-primary-glow);
 }
 
 .apple-stage-step-btn.active .apple-step-num {
@@ -1994,24 +2056,26 @@ input[type="range"]::-moz-range-track {
 }
 
 .apple-step-title {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 750;
   color: var(--text-main);
+  letter-spacing: -0.01em;
 }
 
 .apple-step-caption {
   font-size: 11px;
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 .apple-squircle-pod {
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-glass);
-  border-radius: 20px;
-  padding: 28px 32px;
+  border-radius: 24px;
+  padding: 32px 36px;
   position: relative;
   transition: all var(--trans-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .apple-status-dot {
@@ -2023,20 +2087,38 @@ input[type="range"]::-moz-range-track {
 
 .apple-status-dot--active {
   background: #10b981;
-  box-shadow: 0 0 8px #10b981;
+  box-shadow: 0 0 10px #10b981;
 }
 
 .apple-status-dot--warning {
   background: #f59e0b;
-  box-shadow: 0 0 8px #f59e0b;
+  box-shadow: 0 0 10px #f59e0b;
 }
 
 .apple-status-dot--danger {
   background: #ef4444;
-  box-shadow: 0 0 8px #ef4444;
+  box-shadow: 0 0 10px #ef4444;
 }
 
 .apple-status-dot--primary {
   background: var(--accent-primary);
-  box-shadow: 0 0 8px var(--accent-primary-glow);
+  box-shadow: 0 0 10px var(--accent-primary-glow);
+}
+
+/* 5. Decluttered Clean Diff Bay (极简双舱对比) */
+.apple-clean-diff-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 22px;
+  padding: 26px 28px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 380px;
+}
+
+.apple-clean-diff-card--master {
+  border-color: rgba(37, 99, 235, 0.4);
+  box-shadow: 0 12px 36px -12px rgba(37, 99, 235, 0.22);
 }

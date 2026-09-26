@@ -11,14 +11,11 @@ import {
   ChevronRight,
   ArrowRight,
   Activity,
-  Eye,
   Sliders,
   AlertCircle,
-  Check,
   Terminal,
-  Layers,
-  BookOpen,
-  Cpu,
+  BarChart2,
+  Tv,
 } from 'lucide-react';
 import { RadarChart5D } from '../components/RadarChart5D';
 import { prefersReducedMotion, useHeroEntrance } from '../lib/gsap';
@@ -49,13 +46,13 @@ interface Preset {
 const PRESETS: Preset[] = [
   {
     id: 'socratic',
-    name: '苏格拉底递进启发型',
+    name: '苏格拉底启发型',
     prompt: '高三理科 · 极值点偏移压轴题 · 编译苏格拉底递进反问名师...',
     scores: { style: 0.25, method: 0.35, strengths: 0.92, personality: 0.88, communication: 0.3 },
   },
   {
     id: 'olympiad',
-    name: '竞赛金牌破局型',
+    name: '竞赛公理破局型',
     prompt: '全国联赛 · 导数与零点放缩 · 编译竞赛公理极简证明名师...',
     scores: { style: 0.95, method: 0.92, strengths: 0.88, personality: 0.55, communication: 0.9 },
   },
@@ -65,12 +62,6 @@ const PRESETS: Preset[] = [
     prompt: '一模压轴 · 圆锥曲线联立弦长 · 编译模板切片快速破法名师...',
     scores: { style: 0.75, method: 0.88, strengths: 0.45, personality: 0.72, communication: 0.82 },
   },
-  {
-    id: 'visual',
-    name: '几何数形具象型',
-    prompt: '高中几何 · 椭圆与双曲线统一性 · 编译动态数形几何建模名师...',
-    scores: { style: 0.35, method: 0.45, strengths: 0.98, personality: 0.85, communication: 0.4 },
-  },
 ];
 
 const VIBE_TOKENS = [
@@ -79,7 +70,6 @@ const VIBE_TOKENS = [
   { label: '导数切线放缩', query: '为什么导数大于0函数一定单调递增，逆命题为何不成立？' },
   { label: '苏格拉底反问', preset: 'socratic' },
   { label: '竞赛公理推导', preset: 'olympiad' },
-  { label: '数形结合建模', preset: 'visual' },
 ];
 
 const SAMPLE_QUESTIONS = [
@@ -104,9 +94,8 @@ function renderKatexHtml(latex: string, displayMode = false): string {
 
 export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const reelViewportRef = useRef<HTMLDivElement>(null);
   
-  const [activeReelIndex, setActiveReelIndex] = useState<number>(0);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const [selectedPreset, setSelectedPreset] = useState<string>('socratic');
   const [scores, setScores] = useState<Record<AxisKey, number>>(PRESETS[0].scores);
   const [promptText, setPromptText] = useState<string>(PRESETS[0].prompt);
@@ -167,7 +156,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         setPromptText(p.prompt);
       }
     } else if (token.query) {
-      setPromptText(`正在编译考点：${token.label} · 匹配特级名师因材施教知识模型...`);
+      setPromptText(`正在编译考点：${token.label}...`);
       setUserQuestion(token.query);
     }
   };
@@ -183,86 +172,45 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
     setScores((prev) => ({ ...prev, [key]: val }));
   };
 
-  const handleScrollToReelPod = (index: number) => {
-    const clamped = Math.max(0, Math.min(3, index));
-    setActiveReelIndex(clamped);
-    if (!reelViewportRef.current) return;
-    const target = reelViewportRef.current.children[0]?.children[clamped] as HTMLElement;
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-  };
-
   const learnerName = getLearnerName() || '林同学 (高三理科冲刺)';
   const weakPoint = diagnosis?.weakKnowledge?.[0] || '极值点偏移与对数均值不等式';
 
-  // Dynamic response generated based on current 5D parameters
+  // Decluttered High-Impact Cognitive Diff
   const dynamicDiffAnswer = useMemo(() => {
     const isSocratic = scores.style < 0.5;
-    const isVisual = scores.strengths > 0.6;
-    const isRigorous = scores.method > 0.6;
 
     if (userQuestion.includes('极值点偏移') || userQuestion.includes('差函数')) {
       return {
         strategy: isSocratic ? '苏格拉底启发阶梯' : '竞赛公理深度推导',
-        lead: isSocratic
-          ? '“已知 x₁ + x₂ > 2x₀。如果直接联立方程相减，很难判定正负。那我们能不能换个角度——既然极值对称中心是 x₀，不妨构造对称测试点 x\' = 2x₀ - x₁？此时 f(x\') 与 f(x₁) 的高低关系是什么？”'
-          : '对于极值点偏移问题，构造对称差函数是利用单峰函数的单调单射性。通过求导并利用对数均值不等式放缩，直接将二元极值约束降维成一元符号判别。',
-        corePoints: [
-          '① 发现极值中心 x₀，将非对称区间 [x₁, x₂] 镜像映射到同侧。',
-          '② 构造辅助差函数 F(x) = f(x) - f(2x₀ - x)，求导判定单调性。',
-          '③ 利用 F\'(x) > 0 结合端点零点，严谨反推极值点位移偏向。',
-        ],
-        formula: 'F(x) = f(x) - f(2x_0 - x) \\implies F\'(x) = f\'(x) + f\'(2x_0 - x)',
-        summary: isVisual
-          ? '数形图解：对称曲线在 x₀ 处相切，割线斜率始终大于切线斜率，几何直观一目了然！'
-          : '逻辑支架：成功规避盲目通分硬算的陷阱，推导步骤压缩 65%。',
-        tags: [
-          { text: isSocratic ? '启发式反问' : '公理级推导', type: isSocratic ? 'socratic' : 'axiom' },
-          { text: isVisual ? '数形结合直观' : '严密逻辑降维', type: 'scaffold' },
-          { text: '认知留存率 +88%', type: 'socratic' },
-        ],
+        masterFormula: 'F(x) = f(x) - f(2x_0 - x) \\implies F\'(x) = f\'(x) + f\'(2x_0 - x)',
+        masterQuote: '“构造对称差函数，将复杂的二元极值约束直接降维至一元单调性判定。”',
+        baselineFormula: 'x_1 + x_2 = 2x_0 + \\Delta x \\quad [代入教案公式硬算]',
+        baselineCritique: '“机械套用现成公式，没有认知台阶，变式考题依然无法举一反三。”',
+        masterMetric: '认知留存率 +88%',
+        baselineMetric: '遗忘率 74%',
       };
     }
 
     if (userQuestion.includes('离心率') || userQuestion.includes('圆锥曲线')) {
       return {
-        strategy: isVisual ? '动态几何统一投影' : '代数齐次化速通',
-        lead: isVisual
-          ? '“想象一个平面从不同角度截取圆锥——当截面倾角小于母线时是椭圆，平行时是抛物线，大于时是双曲线。离心率 e 本质上是‘截面倾角正弦与母线倾角正弦的比值’！”'
-          : '圆锥曲线的第二定义统领一切：平面上到定点（焦点）与到定直线（准线）的距离之比为常数 e。0 < e < 1 为椭圆，e = 1 为抛物线，e > 1 为双曲线。',
-        corePoints: [
-          '① 统一定义：焦半径与准线距离之比恒为 e，无需分别记忆几何性质。',
-          '② 极坐标方程：r = ep / (1 - e·cosθ)，一式覆盖全部二次曲线。',
-          '③ 离心率的物理意义：轨道偏心程度与引力轨道逃逸速度的代数刻画。',
-        ],
-        formula: '\\frac{|PF|}{d(P, L)} = e \\quad \\Longleftrightarrow \\quad r(\\theta) = \\frac{ep}{1 - e \\cos\\theta}',
-        summary: '名师视角：抓住了 Dandelin 双球截面图景，考场上无需死记生硬代数公式即可秒判离心率范围。',
-        tags: [
-          { text: '动态截面模型', type: 'scaffold' },
-          { text: '数形本质还原', type: 'axiom' },
-          { text: '几何内驱力 +92%', type: 'socratic' },
-        ],
+        strategy: '动态几何统一投影',
+        masterFormula: '\\frac{|PF|}{d(P, L)} = e \\quad \\Longleftrightarrow \\quad r(\\theta) = \\frac{ep}{1 - e \\cos\\theta}',
+        masterQuote: '“抓住圆锥截面倾角的几何直观，一式统领椭圆、双曲线与抛物线。”',
+        baselineFormula: 'e = \\frac{c}{a} = \\sqrt{1 - \\frac{b^2}{a^2}} \\quad [死记公式]',
+        baselineCritique: '“只背公式字母，缺乏空间投影直觉，遇到倾斜截面题目极易卡壳。”',
+        masterMetric: '几何直觉 +92%',
+        baselineMetric: '题型迁移率 28%',
       };
     }
 
     return {
-      strategy: isRigorous ? '拉格朗日中值与单调单射' : '直观变化率启发',
-      lead: isRigorous
-        ? '“对于可导函数 f(x)，若 f\'(x) > 0 恒成立，由拉格朗日中值定理：任意 x₁ < x₂ 必存在 ξ ∈ (x₁, x₂) 使得 f(x₂) - f(x₁) = f\'(ξ)(x₂ - x₁) > 0，故严格单调增。”'
-        : '“很多同学容易混淆：导数大于 0 则递增，但为什么反过来‘递增’不一定‘导数大于0’？想一想 y = x³ 在原点处的切线斜率是多少？零斜率阻碍它的前进了吗？”',
-      corePoints: [
-        '① 正命题：f\'(x) > 0 是严格单调递增的充分非必要条件。',
-        '② 逆命题反例：y = x³ 在 R 上严格递增，但在 x = 0 处 f\'(0) = 0。',
-        '③ 完备充要条件：f\'(x) ≥ 0 且在任意开区间内不恒为 0。',
-      ],
-      formula: 'f(x_2) - f(x_1) = f\'(\\xi)(x_2 - x_1) > 0 \\quad (x_1 < \\xi < x_2)',
-      summary: '避坑指引：高考极高频陷阱！判别参数范围时若漏掉“不恒为0”的边界检验，整题扣除4分。',
-      tags: [
-        { text: '严格中值定理', type: 'axiom' },
-        { text: '反例思辨教学', type: 'socratic' },
-        { text: '避坑率 100%', type: 'scaffold' },
-      ],
+      strategy: '拉格朗日中值与单调单射',
+      masterFormula: 'f(x_2) - f(x_1) = f\'(\\xi)(x_2 - x_1) > 0 \\quad (x_1 < \\xi < x_2)',
+      masterQuote: '“正命题由中值定理严密实证；逆命题想一想 y = x³ 在原点处的切线斜率！”',
+      baselineFormula: 'f\'(x) > 0 \\iff f(x) \\uparrow \\quad [忽略零点边界条件]',
+      baselineCritique: '“倒果为因，漏掉‘在任意区间不恒为0’的边界检验，高考丢分率极高。”',
+      masterMetric: '避坑率 100%',
+      baselineMetric: '边界漏判率 68%',
     };
   }, [scores, userQuestion]);
 
@@ -277,10 +225,10 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
           {/* Spatial Holographic Badge */}
           <div className="apple-hero-badge">
             <span className="apple-status-dot apple-status-dot--primary" />
-            <span>VIBE CODING STUDIO · 名师即席编译中枢</span>
+            <span style={{ letterSpacing: '0.04em' }}>VIBE CODING STUDIO · 名师即席编译中枢</span>
           </div>
 
-          {/* Impeccable High-Impact Headline */}
+          {/* High-Impact Headline */}
           <h1 className="apple-hero-title">
             今天先透彻诊断他卡在哪<br />
             <span>再决定由哪位名师来讲</span>
@@ -298,7 +246,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               <input
                 type="text"
                 className="vibe-prompt-input"
-                placeholder="键入知识盲区或选择提示词编译专属名师..."
+                placeholder="键入考点或选择提示词即席编译名师..."
                 value={promptText}
                 onChange={(e) => setPromptText(e.target.value)}
               />
@@ -318,7 +266,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
             {/* Quick Interactive Token Chips */}
             <div className="vibe-tokens-row">
-              <span style={{ fontSize: '11px', color: 'var(--text-subtle)', alignSelf: 'center', marginRight: 4 }}>快速提示 Token:</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-subtle)', alignSelf: 'center', marginRight: 4 }}>快速提示:</span>
               {VIBE_TOKENS.map((token) => (
                 <button
                   key={token.label}
@@ -348,13 +296,12 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 </span>
               </div>
 
-              <div style={{ lineHeight: 1.8, textAlign: 'left' }}>
-                <p style={{ color: '#64748b' }}>// TARGET_LEARNER: {learnerName}</p>
+              <div style={{ lineHeight: 1.8, textAlign: 'left' }} className="font-mono-telemetry">
+                <p style={{ color: '#64748b' }}>// TARGET: {learnerName}</p>
                 <p style={{ color: '#64748b' }}>// BOTTLENECK: {weakPoint}</p>
-                <p style={{ color: '#93c5fd' }}>&gt; TENSOR_WEIGHTS: [{Object.values(scores).map((v) => v.toFixed(2)).join(', ')}]</p>
+                <p style={{ color: '#93c5fd' }}>&gt; WEIGHTS: [{Object.values(scores).map((v) => v.toFixed(2)).join(', ')}]</p>
                 <p style={{ color: '#34d399' }}>&gt; SYNAPSE_AST: {selectedPreset.toUpperCase()}_Prompt_Scaffold</p>
                 <p style={{ color: '#cbd5e1' }}>&gt; THEOREM_INJECT: F(x) = f(x) - f(2x₀ - x)</p>
-                <p style={{ color: '#f59e0b' }}>&gt; DERIVATIVE_ORDER: 1st_Difference_Monotonicity</p>
               </div>
 
               <div style={{ marginTop: 16, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
@@ -381,7 +328,6 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               {/* Dynamic Math SVG Canvas */}
               <div style={{ flex: 1, minHeight: 140, position: 'relative' }}>
                 <svg viewBox="0 0 360 140" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-                  {/* Coordinate Axes */}
                   <line x1="30" y1="120" x2="340" y2="120" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
                   <line x1="60" y1="10" x2="60" y2="130" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
                   
@@ -401,7 +347,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                     strokeDasharray="4 3"
                   />
                   
-                  {/* Dynamic Tangent Point */}
+                  {/* Tangent point */}
                   <circle cx="170" cy="45" r="5" fill="#f59e0b" />
                   <line x1="170" y1="45" x2="170" y2="120" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3 3" />
                   <text x="170" y="134" textAnchor="middle" fill="#f59e0b" fontSize="10" fontFamily="monospace">x₀ (对称中心)</text>
@@ -416,10 +362,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   <span>构造对称差函数：</span>
                   <span dangerouslySetInnerHTML={{ __html: renderKatexHtml('F(x) = f(x) - f(2x_0 - x)') }} />
                 </div>
-                <div style={{ fontSize: '12px', color: '#93c5fd', marginTop: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                  <span>名师点拨：利用导数单峰性质判定</span>
-                  <span dangerouslySetInnerHTML={{ __html: renderKatexHtml("F'(x) > 0") }} />
-                  <span>，将二元极值约束降为一元单调性判定。</span>
+                <div className="font-editorial" style={{ fontSize: '13px', color: '#93c5fd', marginTop: 4 }}>
+                  名师点拨：利用导数单峰性质判定单调性，化二元极为一元判定。
                 </div>
               </div>
 
@@ -441,7 +385,10 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               type="button"
               className="btn btn-secondary"
               style={{ padding: '14px 28px', fontSize: '15px' }}
-              onClick={() => handleScrollToReelPod(1)}
+              onClick={() => {
+                const el = document.getElementById('tour-stage-section');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               审视 IRT 认知穿透长卷 ↓
             </button>
@@ -461,42 +408,69 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         </header>
 
         {/* =================================================================
-            PROGRESSIVE CONNECTING CONDUIT SPINE 1 (衔接导轨：从首屏到四环闭环)
+            2. CINEMATIC MORPHING BRIDGE (视觉动态大衔接展桥)
+            解决用户痛点：过度无动效、字太小、废话解释多。
+            换用 28px 高对比大标题 + 流动粒子导轨 + 4 阶段联动胶囊。
             ================================================================= */}
-        <div className="apple-conduit-spine">
-          <div className="apple-spine-line">
-            <div className="apple-spine-dot" />
+        <div id="tour-stage-section" className="apple-cinematic-bridge">
+          <div className="apple-bridge-beam">
+            <div className="apple-bridge-particle" />
           </div>
-          <div className="apple-spine-badge">
-            <Activity size={13} style={{ color: 'var(--accent-primary)' }} />
-            <span>因果流转 · 循序渐进认知闭环</span>
+          <div className="apple-bridge-kicker">COGNITIVE CLOSED LOOP · 因果渐进全息闭环</div>
+          <h2 className="apple-bridge-title">
+            从草稿专注阻滞，到专属名师微课生成
+          </h2>
+          
+          {/* 4 Glowing Interactive Step Pills */}
+          <div className="apple-bridge-flow-row">
+            {[
+              { idx: 0, label: '01 专注捕获', icon: Activity },
+              { idx: 1, label: '02 潜能穿透', icon: BarChart2 },
+              { idx: 2, label: '03 基因重组', icon: Sliders },
+              { idx: 3, label: '04 微课演播', icon: Tv },
+            ].map((step, i) => {
+              const IconComp = step.icon;
+              return (
+                <React.Fragment key={step.idx}>
+                  <button
+                    type="button"
+                    className={`apple-flow-pill ${activeStep === step.idx ? 'active' : ''}`}
+                    onClick={() => setActiveStep(step.idx)}
+                  >
+                    <IconComp size={15} />
+                    <span>{step.label}</span>
+                  </button>
+                  {i < 3 && <span className="apple-flow-arrow">➔</span>}
+                </React.Fragment>
+              );
+            })}
           </div>
-          <p className="apple-spine-narrative">
-            当毫米级视觉流探知学生草稿停滞，IRT 认知引擎即席拟合潜能曲线，驱动 5D 教学参数针对性重组，最终交付无死角的板书微课。
-          </p>
         </div>
 
         {/* =================================================================
-            2. APPLE PRODUCT TOUR STAGE (四环因材施教闭环全幅步进器)
+            3. APPLE PRODUCT TOUR FULL STAGE (图二全新全幅沉浸展台)
+            解决用户痛点：告别塑料感与横向滚轴截断，Active 阶段居中全幅展开！
+            引入深色钛金仪表舱（EEG波形+视线雷达）与等宽高精度遥测数字。
             ================================================================= */}
-        <section className="apple-product-stage">
-          {/* Step Navigation Bar */}
+        <section className="apple-product-stage" style={{ maxWidth: 1120, margin: '0 auto' }}>
+          
+          {/* Top Step Controller Bar */}
           <div className="apple-stage-step-bar">
             {[
-              { idx: 0, num: 'STEP 01', title: '毫米级视觉学情感知舱', caption: '视线与专注微震捕获' },
+              { idx: 0, num: 'STEP 01', title: '毫米级视觉学情感知舱', caption: '视线与脑电微震捕获' },
               { idx: 1, num: 'STEP 02', title: 'IRT 认知反应中枢', caption: '三参数 Logistic 潜能拟合' },
-              { idx: 2, num: 'STEP 03', title: '5D 教学基因重组台', caption: '多维教学法即席重构' },
+              { idx: 2, num: 'STEP 03', title: '5D 教学基因重组台', caption: '多维因材施教即席重构' },
               { idx: 3, num: 'STEP 04', title: '虚拟名师微课剧场', caption: '印刷级黑板动态推导' },
             ].map((step) => (
               <button
                 key={step.idx}
                 type="button"
-                className={`apple-stage-step-btn ${activeReelIndex === step.idx ? 'active' : ''}`}
-                onClick={() => handleScrollToReelPod(step.idx)}
+                className={`apple-stage-step-btn ${activeStep === step.idx ? 'active' : ''}`}
+                onClick={() => setActiveStep(step.idx)}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
                   <span className="apple-step-num">{step.num}</span>
-                  {activeReelIndex === step.idx && <span className="apple-status-dot apple-status-dot--primary" />}
+                  {activeStep === step.idx && <span className="apple-status-dot apple-status-dot--primary" />}
                 </div>
                 <span className="apple-step-title">{step.title}</span>
                 <span className="apple-step-caption">{step.caption}</span>
@@ -504,136 +478,110 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             ))}
           </div>
 
-          {/* Glide Arrows Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-              左右滑动或点击上方卡片探索闭环阶段细节
-            </span>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button
-                type="button"
-                className="reel-nav-btn"
-                onClick={() => handleScrollToReelPod(activeReelIndex - 1)}
-                title="上一阶段"
-                aria-label="上一阶段"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                type="button"
-                className="reel-nav-btn"
-                onClick={() => handleScrollToReelPod(activeReelIndex + 1)}
-                title="下一阶段"
-                aria-label="下一阶段"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          </div>
-
-          {/* Draggable & Panoramic Reel Viewport */}
-          <div className="horizontal-reel-viewport" ref={reelViewportRef}>
-            <div className="horizontal-reel-track">
-              
-              {/* POD 01: 毫米级学情感知舱 */}
-              <div className="reel-pod-card apple-squircle-pod">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          {/* Active Step Full Stage Viewport */}
+          <div style={{ position: 'relative', minHeight: 380 }}>
+            
+            {/* STAGE 01: 毫米级学情感知舱 */}
+            {activeStep === 0 && (
+              <div className="apple-squircle-pod">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span className="badge badge-blue">POD 01 · 毫米级视觉与学情感知舱</span>
-                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>60fps 连续视线追踪</span>
+                    <span className="badge badge-blue">POD 01 · 毫米级视觉学情感知舱</span>
+                    <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>60fps 连续视线追踪</span>
                   </div>
-                  <span className="tabular-nums" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-primary)' }}>
+                  <div className="font-mono-telemetry" style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--accent-primary)' }}>
                     89.4%
-                  </span>
+                  </div>
                 </div>
 
-                {/* Pure Visual Instrument Stage: Eye Radar + Live Waveform */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 24, alignItems: 'center', flex: 1 }}>
-                  {/* Live SVG Waveform Canvas */}
-                  <div style={{ background: 'var(--bg-surface)', borderRadius: 14, padding: 18, border: '1px solid var(--border-glass)' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: 8, display: 'flex', justifyContent: 'space-between' }}>
+                {/* Dark Luxury Titanium Hardware Instrument Bay */}
+                <div className="apple-instrument-bay" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 24, alignItems: 'center', marginBottom: 20 }}>
+                  {/* Waveform Bay */}
+                  <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: 18, border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: 8, display: 'flex', justifyContent: 'space-between' }}>
                       <span>专注微震脑电脉冲波形 (EEG PULSE)</span>
-                      <span style={{ color: '#10b981', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      <span style={{ color: '#10b981', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                         <span className="apple-status-dot apple-status-dot--active" />
                         <span>沉浸推导</span>
                       </span>
                     </div>
-                    <svg viewBox="0 0 300 70" style={{ width: '100%', height: 70, overflow: 'visible' }}>
+                    <svg viewBox="0 0 300 70" style={{ width: '100%', height: 75, overflow: 'visible' }}>
                       <path
                         d={`M 0 35 Q 40 ${35 + Math.sin(waveOffset) * 20} 80 35 T 160 35 T 240 ${35 + Math.cos(waveOffset) * 18} T 300 35`}
                         fill="none"
-                        stroke="var(--accent-primary)"
-                        strokeWidth="3"
+                        stroke="#38bdf8"
+                        strokeWidth="3.5"
                         strokeLinecap="round"
                       />
                     </svg>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-subtle)', marginTop: 8 }}>
-                      <span>今日专注累积: {focusMinutes} min</span>
+                    <div className="font-mono-telemetry" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b', marginTop: 8 }}>
+                      <span>今日专注: {focusMinutes} min</span>
                       <span>眨眼频次: 14 次/min (正常)</span>
                     </div>
                   </div>
 
-                  {/* Pupil Tracking Radar */}
-                  <div style={{ background: 'var(--bg-surface)', borderRadius: 14, padding: 18, border: '1px solid var(--border-glass)', textAlign: 'center' }}>
-                    <svg viewBox="0 0 160 100" style={{ width: '100%', height: 90 }}>
-                      <ellipse cx="80" cy="50" rx="60" ry="38" fill="none" stroke="var(--border-glass)" strokeWidth="1.5" />
-                      <circle cx="80" cy="50" r="22" fill="none" stroke="var(--accent-primary)" strokeWidth="2" strokeDasharray="4 2" />
-                      <circle cx={`${80 + Math.sin(waveOffset) * 8}`} cy={`${50 + Math.cos(waveOffset) * 5}`} r="7" fill="var(--accent-primary)" />
-                      <text x="80" y="96" textAnchor="middle" fill="#10b981" fontSize="10" fontWeight="600">
+                  {/* Pupil Tracking Reticle */}
+                  <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: 18, border: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
+                    <svg viewBox="0 0 160 100" style={{ width: '100%', height: 95 }}>
+                      <ellipse cx="80" cy="50" rx="64" ry="40" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
+                      <circle cx="80" cy="50" r="22" fill="none" stroke="#38bdf8" strokeWidth="2" strokeDasharray="4 2" />
+                      <circle cx={`${80 + Math.sin(waveOffset) * 8}`} cy={`${50 + Math.cos(waveOffset) * 5}`} r="8" fill="#38bdf8" />
+                      <text x="80" y="96" textAnchor="middle" fill="#10b981" fontSize="10" fontWeight="600" fontFamily="sans-serif">
                         视线锁定 · 草稿第3步凝滞捕获
                       </text>
                     </svg>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid var(--border-glass)', fontSize: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid var(--border-glass)', fontSize: '13px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>实时捕获阻滞时段: 18.4 分钟</span>
-                  <button type="button" className="btn btn-secondary" style={{ padding: '6px 14px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }} onClick={() => onNavigate('collect')}>
+                  <button type="button" className="btn btn-secondary" style={{ padding: '8px 18px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={() => onNavigate('collect')}>
                     <span>进入感知控制台</span>
-                    <ArrowRight size={13} />
+                    <ArrowRight size={14} />
                   </button>
                 </div>
               </div>
+            )}
 
-              {/* POD 02: IRT 认知反应中枢 */}
-              <div className="reel-pod-card apple-squircle-pod">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            {/* STAGE 02: IRT 认知反应中枢 */}
+            {activeStep === 1 && (
+              <div className="apple-squircle-pod">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span className="badge badge-amber">POD 02 · 项目反应理论 (IRT) 认知反应中枢</span>
-                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>三参数 Logistic 曲线拟合</span>
+                    <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>三参数 Logistic 曲线拟合</span>
                   </div>
-                  <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                    潜能 <strong style={{ color: 'var(--accent-primary)', fontSize: '1.4rem' }}>θ = +{irtTheta.toFixed(2)}</strong>
+                  <div className="font-mono-telemetry" style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+                    潜能 <strong style={{ color: 'var(--accent-primary)', fontSize: '1.8rem' }}>θ = +{irtTheta.toFixed(2)}</strong>
                   </div>
                 </div>
 
-                {/* Interactive IRT Curve Canvas */}
-                <div style={{ background: 'var(--bg-surface)', borderRadius: 14, padding: 20, border: '1px solid var(--border-glass)', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-subtle)', marginBottom: 8 }}>
+                <div style={{ background: 'var(--bg-surface)', borderRadius: 16, padding: 24, border: '1px solid var(--border-glass)', marginBottom: 20 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-subtle)', marginBottom: 12 }}>
                     <span>P(θ) 掌握概率函数曲线</span>
-                    <span style={{ color: '#ef4444', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <span style={{ color: '#ef4444', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                       <span className="apple-status-dot apple-status-dot--danger" />
                       <span>锁定卡点: {weakPoint}</span>
                     </span>
                   </div>
-                  <svg viewBox="0 0 400 120" style={{ width: '100%', height: 110 }}>
-                    <line x1="30" y1="100" x2="380" y2="100" stroke="var(--border-glass)" strokeWidth="1" />
+                  <svg viewBox="0 0 460 120" style={{ width: '100%', height: 120 }}>
+                    <line x1="30" y1="100" x2="440" y2="100" stroke="var(--border-glass)" strokeWidth="1" />
                     <line x1="30" y1="10" x2="30" y2="100" stroke="var(--border-glass)" strokeWidth="1" />
-                    {/* S-curve dynamically shifting with irtTheta */}
                     <path
-                      d={`M 30 95 C 100 95 ${150 + irtTheta * 15} 60 ${200 + irtTheta * 15} 30 C 250 15 320 15 380 15`}
+                      d={`M 30 95 C 100 95 ${150 + irtTheta * 15} 60 ${220 + irtTheta * 15} 30 C 270 15 360 15 440 15`}
                       fill="none"
                       stroke="var(--accent-primary)"
-                      strokeWidth="3"
+                      strokeWidth="3.5"
                     />
-                    <circle cx={`${200 + irtTheta * 15}`} cy="30" r="6" fill="#ef4444" />
-                    <text x={`${200 + irtTheta * 15}`} y="20" textAnchor="middle" fill="#ef4444" fontSize="10" fontWeight="700">
+                    <circle cx={`${220 + irtTheta * 15}`} cy="30" r="7" fill="#ef4444" />
+                    <text x={`${220 + irtTheta * 15}`} y="18" textAnchor="middle" fill="#ef4444" fontSize="11" fontWeight="700">
                       林同学实际掌握点 (P=0.38)
                     </text>
                   </svg>
+                  
                   {/* Slider to interactively adjust theta */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 10 }}>
-                    <span style={{ fontSize: '11px', color: 'var(--text-subtle)' }}>潜能调节:</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 14 }}>
+                    <span style={{ fontSize: '12px', color: 'var(--text-subtle)' }}>潜能调节:</span>
                     <input
                       type="range"
                       min={0.5}
@@ -643,27 +591,29 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       onChange={(e) => setIrtTheta(Number(e.target.value))}
                       style={{ flex: 1, accentColor: 'var(--accent-primary)' }}
                     />
-                    <span className="tabular-nums" style={{ fontSize: '12px', color: 'var(--accent-primary)', fontWeight: 700 }}>
+                    <span className="font-mono-telemetry" style={{ fontSize: '14px', color: 'var(--accent-primary)', fontWeight: 700 }}>
                       θ = {irtTheta.toFixed(2)}
                     </span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid var(--border-glass)', fontSize: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid var(--border-glass)', fontSize: '13px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>推断置信度: 94% · 根因: 对数均值对称化放缩盲区</span>
-                  <button type="button" className="btn btn-secondary" style={{ padding: '6px 14px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }} onClick={() => onNavigate('diagnose')}>
+                  <button type="button" className="btn btn-secondary" style={{ padding: '8px 18px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={() => onNavigate('diagnose')}>
                     <span>进入认知热力矩阵</span>
-                    <ArrowRight size={13} />
+                    <ArrowRight size={14} />
                   </button>
                 </div>
               </div>
+            )}
 
-              {/* POD 03: 5D 教学重组台 */}
-              <div className="reel-pod-card apple-squircle-pod">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            {/* STAGE 03: 5D 教学重组台 */}
+            {activeStep === 2 && (
+              <div className="apple-squircle-pod">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span className="badge badge-emerald">POD 03 · 5D 教学基因重组台</span>
-                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>拟物旋钮与声学电平</span>
+                    <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>拟物旋钮与声学电平</span>
                   </div>
                   <div className="preset-chip-row" style={{ margin: 0 }}>
                     {PRESETS.map((p) => (
@@ -673,27 +623,26 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                         className={`preset-chip ${selectedPreset === p.id ? 'active' : ''}`}
                         onClick={() => handlePresetSelect(p)}
                       >
-                        {p.name.slice(0, 4)}
+                        {p.name}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Rotary Knobs & 5D Radar */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'center', flex: 1 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'center', marginBottom: 20 }}>
                   {/* Rotary Dials for 5 dimensions */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'center' }}>
                     {AXES.slice(0, 4).map((axis) => {
                       const deg = -90 + scores[axis.key] * 180;
                       return (
                         <div key={axis.key} style={{ textAlign: 'center' }}>
-                          <div className="rotary-dial-container" style={{ margin: '0 auto 6px' }}>
+                          <div className="rotary-dial-container" style={{ margin: '0 auto 8px' }}>
                             <div className="rotary-dial-pointer" style={{ transform: `rotate(${deg}deg)` }} />
-                            <span style={{ fontSize: '10px', color: 'var(--text-muted)', zIndex: 1 }}>
+                            <span className="font-mono-telemetry" style={{ fontSize: '11px', color: 'var(--text-muted)', zIndex: 1 }}>
                               {Math.round(scores[axis.key] * 100)}%
                             </span>
                           </div>
-                          <div style={{ fontSize: '11px', color: 'var(--text-main)', fontWeight: 650 }}>{axis.label}</div>
+                          <div style={{ fontSize: '12px', color: 'var(--text-main)', fontWeight: 650 }}>{axis.label}</div>
                         </div>
                       );
                     })}
@@ -701,63 +650,62 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
                   {/* 5D Radar Stage */}
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <RadarChart5D scores={scores} size={180} showLabels showComposite highlightColor="var(--accent-primary)" />
+                    <RadarChart5D scores={scores} size={200} showLabels showComposite highlightColor="var(--accent-primary)" />
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid var(--border-glass)', fontSize: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid var(--border-glass)', fontSize: '13px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>因材施教适配度: 100% · 苏格拉底递进反问</span>
                   <button
                     type="button"
                     className="btn btn-primary"
-                    style={{ padding: '6px 14px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                    style={{ padding: '8px 18px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: 6 }}
                     onClick={() => {
                       const el = document.getElementById('workbench-section');
                       el?.scrollIntoView({ behavior: 'smooth' });
                     }}
                   >
                     <span>前往参数工作台</span>
-                    <ArrowRight size={13} />
+                    <ArrowRight size={14} />
                   </button>
                 </div>
               </div>
+            )}
 
-              {/* POD 04: 微课演播剧场 */}
-              <div className="reel-pod-card apple-squircle-pod">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            {/* STAGE 04: 微课演播剧场 */}
+            {activeStep === 3 && (
+              <div className="apple-squircle-pod">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span className="badge badge-blue">POD 04 · 虚拟名师微课演播剧场</span>
-                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>纯净黑板演算与步骤光谱</span>
+                    <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>纯净黑板演算与步骤光谱</span>
                   </div>
-                  <span className="badge badge-emerald" style={{ fontSize: '11px' }}>
+                  <span className="badge badge-emerald" style={{ fontSize: '12px' }}>
                     +84% 思维自驱力
                   </span>
                 </div>
 
-                {/* Derivation Spectrum Comparison */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
-                  {/* Master Teacher Spectrum Bar */}
-                  <div style={{ background: 'rgba(37,99,235,0.06)', borderRadius: 10, padding: 14, borderLeft: '3px solid var(--accent-primary)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 20 }}>
+                  <div style={{ background: 'rgba(37,99,235,0.06)', borderRadius: 12, padding: 18, borderLeft: '3px solid var(--accent-primary)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: 8 }}>
                       <strong style={{ color: 'var(--accent-primary)' }}>专属名师：启发构造对称差函数 F(x) = f(x) - f(2x₀ - x)</strong>
-                      <span style={{ color: '#10b981', fontWeight: 700 }}>认知阶梯 98%</span>
+                      <span className="font-mono-telemetry" style={{ color: '#10b981', fontWeight: 700 }}>认知阶梯 98%</span>
                     </div>
                     <div className="derivation-spectrum-bar" />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)', marginTop: 4 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-muted)', marginTop: 6 }}>
                       <span>① 发现对称中心</span>
                       <span>② 反问测试点</span>
                       <span>③ 单调单射证明</span>
                     </div>
                   </div>
 
-                  {/* Generic AI Baseline Spectrum Bar */}
-                  <div style={{ background: 'var(--bg-muted)', borderRadius: 10, padding: 14, borderLeft: '3px solid #64748b' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: 6 }}>
+                  <div style={{ background: 'var(--bg-muted)', borderRadius: 12, padding: 18, borderLeft: '3px solid #64748b' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: 8 }}>
                       <strong style={{ color: 'var(--text-subtle)' }}>通用基准 AI：暴力联立方程硬套对数均值公式</strong>
-                      <span style={{ color: '#ef4444', fontWeight: 700 }}>遗忘率极高</span>
+                      <span className="font-mono-telemetry" style={{ color: '#ef4444', fontWeight: 700 }}>遗忘率极高</span>
                     </div>
-                    <div style={{ height: 6, background: '#64748b', borderRadius: 3, opacity: 0.5 }} />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-subtle)', marginTop: 4 }}>
+                    <div style={{ height: 6, background: '#64748b', borderRadius: 3, opacity: 0.4 }} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-subtle)', marginTop: 6 }}>
                       <span>① 硬套公式</span>
                       <span>② 直接给答案</span>
                       <span>✕ 无思考启发</span>
@@ -765,49 +713,65 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid var(--border-glass)', fontSize: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: '1px solid var(--border-glass)', fontSize: '13px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>板书支持 LaTeX KaTeX 实时几何推导</span>
-                  <button type="button" className="btn btn-primary" style={{ padding: '6px 14px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }} onClick={() => onNavigate('studio')}>
+                  <button type="button" className="btn btn-primary" style={{ padding: '8px 18px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={() => onNavigate('studio')}>
                     <span>前往演播厅试听微课</span>
-                    <ArrowRight size={13} />
+                    <ArrowRight size={14} />
                   </button>
                 </div>
               </div>
+            )}
 
-            </div>
+          </div>
+
+          {/* Bottom Stage Navigation Arrows */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 18, paddingTop: 16, borderTop: '1px solid var(--border-glass)' }}>
+            <button
+              type="button"
+              className="reel-nav-btn"
+              onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
+              disabled={activeStep === 0}
+              style={{ opacity: activeStep === 0 ? 0.4 : 1 }}
+              title="上一阶段"
+              aria-label="上一阶段"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <span className="font-mono-telemetry" style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+              STAGE {activeStep + 1} / 4
+            </span>
+            <button
+              type="button"
+              className="reel-nav-btn"
+              onClick={() => setActiveStep((prev) => Math.min(3, prev + 1))}
+              disabled={activeStep === 3}
+              style={{ opacity: activeStep === 3 ? 0.4 : 1 }}
+              title="下一阶段"
+              aria-label="下一阶段"
+            >
+              <ChevronRight size={16} />
+            </button>
           </div>
         </section>
 
         {/* =================================================================
-            PROGRESSIVE CONNECTING CONDUIT SPINE 2 (衔接导轨：从闭环到工作台)
+            4. INTERACTIVE 5D WORKBENCH (图三极简双舱工作台)
+            解决用户痛点：全是字、解释过载。
+            断舍离 80% 废话文字！纯粹聚焦：
+            左侧极简触觉滑块 ➔ 右侧 KaTeX 公式对决 + 单句差异对比 + 核心指标。
             ================================================================= */}
-        <div className="apple-conduit-spine">
-          <div className="apple-spine-line">
-            <div className="apple-spine-dot" />
-          </div>
-          <div className="apple-spine-badge">
-            <Sliders size={13} style={{ color: 'var(--accent-primary)' }} />
-            <span>深度互动演练 · 亲验参数分界</span>
-          </div>
-          <p className="apple-spine-narrative">
-            名师的教学风格不是一句口号。在下方工作台中自由调节认知参数并输入真题，同屏直击名师启发支架与通用 AI 的答复差距。
-          </p>
-        </div>
-
-        {/* =================================================================
-            3. INTERACTIVE 5D WORKBENCH (5D 双栏教学法实时差分对比工作台)
-            ================================================================= */}
-        <section id="workbench-section" style={{ margin: '40px 0 60px' }}>
+        <section id="workbench-section" style={{ margin: '72px 0 60px' }}>
           <div style={{ textAlign: 'center', marginBottom: 36 }}>
             <div className="apple-hero-badge" style={{ marginBottom: 12 }}>
               <Zap size={13} style={{ color: 'var(--accent-primary)' }} />
               <span>INTERACTIVE COGNITIVE WORKBENCH · 5D 实时演练中枢</span>
             </div>
-            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.6rem)', letterSpacing: '-0.035em', fontWeight: 800, color: 'var(--text-main)', marginBottom: 12 }}>
-              自主调节 5D 认知基因，实时透视名师与通用 AI 的答复差距
+            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.6rem)', letterSpacing: '-0.035em', fontWeight: 850, color: 'var(--text-main)', marginBottom: 8 }}>
+              自主调节 5D 认知基因，实时透视生成差距
             </h2>
-            <p style={{ fontSize: '15px', color: 'var(--text-body)', maxWidth: 720, margin: '0 auto', lineHeight: 1.6 }}>
-              拒绝黑盒盲信。自由键入难题或选择经典压轴题，拖动教学法滑块，同屏比对名师因材施教的启发认知支架与通用大模型的死板结论。
+            <p style={{ fontSize: '15px', color: 'var(--text-muted)', maxWidth: 620, margin: '0 auto' }}>
+              拖动滑块或选择经典压轴题，同屏直击名师启发支架与通用大模型的死板结论。
             </p>
           </div>
 
@@ -817,10 +781,10 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             <div className="workbench-controls apple-squircle-pod">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                 <span style={{ fontSize: '14px', fontWeight: 750, color: 'var(--text-main)' }}>
-                  名师风格快捷预设
+                  名师风格预设
                 </span>
                 <span style={{ fontSize: '12px', color: 'var(--accent-primary)', fontWeight: 600 }}>
-                  当前: {PRESETS.find((p) => p.id === selectedPreset)?.name || '自定义调谐'}
+                  {PRESETS.find((p) => p.id === selectedPreset)?.name || '自定义'}
                 </span>
               </div>
 
@@ -837,8 +801,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 ))}
               </div>
 
-              {/* 5D Axis Sliders */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 12 }}>
+              {/* 5D Axis Sliders - Clean, No Text Clutter */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 10 }}>
                 {AXES.map((axis) => {
                   const val = scores[axis.key];
                   return (
@@ -847,13 +811,9 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                         <span style={{ fontSize: '13px', fontWeight: 650, color: 'var(--text-main)' }}>
                           {axis.label}
                         </span>
-                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: '11px', color: 'var(--text-muted)' }}>
-                          <span>{axis.low}</span>
-                          <span className="tabular-nums" style={{ fontWeight: 700, color: 'var(--accent-primary)', minWidth: 32, textAlign: 'right' }}>
-                            {Math.round(val * 100)}%
-                          </span>
-                          <span>{axis.high}</span>
-                        </div>
+                        <span className="font-mono-telemetry" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-primary)' }}>
+                          {Math.round(val * 100)}%
+                        </span>
                       </div>
                       <input
                         type="range"
@@ -869,47 +829,31 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 })}
               </div>
 
-              {/* Question Input Box */}
-              <div style={{ marginTop: 22, paddingTop: 16, borderTop: '1px solid var(--border-glass)' }}>
-                <label htmlFor="user-question-input" style={{ display: 'block', fontSize: '13px', fontWeight: 650, color: 'var(--text-main)', marginBottom: 8 }}>
-                  输入待求证考题或知识难点：
+              {/* Question Archetype Selectors */}
+              <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border-glass)' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 650, color: 'var(--text-main)', marginBottom: 8 }}>
+                  快速求证考题：
                 </label>
-                <textarea
-                  id="user-question-input"
-                  rows={2}
-                  value={userQuestion}
-                  onChange={(e) => setUserQuestion(e.target.value)}
-                  placeholder="输入你想测试名师解题启发的问题..."
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--border-academic)',
-                    background: 'var(--bg-surface)',
-                    fontSize: '13px',
-                    color: 'var(--text-main)',
-                    resize: 'none',
-                    outline: 'none',
-                  }}
-                />
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {SAMPLE_QUESTIONS.map((q) => (
                     <button
                       key={q}
                       type="button"
                       onClick={() => setUserQuestion(q)}
                       style={{
-                        padding: '4px 10px',
-                        borderRadius: 6,
+                        padding: '8px 12px',
+                        borderRadius: 8,
+                        textAlign: 'left',
                         border: '1px solid var(--border-glass)',
                         background: userQuestion === q ? 'var(--accent-primary-subtle)' : 'var(--bg-surface)',
-                        color: userQuestion === q ? 'var(--accent-primary)' : 'var(--text-muted)',
-                        fontSize: '11px',
+                        color: userQuestion === q ? 'var(--accent-primary)' : 'var(--text-main)',
+                        fontSize: '12px',
+                        fontWeight: userQuestion === q ? 650 : 500,
                         cursor: 'pointer',
                         transition: 'all 0.15s ease',
                       }}
                     >
-                      {q.slice(0, 16)}...
+                      {q}
                     </button>
                   ))}
                 </div>
@@ -917,124 +861,83 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
             </div>
 
-            {/* Right Column: Split Comparison Cards */}
+            {/* Right Column: Clean Diff Cards - Pure Formula & Contrast */}
             <div className="workbench-diff-container">
               
               {/* Card 1: Your Tuned Master Teacher */}
-              <div className="workbench-card workbench-card--master apple-squircle-pod">
+              <div className="apple-clean-diff-card apple-clean-diff-card--master">
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <GraduationCap size={18} style={{ color: 'var(--accent-primary)' }} />
-                      <strong style={{ fontSize: '15px', color: 'var(--accent-primary)' }}>您调谐的专属特级名师</strong>
+                      <GraduationCap size={20} style={{ color: 'var(--accent-primary)' }} />
+                      <strong style={{ fontSize: '16px', color: 'var(--accent-primary)' }}>定制特级名师</strong>
                     </div>
-                    <span className="badge badge-blue" style={{ fontSize: '11px' }}>
-                      {dynamicDiffAnswer.strategy}
+                    <span className="badge badge-blue font-mono-telemetry" style={{ fontSize: '11px' }}>
+                      {dynamicDiffAnswer.masterMetric}
                     </span>
                   </div>
 
-                  {/* Dynamic Tags */}
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
-                    {dynamicDiffAnswer.tags.map((tag) => (
-                      <span key={tag.text} className={`diff-tag-${tag.type}`} style={{ padding: '3px 9px', borderRadius: 4, fontSize: '11px', fontWeight: 700 }}>
-                        {tag.text}
-                      </span>
-                    ))}
+                  {/* Clean KaTeX Formula Display */}
+                  <div style={{ margin: '14px 0', padding: '16px 14px', background: 'var(--bg-surface-elevated)', borderRadius: 12, border: '1px solid var(--border-glass)', textAlign: 'center' }}>
+                    <div dangerouslySetInnerHTML={{ __html: renderKatexHtml(dynamicDiffAnswer.masterFormula, true) }} />
                   </div>
 
-                  <p style={{ fontSize: '13px', color: 'var(--text-main)', lineHeight: 1.7, marginBottom: 12, fontWeight: 550, background: 'rgba(37,99,235,0.04)', padding: '10px 12px', borderRadius: 8, borderLeft: '3px solid var(--accent-primary)' }}>
-                    {dynamicDiffAnswer.lead}
-                  </p>
-
-                  {/* Math Formula Rendered with KaTeX */}
-                  <div style={{ margin: '10px 0', padding: '10px 14px', background: 'var(--bg-surface)', borderRadius: 8, border: '1px solid var(--border-glass)', textAlign: 'center' }}>
-                    <div dangerouslySetInnerHTML={{ __html: renderKatexHtml(dynamicDiffAnswer.formula, true) }} />
+                  {/* Editorial Serif Thought Guidance */}
+                  <div className="font-editorial" style={{ fontSize: '15px', color: 'var(--text-main)', lineHeight: 1.7, background: 'rgba(37,99,235,0.05)', padding: '14px 16px', borderRadius: 10, borderLeft: '3px solid var(--accent-primary)', marginBottom: 14 }}>
+                    {dynamicDiffAnswer.masterQuote}
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
-                    {dynamicDiffAnswer.corePoints.map((point, i) => (
-                      <div key={i} style={{ fontSize: '12px', color: 'var(--text-body)', lineHeight: 1.6, paddingLeft: 8, borderLeft: '2px solid rgba(37,99,235,0.4)' }}>
-                        {point}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div style={{ fontSize: '12px', color: 'var(--accent-primary)', background: 'var(--bg-surface)', padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-glass)', lineHeight: 1.5, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <Lightbulb size={15} style={{ flexShrink: 0 }} />
-                    <span>{dynamicDiffAnswer.summary}</span>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <span className="badge badge-blue">启发式反问</span>
+                    <span className="badge badge-emerald">数形结合降维</span>
                   </div>
                 </div>
 
-                <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid var(--border-glass)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>已根据当前 5D 参数实时适配</span>
+                <div style={{ marginTop: 20, paddingTop: 14, borderTop: '1px solid var(--border-glass)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="font-mono-telemetry" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>5D 参数实时适配</span>
                   <button
                     type="button"
                     className="btn btn-primary"
-                    style={{ padding: '6px 16px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                    style={{ padding: '8px 18px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: 4 }}
                     onClick={() => onNavigate('compose', { teacherSection: 'compose', initialScores: scores })}
                   >
                     <span>注入名师工坊</span>
-                    <ArrowRight size={13} />
+                    <ArrowRight size={14} />
                   </button>
                 </div>
               </div>
 
               {/* Card 2: Standard Baseline Generic AI */}
-              <div className="workbench-card apple-squircle-pod">
+              <div className="apple-clean-diff-card">
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <Bot size={18} style={{ color: 'var(--text-muted)' }} />
-                      <strong style={{ fontSize: '15px', color: 'var(--text-muted)' }}>标准通用基准大模型</strong>
+                      <Bot size={20} style={{ color: 'var(--text-muted)' }} />
+                      <strong style={{ fontSize: '16px', color: 'var(--text-muted)' }}>通用基准大模型</strong>
                     </div>
-                    <span className="badge" style={{ background: 'var(--bg-muted)', color: 'var(--text-muted)', fontSize: '11px' }}>
-                      未定制通用模型
+                    <span className="badge font-mono-telemetry" style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', fontSize: '11px' }}>
+                      {dynamicDiffAnswer.baselineMetric}
                     </span>
                   </div>
 
-                  {/* Generic Tags */}
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
-                    <span className="diff-tag-generic" style={{ padding: '3px 9px', borderRadius: 4, fontSize: '11px', fontWeight: 600 }}>
-                      直给公式结论
-                    </span>
-                    <span className="diff-tag-generic" style={{ padding: '3px 9px', borderRadius: 4, fontSize: '11px', fontWeight: 600 }}>
-                      无认知支架
-                    </span>
-                    <span className="diff-tag-generic" style={{ padding: '3px 9px', borderRadius: 4, fontSize: '11px', fontWeight: 600 }}>
-                      考场难以迁移
-                    </span>
+                  {/* Raw Formula Display */}
+                  <div style={{ margin: '14px 0', padding: '16px 14px', background: 'var(--bg-muted)', borderRadius: 12, border: '1px dashed var(--border-glass)', textAlign: 'center', color: '#64748b' }}>
+                    <div dangerouslySetInnerHTML={{ __html: renderKatexHtml(dynamicDiffAnswer.baselineFormula, true) }} />
                   </div>
 
-                  <p style={{ fontSize: '13px', color: 'var(--text-body)', lineHeight: 1.7, marginBottom: 12, background: 'var(--bg-muted)', padding: '10px 12px', borderRadius: 8, borderLeft: '3px solid #94a3b8' }}>
-                    “针对该问题，直接列出通用不等式或方程组。令代数式等于目标值，代入数值进行暴力移项化简，得出最终解。”
-                  </p>
-
-                  <div style={{ margin: '10px 0', padding: '10px 14px', background: 'var(--bg-surface)', borderRadius: 8, border: '1px dashed var(--border-glass)', textAlign: 'center', color: '#64748b' }}>
-                    <div style={{ fontFamily: 'monospace', fontSize: '12px' }}>
-                      [直接输出结果]: x₁ + x₂ = 2x₀ + Δx ⇒ 套用公式可得结论
-                    </div>
+                  {/* Contrast Callout */}
+                  <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.7, background: 'var(--bg-surface)', padding: '14px 16px', borderRadius: 10, borderLeft: '3px solid #94a3b8', marginBottom: 14 }}>
+                    {dynamicDiffAnswer.baselineCritique}
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.6, paddingLeft: 8, borderLeft: '2px solid #cbd5e1' }}>
-                      ① 步骤一：机械罗列教案公式，未解释为什么要这样构造。
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.6, paddingLeft: 8, borderLeft: '2px solid #cbd5e1' }}>
-                      ② 步骤二：跳过直觉图景，直接进行复杂代数运算。
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.6, paddingLeft: 8, borderLeft: '2px solid #cbd5e1' }}>
-                      ③ 步骤三：直接输出最终不等式答案。
-                    </div>
-                  </div>
-
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', background: 'var(--bg-surface)', padding: '10px 12px', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--border-glass)', lineHeight: 1.6, display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-                    <AlertCircle size={15} style={{ color: '#ef4444', flexShrink: 0, marginTop: 2 }} />
-                    <span>痛点剖析：传统通用大模型直接照搬教案条目，学生遇到变形题依然不会举一反三；而上方左侧名师能根据学生的基因参数，智能选择“苏格拉底反问”、“公理证明”或“化简速通”，实现真正的因材施教。</span>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <span className="badge" style={{ background: 'var(--bg-muted)', color: 'var(--text-muted)' }}>直接灌输</span>
+                    <span className="badge" style={{ background: 'var(--bg-muted)', color: 'var(--text-muted)' }}>无认知台阶</span>
                   </div>
                 </div>
 
-                <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid var(--border-glass)', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>基准无个性化认知调优</span>
+                <div style={{ marginTop: 20, paddingTop: 14, borderTop: '1px solid var(--border-glass)', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                  <span className="font-mono-telemetry" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>无个性化调优</span>
                 </div>
               </div>
 
@@ -1044,7 +947,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
         </section>
 
         {/* =================================================================
-            4. SYSTEM CAPABILITY METRICS (全链路四维赋能矩阵)
+            5. SYSTEM CAPABILITY METRICS (全链路四维赋能矩阵)
             ================================================================= */}
         <section style={{ margin: '40px 0 60px', padding: '32px', background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-xl)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 24, textAlign: 'center' }}>
@@ -1069,7 +972,7 @@ const StatItem: React.FC<{ label: string; unit: string; value: string; highlight
   <div>
     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 4 }}>
       <span
-        className="stat-figure tabular-nums"
+        className="stat-figure tabular-nums font-mono-telemetry"
         style={{
           fontSize: 'var(--text-2xl)',
           fontWeight: 800,
