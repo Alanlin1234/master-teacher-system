@@ -157,6 +157,12 @@ export class GSAPEngine {
         if (progress < 1) {
           frameId = requestAnimationFrame(animate);
         } else {
+          if (el instanceof HTMLElement) {
+            if (vars.opacity !== undefined && vars.opacity === 1) el.style.opacity = '';
+            if (vars.x === 0 && vars.y === 0 && (vars.scale === undefined || vars.scale === 1)) {
+              el.style.transform = '';
+            }
+          }
           vars.onComplete?.();
         }
       };
@@ -167,6 +173,14 @@ export class GSAPEngine {
     const handle = {
       kill: () => {
         isKilled = true;
+        elements.forEach(el => {
+          if (el instanceof HTMLElement) {
+            if (vars.opacity !== undefined) el.style.opacity = '1';
+            if (vars.y !== undefined || vars.x !== undefined || vars.scale !== undefined || vars.scaleX !== undefined) {
+              el.style.transform = '';
+            }
+          }
+        });
       },
     };
     return handle;

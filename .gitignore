@@ -20,11 +20,9 @@ backend/uploads/*
 .env
 .env.local
 
-# Built bundles embed local keys; rebuild locally
+# Build output cache
 frontend/dist/
 hf_static_free/
-assets/index-*.js
-assets/index-*.css
 
 # Logs
 *.log
