@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { RefreshCw, Zap, Check, Lightbulb } from 'lucide-react';
+import { RefreshCw, Zap, Check, Lightbulb, ArrowRight } from 'lucide-react';
 import { useCountUp } from '../lib/gsap';
 import { cognitiveApi } from '../services/eduApi';
 import { getLearnerId, getLearnerName, writeDiagnosis, type StoredDiagnosis } from '../services/learnerStore';
@@ -128,20 +128,16 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
             1. HEADER: MASSIVE APPLE TYPOGRAPHY & IDENTITY BADGE (强化主标题)
             ================================================================= */}
         <header style={{ marginBottom: 32, textAlign: 'left' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-            <span className="badge badge-amber" style={{ fontSize: '13px', padding: '4px 14px' }}>
-              IRT 认知诊断中枢
-            </span>
-            <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-              分析对象：<strong style={{ color: 'var(--text-main)' }}>{learnerName}</strong> · 独立学情通道
-            </span>
+          <div className="apple-pro-eyebrow" style={{ marginBottom: 12 }}>
+            <span className="apple-status-dot apple-status-dot--primary" />
+            <span>IRT COGNITIVE ARCHITECTURE · 认知穿透中枢 · {learnerName}</span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(2.4rem, 4.2vw, 3.2rem)', fontWeight: 850, letterSpacing: '-0.04em', color: 'var(--text-main)', margin: '8px 0 12px' }}>
-            全域知识网络与认知掌握度热力图
+          <h1 className="apple-monumental-headline" style={{ fontSize: 'clamp(2.4rem, 4.2vw, 3.2rem)', textAlign: 'left', margin: '8px 0 12px', textWrap: 'balance' }}>
+            全域知识网络与认知掌握度热力矩阵
           </h1>
 
-          <p style={{ fontSize: 'clamp(1rem, 1.6vw, 1.15rem)', color: 'var(--text-body)', maxWidth: '44em', lineHeight: 1.6 }}>
+          <p className="apple-pro-subtitle" style={{ textAlign: 'left', maxWidth: '44em', margin: 0, textWrap: 'balance' }}>
             摒弃单薄的线性列表。矩阵色阶精准映射 5 大知识域掌握深度，通过 IRT 潜能曲线穿透隐性认知断层，直击高频失分命门。
           </p>
         </header>
@@ -149,43 +145,45 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
         {/* =================================================================
             2. TOP CONTROLS & IRT METRICS BAR (指标看板与学科切换)
             ================================================================= */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, marginBottom: 28 }}>
-          <div style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-lg)', padding: '20px 24px', border: '1px solid var(--border-glass)', boxShadow: 'var(--shadow-sm)' }}>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: 4 }}>IRT 综合能力层级</div>
-            <div className="stat-figure" style={{ color: 'var(--accent-primary)', fontSize: '1.8rem' }}>{abilityLevel}</div>
-            <div style={{ fontSize: '12px', color: 'var(--text-body)', marginTop: 4 }}>位列全省理科前 3.5% 认知区段</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, marginBottom: 28 }}>
+          <div className="apple-activity-card" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600, marginBottom: 4 }}>IRT 综合能力层级</div>
+            <div className="apple-keynote-stat-val" style={{ fontSize: '1.9rem', margin: '4px 0', color: 'var(--accent-primary)' }}>{abilityLevel}</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>位列全省理科前 3.5% 认知区段</div>
           </div>
 
-          <div style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-lg)', padding: '20px 24px', border: '1px solid var(--border-glass)', boxShadow: 'var(--shadow-sm)' }}>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: 4 }}>潜在能力值 (θ Theta)</div>
-            <div className="stat-figure tabular-nums" style={{ color: 'var(--text-main)', fontSize: '1.8rem' }}>
+          <div className="apple-activity-card" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600, marginBottom: 4 }}>潜在能力值 (θ Theta)</div>
+            <div className="apple-keynote-stat-val" style={{ fontSize: '1.9rem', margin: '4px 0' }}>
               +{(thetaShown / 100).toFixed(2)}
             </div>
-            <div style={{ fontSize: '12px', color: '#10b981', marginTop: 4 }}>高难度题项具备极高穿透力</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>高难度题项具备极高穿透力</div>
           </div>
 
-          <div style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-lg)', padding: '20px 24px', border: '1px solid var(--border-glass)', boxShadow: 'var(--shadow-sm)' }}>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: 4 }}>推断置信度 (Confidence)</div>
-            <div className="stat-figure tabular-nums" style={{ color: '#10b981', fontSize: '1.8rem' }}>{confShown}%</div>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: 4 }}>基于 142 组多模态答题与草稿采样</div>
+          <div className="apple-activity-card" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600, marginBottom: 4 }}>推断置信度 (Confidence)</div>
+            <div className="apple-keynote-stat-val" style={{ fontSize: '1.9rem', margin: '4px 0' }}>{confShown}%</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>基于 142 组多模态答题与草稿采样</div>
           </div>
         </div>
 
         {/* Toolbar Row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 14 }}>
-          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <select
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               style={{
-                height: 40,
-                padding: '0 14px',
-                borderRadius: 10,
+                height: 38,
+                padding: '0 20px',
+                borderRadius: 9999,
                 border: '1px solid var(--border-glass)',
                 background: 'var(--bg-surface)',
                 color: 'var(--text-main)',
                 fontSize: '13px',
-                fontWeight: 600,
+                fontWeight: 650,
+                outline: 'none',
+                cursor: 'pointer'
               }}
             >
               {SUBJECTS.map((s) => (
@@ -197,14 +195,16 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
               value={grade}
               onChange={(e) => setGrade(e.target.value)}
               style={{
-                height: 40,
-                padding: '0 14px',
-                borderRadius: 10,
+                height: 38,
+                padding: '0 20px',
+                borderRadius: 9999,
                 border: '1px solid var(--border-glass)',
                 background: 'var(--bg-surface)',
                 color: 'var(--text-main)',
                 fontSize: '13px',
-                fontWeight: 600,
+                fontWeight: 650,
+                outline: 'none',
+                cursor: 'pointer'
               }}
             >
               {GRADES.map((g) => (
@@ -214,33 +214,25 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
 
             <button
               type="button"
-              className="btn btn-secondary"
+              className="apple-btn-pill-primary"
               disabled={busy}
               onClick={runDiagnosis}
-              style={{ height: 40, padding: '0 18px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              style={{ height: 38, padding: '0 20px', fontSize: '13px' }}
             >
-              <RefreshCw size={14} className={busy ? 'spin' : ''} />
+              <RefreshCw size={13} className={busy ? 'spin' : ''} />
               <span>{busy ? '正在计算 IRT 矩阵...' : '重新评估掌握度'}</span>
             </button>
           </div>
 
-          {/* Color Legend */}
-          <div style={{ display: 'flex', gap: 14, fontSize: '12px', color: 'var(--text-muted)' }}>
+          {/* Apple Monochromatic Color Legend */}
+          <div style={{ display: 'flex', gap: 18, fontSize: '12px', color: 'var(--text-muted)' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'rgba(239,68,68,0.3)', border: '1px solid #ef4444' }} />
-              严重薄弱 (&lt;50%)
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)' }} />
+              <span>核心攻坚卡点 (&lt;60%)</span>
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'rgba(245,158,11,0.3)', border: '1px solid #d97706' }} />
-              易错薄弱 (50~65%)
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'rgba(16,185,129,0.3)', border: '1px solid #10b981' }} />
-              良好掌握 (65~80%)
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'rgba(37,99,235,0.3)', border: '1px solid #2563eb' }} />
-              透彻掌握 (&gt;80%)
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--bg-muted)', border: '1px solid var(--border-glass)' }} />
+              <span>常规稳固考点 (≥60%)</span>
             </span>
           </div>
         </div>
@@ -248,38 +240,57 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
         {/* =================================================================
             3. KNOWLEDGE MASTERY HEATMAP GRID (知识掌握度热力图矩阵)
             ================================================================= */}
-        <div className="heatmap-card" style={{ marginBottom: 32 }}>
+        <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-glass)', borderRadius: 24, padding: '28px 30px', marginBottom: 32, boxShadow: 'var(--shadow-md)' }}>
           <div style={{ marginBottom: 20 }}>
-            <strong style={{ fontSize: '16px', color: 'var(--text-main)' }}>
-              高考数学考点掌握矩阵 (点击任意单元格可下钻查看 IRT 参数与错因)
+            <strong style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 700 }}>
+              高考数学考点掌握矩阵 · 单击单元格下钻 IRT 深度诊断
             </strong>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             {HEATMAP_DOMAINS.map((group) => (
-              <div key={group.domain} className="heatmap-domain-row">
-                <div className="heatmap-domain-name">{group.domain}</div>
-                <div className="heatmap-cell-grid">
+              <div key={group.domain} className="heatmap-domain-row" style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 16, alignItems: 'center' }}>
+                <div style={{ fontSize: '13px', fontWeight: 750, color: 'var(--text-muted)' }}>{group.domain}</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
                   {group.topics.map((t) => {
                     const isSelected = selectedTopic?.name === t.name;
-                    const tierClass = getMasteryTierClass(t.mastery);
+                    const isWeak = t.mastery < 0.6;
                     const pct = Math.round(t.mastery * 100);
                     return (
                       <div
                         key={t.name}
-                        className={`heatmap-cell ${tierClass}`}
                         onClick={() => setSelectedTopic(t)}
                         style={{
-                          outline: isSelected ? '2px solid var(--accent-primary)' : 'none',
+                          padding: '14px 16px',
+                          borderRadius: 16,
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease',
+                          background: isSelected ? 'var(--bg-surface-elevated)' : 'var(--bg-subtle)',
+                          border: isSelected 
+                            ? '1.5px solid var(--accent-primary)' 
+                            : isWeak 
+                              ? '1px solid rgba(0, 113, 227, 0.35)' 
+                              : '1px solid var(--border-glass)',
+                          boxShadow: isSelected ? '0 6px 20px -4px rgba(0, 113, 227, 0.2)' : 'none',
                           transform: isSelected ? 'translateY(-2px)' : 'none',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          minHeight: 70,
                         }}
                       >
-                        <div style={{ fontSize: '12px', fontWeight: 650, lineHeight: 1.3, marginBottom: 6 }}>
+                        <div style={{ fontSize: '13px', fontWeight: 650, lineHeight: 1.35, marginBottom: 8, color: 'var(--text-main)' }}>
                           {t.name}
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', opacity: 0.9 }}>
-                          <span className="tabular-nums" style={{ fontWeight: 700 }}>{pct}%</span>
-                          <span style={{ fontSize: '10px' }}>{getTierLabel(t.mastery)}</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px' }}>
+                          <span className="font-mono-telemetry" style={{ fontWeight: 700, color: isWeak ? 'var(--accent-primary)' : 'var(--text-muted)' }}>
+                            {pct}%
+                          </span>
+                          {isWeak && (
+                            <span style={{ fontSize: '10px', fontWeight: 650, color: 'var(--accent-primary)', background: 'rgba(0, 113, 227, 0.08)', padding: '2px 7px', borderRadius: 9999 }}>
+                              攻坚点
+                            </span>
+                          )}
                         </div>
                       </div>
                     );
@@ -291,99 +302,93 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
         </div>
 
         {/* =================================================================
-            4. CELL DRILLDOWN INSPECTOR CARD (单元格深度下钻与错因诊断)
+            4. CELL DRILLDOWN INSPECTOR CARD (Apple Pro 下钻透析面板)
             ================================================================= */}
         {selectedTopic && (
           <div
             style={{
               background: 'var(--bg-surface)',
-              border: '1.5px solid var(--accent-primary-border)',
-              borderRadius: 'var(--radius-xl)',
+              border: '1px solid var(--border-glass)',
+              borderRadius: 24,
               padding: '28px 32px',
-              boxShadow: 'var(--shadow-lg), 0 0 30px -10px var(--accent-primary-glow)',
+              boxShadow: '0 8px 30px -4px rgba(0, 113, 227, 0.12)',
               marginBottom: 36,
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
-                <span className="badge badge-blue" style={{ fontSize: '11px', marginBottom: 6 }}>
+                <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--accent-primary)', fontSize: '11px', padding: '3px 10px', borderRadius: 9999, fontWeight: 650, display: 'inline-block', marginBottom: 6 }}>
                   考点下钻透析
                 </span>
-                <h3 style={{ fontSize: '1.5rem', color: 'var(--text-main)', margin: '4px 0 0' }}>
+                <h3 style={{ fontSize: '1.5rem', color: 'var(--text-main)', margin: '4px 0 0', fontWeight: 800 }}>
                   {selectedTopic.name}
                 </h3>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>当前掌握度</div>
-                <div className="stat-figure tabular-nums" style={{ fontSize: '2rem', color: selectedTopic.mastery < 0.6 ? '#ef4444' : '#10b981' }}>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>当前掌握度</div>
+                <div className="apple-keynote-stat-val" style={{ fontSize: '2.4rem', color: selectedTopic.mastery < 0.6 ? 'var(--accent-primary)' : 'var(--text-main)', margin: 0 }}>
                   {Math.round(selectedTopic.mastery * 100)}%
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, background: 'var(--bg-surface-elevated)', padding: '16px 20px', borderRadius: 12, border: '1px solid var(--border-glass)', marginBottom: 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, background: 'var(--bg-surface-elevated)', padding: '18px 22px', borderRadius: 16, border: '1px solid var(--border-glass)', marginBottom: 20 }}>
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>题项难度系数 (IRT b)</div>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'monospace' }}>b = {selectedTopic.irtB}</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-subtle)' }}>压轴难度高阶考点</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>题项难度系数 (IRT b)</div>
+                <div style={{ fontSize: '18px', fontWeight: 750, color: 'var(--text-main)', fontFamily: 'monospace', margin: '4px 0 2px' }}>b = {selectedTopic.irtB}</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>压轴难度高阶考点</div>
               </div>
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>区分度指数 (IRT a)</div>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'monospace' }}>a = {selectedTopic.irtA}</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-subtle)' }}>极高分水岭鉴别力</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>区分度指数 (IRT a)</div>
+                <div style={{ fontSize: '18px', fontWeight: 750, color: 'var(--text-main)', fontFamily: 'monospace', margin: '4px 0 2px' }}>a = {selectedTopic.irtA}</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>极高分水岭鉴别力</div>
               </div>
               <div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>攻坚推荐方式</div>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent-primary)', marginTop: 2 }}>
-                  {selectedTopic.mastery < 0.6 ? (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#f59e0b' }}>
-                      <Zap size={14} />
-                      <span>特级名师定制攻坚</span>
-                    </span>
-                  ) : (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#10b981' }}>
-                      <Check size={14} />
-                      <span>正常变式巩固</span>
-                    </span>
-                  )}
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>攻坚推荐方式</div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent-primary)', marginTop: 4 }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <Zap size={14} />
+                    <span>特级名师定制攻坚</span>
+                  </span>
                 </div>
-                <div style={{ fontSize: '11px', color: 'var(--text-subtle)', marginTop: 2 }}>建议苏格拉底递进启发</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 2 }}>建议苏格拉底递进启发</div>
               </div>
             </div>
 
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ marginBottom: 22 }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Lightbulb size={15} style={{ color: 'var(--accent-primary)' }} />
                 <span>认知阻滞与典型错因剖析：</span>
               </div>
-              <p style={{ fontSize: '13px', color: 'var(--text-body)', lineHeight: 1.7, background: 'var(--bg-subtle)', padding: '12px 16px', borderRadius: 8, borderLeft: '3px solid #d97706' }}>
+              <p style={{ fontSize: '13px', color: 'var(--text-body)', lineHeight: 1.7, background: 'var(--bg-subtle)', padding: '14px 18px', borderRadius: 12, borderLeft: '3px solid var(--accent-primary)', margin: 0 }}>
                 {selectedTopic.errorReason}
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: 14 }}>
+            <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="apple-btn-pill-primary"
                 onClick={() => onCompose([selectedTopic.name])}
-                style={{ padding: '10px 24px', fontSize: '14px', fontWeight: 650 }}
+                style={{ height: 42, padding: '0 24px', fontSize: '13px' }}
               >
-                针对【{selectedTopic.name}】一键合成专属名师微课 →
+                <span>针对【{selectedTopic.name}】合成名师微课</span>
+                <ArrowRight size={14} />
               </button>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="apple-btn-link"
                 onClick={() => setSelectedTopic(null)}
-                style={{ padding: '10px 20px', fontSize: '13px' }}
+                style={{ fontSize: '13px', padding: '0 12px' }}
               >
-                收起详情
+                <span>收起详情</span>
               </button>
             </div>
           </div>
         )}
 
         {/* =================================================================
-            5. BOTTOM GLOBAL ACTION BAR (全域定向合成直通操作栏)
+            5. BOTTOM GLOBAL ACTION BAR (Apple 悬浮微晶直达底栏)
             ================================================================= */}
         <div
           style={{
@@ -392,26 +397,29 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
             alignItems: 'center',
             background: 'var(--bg-surface)',
             border: '1px solid var(--border-glass)',
-            padding: '18px 30px',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: 'var(--shadow-md)',
+            padding: '18px 32px',
+            borderRadius: 9999,
+            boxShadow: '0 8px 30px -4px rgba(0, 0, 0, 0.05)',
+            flexWrap: 'wrap',
+            gap: 16
           }}
         >
           <div>
-            <strong style={{ fontSize: '15px', color: 'var(--text-main)' }}>
-              热力图已锁定 {allWeakTopics.length} 处攻坚突破口
+            <strong style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 700 }}>
+              热力矩阵已锁定 {allWeakTopics.length} 处攻坚突破口
             </strong>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '2px 0 0' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: '2px 0 0' }}>
               包括：{allWeakTopics.slice(0, 3).join('、')} 等关键阻滞考点。
             </p>
           </div>
           <button
             type="button"
-            className="btn btn-primary"
-            style={{ padding: '12px 32px', fontSize: '14px', fontWeight: 650 }}
+            className="apple-btn-pill-primary"
+            style={{ height: 42, padding: '0 28px', fontSize: '14px' }}
             onClick={() => onCompose(allWeakTopics)}
           >
-            按全套薄弱点一键定向合成特级名师 →
+            <span>按全套薄弱点定向合成名师</span>
+            <ArrowRight size={15} />
           </button>
         </div>
 

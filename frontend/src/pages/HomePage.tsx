@@ -281,8 +281,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   <BookOpen size={14} style={{ color: 'var(--accent-primary)' }} />
                   <span>Apple Math Notes · {learnerName} · 压轴题思维阶梯</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: '#10b981', fontWeight: 600 }}>
-                  <span className="apple-status-dot apple-status-dot--active" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>
+                  <span className="apple-status-dot apple-status-dot--primary" />
                   <span>LIVE 实时同频 · 12ms</span>
                 </div>
               </div>
@@ -296,14 +296,14 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                     <span style={{ fontSize: '12px', fontWeight: 750, color: 'var(--accent-primary)', letterSpacing: '0.04em' }}>
                       名师解题思维阶梯 (MATH NOTES)
                     </span>
-                    <span className="badge badge-emerald" style={{ fontSize: '11px', padding: '2px 8px' }}>
+                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--text-muted)', borderRadius: 9999, fontSize: '11px', padding: '2px 10px', fontWeight: 600 }}>
                       自适应 99.4%
                     </span>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '13px' }}>
-                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(0,113,227,0.12)', color: 'var(--accent-primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>1</span>
+                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>01</span>
                       <div>
                         <div style={{ fontWeight: 650, color: 'var(--text-main)', marginBottom: 2 }}>构造对称差函数：</div>
                         <div style={{ color: 'var(--accent-primary)', fontFamily: 'monospace', fontWeight: 700, fontSize: '13px' }}>
@@ -312,19 +312,19 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '13px' }}>
-                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(52,199,89,0.15)', color: '#34c759', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>2</span>
+                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>02</span>
                       <div>
                         <div style={{ fontWeight: 650, color: 'var(--text-main)', marginBottom: 2 }}>一阶求导单调判定：</div>
-                        <div style={{ color: '#10b981', fontFamily: 'monospace', fontWeight: 700, fontSize: '13px' }}>
+                        <div style={{ color: 'var(--text-main)', fontFamily: 'monospace', fontWeight: 700, fontSize: '13px' }}>
                           F'(x) = f'(x) + f'(2x₀ - x)
                         </div>
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '13px' }}>
-                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(255,149,0,0.15)', color: '#ff9500', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>3</span>
+                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border-glass)', color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>03</span>
                       <div>
                         <div style={{ fontWeight: 650, color: 'var(--text-main)', marginBottom: 2 }}>单峰性质降维破局：</div>
-                        <div style={{ color: '#ff9500', fontSize: '12px', fontWeight: 600 }}>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 500 }}>
                           化二元极值为一元单调性，直破考点死结
                         </div>
                       </div>
@@ -359,15 +359,15 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                     <path
                       d={`M 280 85 Q 190 15 50 ${55 + Math.cos(waveOffset) * 6}`}
                       fill="none"
-                      stroke="#10b981"
+                      stroke="rgba(0, 113, 227, 0.35)"
                       strokeWidth="2"
                       strokeDasharray="4 3"
                     />
-                    <circle cx="165" cy="40" r="4" fill="#ff9500" />
-                    <line x1="165" y1="40" x2="165" y2="95" stroke="#ff9500" strokeWidth="1" strokeDasharray="3 3" />
-                    <text x="165" y="105" textAnchor="middle" fill="#ff9500" fontSize="10" fontFamily="monospace" fontWeight="bold">x₀</text>
+                    <circle cx="165" cy="40" r="4" fill="var(--accent-primary)" />
+                    <line x1="165" y1="40" x2="165" y2="95" stroke="var(--accent-primary)" strokeWidth="1" strokeDasharray="3 3" />
+                    <text x="165" y="105" textAnchor="middle" fill="var(--accent-primary)" fontSize="10" fontFamily="monospace" fontWeight="bold">x₀</text>
                     <text x="250" y="45" fill="var(--accent-primary)" fontSize="11" fontFamily="monospace" fontWeight="bold">y = f(x)</text>
-                    <text x="75" y="45" fill="#10b981" fontSize="10" fontFamily="monospace" fontWeight="bold">y = f(2x₀ - x)</text>
+                    <text x="75" y="45" fill="var(--text-muted)" fontSize="10" fontFamily="monospace" fontWeight="bold">y = f(2x₀ - x)</text>
                   </svg>
                 </div>
 
@@ -476,8 +476,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                     <div>
                       <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: 12, display: 'flex', justifyContent: 'space-between', fontWeight: 600 }}>
                         <span>专注微震脑电脉冲 (EEG PULSE)</span>
-                        <span style={{ color: '#10b981', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                          <span className="apple-status-dot apple-status-dot--active" />
+                        <span style={{ color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                          <span className="apple-status-dot apple-status-dot--primary" />
                           <span>沉浸搜寻</span>
                         </span>
                       </div>
@@ -501,7 +501,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   <div className="apple-draft-paper">
                     <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: 10, display: 'flex', justifyContent: 'space-between', fontWeight: 600 }}>
                       <span>草稿纸演算与视网膜注视热点</span>
-                      <span style={{ color: 'var(--accent-primary)', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700 }}>X: 184 · Y: 312</span>
+                      <span style={{ color: 'var(--accent-primary)', fontFamily: 'monospace', fontSize: '11px', fontWeight: 750 }}>X: 184 · Y: 312</span>
                     </div>
 
                     <div style={{ position: 'relative', height: 95 }}>
@@ -509,7 +509,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       <div style={{ fontFamily: 'monospace', fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.7 }}>
                         <div>f'(x) = 2x - a/x = (2x² - a)/x</div>
                         <div style={{ color: 'var(--accent-primary)', fontWeight: 'bold' }}>令 f'(x) = 0 =&gt; x₀ = √(a/2)</div>
-                        <div style={{ color: '#ef4444', fontWeight: 'bold' }}>第3步: 对称差放缩阻滞... ?</div>
+                        <div style={{ color: 'var(--text-main)', fontWeight: 'bold' }}>第3步: 对称差放缩阻滞... ?</div>
                       </div>
 
                       {/* Gaze Focus Rings on stuck step */}
@@ -517,13 +517,13 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                         <svg viewBox="0 0 100 60" style={{ width: 100, height: 60 }}>
                           <ellipse cx="50" cy="30" rx="36" ry="20" fill="none" stroke="rgba(0,113,227,0.2)" strokeWidth="1.5" />
                           <circle cx="50" cy="30" r="14" fill="none" stroke="var(--accent-primary)" strokeWidth="1.5" strokeDasharray="3 2" />
-                          <circle cx={`${50 + Math.sin(waveOffset) * 4}`} cy={`${30 + Math.cos(waveOffset) * 3}`} r="5" fill="#ef4444" />
+                          <circle cx={`${50 + Math.sin(waveOffset) * 4}`} cy={`${30 + Math.cos(waveOffset) * 3}`} r="5" fill="var(--accent-primary)" />
                         </svg>
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: '#10b981', fontWeight: 700, marginTop: 10 }}>
-                      <span className="apple-status-dot apple-status-dot--active" />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600, marginTop: 10 }}>
+                      <span className="apple-status-dot apple-status-dot--primary" />
                       <span>视线锁定：在对称差放缩临界点停顿 18.4s</span>
                     </div>
                   </div>
@@ -545,7 +545,9 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
                   <div>
-                    <span className="badge badge-amber">POD 02 · 项目反应理论 (IRT) 认知反应中枢</span>
+                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--text-main)', borderRadius: 9999, fontSize: '12px', padding: '4px 12px', fontWeight: 650 }}>
+                      POD 02 · 项目反应理论 (IRT) 认知反应中枢
+                    </span>
                     <span style={{ marginLeft: 12, fontSize: '13px', color: 'var(--text-muted)' }}>三参数 Logistic 拟合</span>
                   </div>
                   <div className="font-mono-telemetry" style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
@@ -556,8 +558,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                 <div style={{ background: 'var(--bg-surface)', borderRadius: 20, padding: 24, border: '1px solid var(--border-glass)', marginBottom: 24 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-muted)', marginBottom: 12, fontWeight: 600 }}>
                     <span>P(θ) 掌握概率函数曲线</span>
-                    <span style={{ color: '#ef4444', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                      <span className="apple-status-dot apple-status-dot--danger" />
+                    <span style={{ color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                      <span className="apple-status-dot apple-status-dot--primary" />
                       <span>卡点: {weakPoint}</span>
                     </span>
                   </div>
@@ -570,8 +572,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       stroke="var(--accent-primary)"
                       strokeWidth="3.5"
                     />
-                    <circle cx={`${220 + irtTheta * 15}`} cy="30" r="7" fill="#ef4444" />
-                    <text x={`${220 + irtTheta * 15}`} y="18" textAnchor="middle" fill="#ef4444" fontSize="11" fontWeight="700">
+                    <circle cx={`${220 + irtTheta * 15}`} cy="30" r="7" fill="var(--accent-primary)" />
+                    <text x={`${220 + irtTheta * 15}`} y="18" textAnchor="middle" fill="var(--text-main)" fontSize="11" fontWeight="700">
                       林同学实际掌握点 (P=0.38)
                     </text>
                   </svg>
@@ -612,7 +614,9 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
                   <div>
-                    <span className="badge badge-emerald">POD 03 · 5D 教学基因重组台</span>
+                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--text-main)', borderRadius: 9999, fontSize: '12px', padding: '4px 12px', fontWeight: 650 }}>
+                      POD 03 · 5D 教学基因重组台
+                    </span>
                     <span style={{ marginLeft: 12, fontSize: '13px', color: 'var(--text-muted)' }}>多维拟物微调</span>
                   </div>
                   <div className="preset-chip-row" style={{ margin: 0 }}>
@@ -675,10 +679,12 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
                   <div>
-                    <span className="badge badge-blue">POD 04 · 虚拟名师微课演播剧场</span>
+                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--text-main)', borderRadius: 9999, fontSize: '12px', padding: '4px 12px', fontWeight: 650 }}>
+                      POD 04 · 虚拟名师微课演播剧场
+                    </span>
                     <span style={{ marginLeft: 12, fontSize: '13px', color: 'var(--text-muted)' }}>思维阶梯演算</span>
                   </div>
-                  <span className="badge badge-emerald" style={{ fontSize: '12px' }}>
+                  <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--accent-primary)', borderRadius: 9999, fontSize: '12px', padding: '4px 12px', fontWeight: 650 }}>
                     +84% 思维自驱力
                   </span>
                 </div>
@@ -687,7 +693,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   <div style={{ background: 'var(--bg-surface)', borderRadius: 16, padding: 20, borderLeft: '4px solid var(--accent-primary)', border: '1px solid var(--border-glass)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: 10 }}>
                       <strong style={{ color: 'var(--accent-primary)' }}>专属名师：启发构造对称差函数 F(x) = f(x) - f(2x₀ - x)</strong>
-                      <span className="font-mono-telemetry" style={{ color: '#10b981', fontWeight: 750 }}>认知阶梯 98%</span>
+                      <span className="font-mono-telemetry" style={{ color: 'var(--accent-primary)', fontWeight: 750 }}>认知阶梯 98%</span>
                     </div>
                     <div className="derivation-spectrum-bar" />
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-muted)', marginTop: 10, fontWeight: 600 }}>
@@ -700,7 +706,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   <div style={{ background: 'var(--bg-surface)', borderRadius: 16, padding: 20, borderLeft: '4px solid #94a3b8', border: '1px solid var(--border-glass)', opacity: 0.85 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: 10 }}>
                       <strong style={{ color: 'var(--text-muted)' }}>通用基准 AI：暴力联立方程硬套对数均值公式</strong>
-                      <span className="font-mono-telemetry" style={{ color: '#ef4444', fontWeight: 750 }}>遗忘率极高</span>
+                      <span className="font-mono-telemetry" style={{ color: 'var(--text-muted)', fontWeight: 700 }}>遗忘率极高</span>
                     </div>
                     <div style={{ height: 6, background: '#94a3b8', borderRadius: 3, opacity: 0.3 }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-muted)', marginTop: 10 }}>
@@ -907,15 +913,19 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
                     {dynamicDiffAnswer.steps.map((st, idx) => (
                       <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '12px', color: 'var(--text-main)' }}>
-                        <CheckCircle2 size={14} style={{ color: '#10b981', flexShrink: 0 }} />
+                        <CheckCircle2 size={14} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
                         <span>阶梯 {idx + 1}: {st}</span>
                       </div>
                     ))}
                   </div>
 
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <span className="badge badge-blue">启发式反问</span>
-                    <span className="badge badge-emerald">数形结合降维</span>
+                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--accent-primary)', fontSize: '11px', padding: '3px 10px', borderRadius: 9999, fontWeight: 600 }}>
+                      启发式反问
+                    </span>
+                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--accent-primary)', fontSize: '11px', padding: '3px 10px', borderRadius: 9999, fontWeight: 600 }}>
+                      数形结合降维
+                    </span>
                   </div>
                 </div>
 
@@ -941,7 +951,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       <Bot size={20} style={{ color: 'var(--text-muted)' }} />
                       <strong style={{ fontSize: '16px', color: 'var(--text-muted)' }}>通用基准大模型</strong>
                     </div>
-                    <span className="badge font-mono-telemetry" style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', fontSize: '11px' }}>
+                    <span className="font-mono-telemetry" style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-muted)', color: 'var(--text-muted)', fontSize: '11px', padding: '3px 10px', borderRadius: 9999, fontWeight: 600 }}>
                       {dynamicDiffAnswer.baselineMetric}
                     </span>
                   </div>
