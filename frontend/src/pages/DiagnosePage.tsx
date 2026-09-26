@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { RefreshCw, Zap, Check, Lightbulb } from 'lucide-react';
 import { useCountUp } from '../lib/gsap';
 import { cognitiveApi } from '../services/eduApi';
 import { getLearnerId, getLearnerName, writeDiagnosis, type StoredDiagnosis } from '../services/learnerStore';
@@ -216,9 +217,10 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
               className="btn btn-secondary"
               disabled={busy}
               onClick={runDiagnosis}
-              style={{ height: 40, padding: '0 18px', fontSize: '13px' }}
+              style={{ height: 40, padding: '0 18px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: 6 }}
             >
-              {busy ? '正在计算 IRT 矩阵...' : '🔄 重新评估掌握度'}
+              <RefreshCw size={14} className={busy ? 'spin' : ''} />
+              <span>{busy ? '正在计算 IRT 矩阵...' : '重新评估掌握度'}</span>
             </button>
           </div>
 
@@ -332,16 +334,27 @@ export const DiagnosePage: React.FC<Props> = ({ onCompose }) => {
               </div>
               <div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>攻坚推荐方式</div>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent-primary)' }}>
-                  {selectedTopic.mastery < 0.6 ? '🔥 特级名师定制攻坚' : '✅ 正常变式巩固'}
+                <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent-primary)', marginTop: 2 }}>
+                  {selectedTopic.mastery < 0.6 ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#f59e0b' }}>
+                      <Zap size={14} />
+                      <span>特级名师定制攻坚</span>
+                    </span>
+                  ) : (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#10b981' }}>
+                      <Check size={14} />
+                      <span>正常变式巩固</span>
+                    </span>
+                  )}
                 </div>
-                <div style={{ fontSize: '11px', color: 'var(--text-subtle)' }}>建议苏格拉底递进启发</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-subtle)', marginTop: 2 }}>建议苏格拉底递进启发</div>
               </div>
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)', marginBottom: 6 }}>
-                💡 认知阻滞与典型错因剖析：
+              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Lightbulb size={15} style={{ color: 'var(--accent-primary)' }} />
+                <span>认知阻滞与典型错因剖析：</span>
               </div>
               <p style={{ fontSize: '13px', color: 'var(--text-body)', lineHeight: 1.7, background: 'var(--bg-subtle)', padding: '12px 16px', borderRadius: 8, borderLeft: '3px solid #d97706' }}>
                 {selectedTopic.errorReason}

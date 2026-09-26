@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Camera, Square, Play, AlertCircle, FileText, UploadCloud, Mic } from 'lucide-react';
 import { gsap, prefersReducedMotion, useCountUp, usePageEnter } from '../lib/gsap';
 import { cameraService } from '../services/cameraService';
 import { analysisApi, monitorApi, reportsApi } from '../services/eduApi';
@@ -280,22 +281,24 @@ export const CollectPage: React.FC<Props> = ({ onDiagnose, initialSegment = 'mon
                         type="button"
                         className={running ? 'btn btn-secondary' : 'btn btn-primary'}
                         onClick={toggleCamera}
-                        style={{ padding: '8px 20px', fontSize: '13px', fontWeight: 650 }}
+                        style={{ padding: '8px 20px', fontSize: '13px', fontWeight: 650, display: 'inline-flex', alignItems: 'center', gap: 6 }}
                       >
-                        {running ? '⏹ 停止采集' : '▶ 启动前置视觉流'}
+                        {running ? <Square size={13} /> : <Play size={13} />}
+                        <span>{running ? '停止采集' : '启动前置视觉流'}</span>
                       </button>
                     </div>
 
                     {!running && (
                       <div style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
-                        <div style={{ fontSize: '32px', marginBottom: 8 }}>📷</div>
+                        <Camera size={36} style={{ color: 'var(--text-muted)', marginBottom: 8 }} />
                         <p style={{ fontSize: '13px' }}>前置视觉捕捉流待命 · 点击右下方启动</p>
                       </div>
                     )}
                   </div>
 
-                  <p style={{ marginTop: 14, fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                    ℹ️ {detail}
+                  <p style={{ marginTop: 14, fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <AlertCircle size={14} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
+                    <span>{detail}</span>
                   </p>
                 </div>
 
@@ -495,22 +498,28 @@ export const CollectPage: React.FC<Props> = ({ onDiagnose, initialSegment = 'mon
                   type="button"
                   className={`multimodal-track-btn ${activeTrack === 'text' ? 'active' : ''}`}
                   onClick={() => setActiveTrack('text')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
                 >
-                  📝 文本推导推演
+                  <FileText size={14} />
+                  <span>文本推导推演</span>
                 </button>
                 <button
                   type="button"
                   className={`multimodal-track-btn ${activeTrack === 'image' ? 'active' : ''}`}
                   onClick={() => setActiveTrack('image')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
                 >
-                  📷 试卷拍照 / 草稿 OCR
+                  <Camera size={14} />
+                  <span>试卷拍照 / 草稿 OCR</span>
                 </button>
                 <button
                   type="button"
                   className={`multimodal-track-btn ${activeTrack === 'audio' ? 'active' : ''}`}
                   onClick={() => setActiveTrack('audio')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
                 >
-                  🎙️ 答疑语音识别
+                  <Mic size={14} />
+                  <span>答疑语音识别</span>
                 </button>
               </div>
 
@@ -561,7 +570,13 @@ export const CollectPage: React.FC<Props> = ({ onDiagnose, initialSegment = 'mon
                           transition: 'all 0.2s ease',
                         }}
                       >
-                        <div style={{ fontSize: '32px', marginBottom: 8 }}>{imageUploaded ? '📄' : '📤'}</div>
+                        <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}>
+                          {imageUploaded ? (
+                            <FileText size={36} style={{ color: 'var(--accent-primary)' }} />
+                          ) : (
+                            <UploadCloud size={36} style={{ color: 'var(--text-muted)' }} />
+                          )}
+                        </div>
                         <strong style={{ fontSize: '14px', color: 'var(--text-main)' }}>
                           {imageUploaded ? '已载入高三一模数学试卷压轴题.jpg' : '点击上传试卷照片或错题草稿纸'}
                         </strong>
@@ -590,9 +605,10 @@ export const CollectPage: React.FC<Props> = ({ onDiagnose, initialSegment = 'mon
                           type="button"
                           className={audioRecording ? 'btn btn-secondary' : 'btn btn-primary'}
                           onClick={() => setAudioRecording(!audioRecording)}
-                          style={{ padding: '10px 24px', fontSize: '14px', marginBottom: 12 }}
+                          style={{ padding: '10px 24px', fontSize: '14px', marginBottom: 12, display: 'inline-flex', alignItems: 'center', gap: 6 }}
                         >
-                          {audioRecording ? '⏹ 停止录音解析' : '🎙️ 开始模拟录音解析'}
+                          {audioRecording ? <Square size={14} /> : <Mic size={14} />}
+                          <span>{audioRecording ? '停止录音解析' : '开始模拟录音解析'}</span>
                         </button>
                         <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                           {audioRecording ? '正在监听学生陈述... 识别到长语顿与困惑犹豫语调' : '点击录制学生作答讲解语音，解析语义流与困惑停留时段'}
