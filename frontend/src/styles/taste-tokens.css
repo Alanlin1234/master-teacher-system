@@ -1471,3 +1471,236 @@
   color: #ffffff;
   z-index: 2;
 }
+
+/* ==========================================================================
+   TEACHER LIBRARY: GRAND MASTER HALL OF FAME (名师智库 · 名人堂画廊)
+   ========================================================================== */
+.library-master-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 28px;
+}
+
+.library-master-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  position: relative;
+}
+
+.library-master-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 24px 52px -10px rgba(0, 0, 0, 0.55), 0 0 28px -4px rgba(59, 130, 246, 0.18);
+}
+
+.library-photo-viewport {
+  width: 100%;
+  height: 240px;
+  position: relative;
+  background: #020617;
+  overflow: hidden;
+}
+
+.library-photo-viewport img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.library-master-card:hover .library-photo-viewport img {
+  transform: scale(1.04);
+}
+
+.master-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justifyContent: center;
+  padding: 24px;
+}
+
+.master-drawer-card {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px -16px rgba(0, 0, 0, 0.65);
+  position: relative;
+  padding: 32px;
+}
+
+/* ==========================================================================
+   TEACHER STUDIO: CINEMA PRO 4K HARDWARE STAGE (微课演播室 · 导播台)
+   ========================================================================== */
+.studio-timeline-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 8px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) {
+  .studio-timeline-bar {
+    grid-template-columns: 1fr;
+  }
+}
+
+.studio-step-pill {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.studio-step-pill.active {
+  background: var(--bg-surface-elevated);
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.15);
+}
+
+.studio-step-pill.done {
+  background: rgba(0, 113, 227, 0.05);
+  border-color: rgba(0, 113, 227, 0.2);
+}
+
+.studio-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justifyContent: center;
+  font-size: 11px;
+  font-weight: 750;
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+}
+
+.studio-step-pill.active .studio-step-num {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.studio-step-pill.done .studio-step-num {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* Step 1 Picker Cards */
+.studio-teacher-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.studio-teacher-picker-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+}
+
+.studio-teacher-picker-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+.studio-teacher-picker-card.selected {
+  border-color: var(--accent-primary);
+  background: var(--bg-surface-elevated);
+  box-shadow: 0 0 20px -2px rgba(0, 113, 227, 0.3);
+}
+
+.studio-teacher-avatar-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #020617;
+  flex-shrink: 0;
+}
+
+.studio-teacher-avatar-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* Step 4 Cinema Pro Bezel */
+.cinema-pro-bezel {
+  background: #020617;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 32px 84px -16px rgba(0, 0, 0, 0.75), 0 0 48px -12px rgba(0, 113, 227, 0.2);
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.cinema-pro-topbar {
+  background: rgba(8, 12, 20, 0.9);
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justifyContent: space-between;
+}
+
+.cinema-pro-viewport {
+  position: relative;
+  background: #000000;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  justifyContent: center;
+}
+
+.cinema-pro-viewport video {
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+}
+
+.cinema-pro-footer {
+  padding: 18px 24px;
+  background: rgba(8, 12, 20, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justifyContent: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}

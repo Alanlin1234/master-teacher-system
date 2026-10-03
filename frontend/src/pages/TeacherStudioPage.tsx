@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { studioApi, teachersApi } from '../services/api';
+import { speechService } from '../services/speech';
 import {
   VideoCameraIcon,
   SparklesIcon,
@@ -9,6 +10,7 @@ import {
   ChevronRightIcon,
   CheckIcon,
 } from '../components/Icons';
+import { Volume2, VolumeX, Check, Award, Tv } from 'lucide-react';
 
 interface Props {
   initialTopic?: string;
@@ -64,6 +66,31 @@ export const TeacherStudioPage: React.FC<Props> = ({
   const [isRendering, setIsRendering] = useState(false);
   const [mergedVideoUrl, setMergedVideoUrl] = useState('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [playingTeacherId, setPlayingTeacherId] = useState<string | null>(null);
+
+  const getSafeAvatarUrl = (photoUrl?: string, id?: string) => {
+    if (photoUrl && photoUrl.trim() !== '') {
+      return photoUrl.startsWith('/') ? '.' + photoUrl : photoUrl;
+    }
+    const num = id ? parseInt(id.replace(/\D/g, ''), 10) : 1;
+    const safeNum = isNaN(num) || num < 1 ? 1 : ((num - 1) % 17) + 1;
+    return `./photos/${safeNum}.png`;
+  };
+
+  const toggleTeacherAudio = (e: React.MouseEvent, t: any) => {
+    e.stopPropagation();
+    if (playingTeacherId === t.id) {
+      speechService.stop();
+      setPlayingTeacherId(null);
+    } else {
+      setPlayingTeacherId(t.id);
+      speechService.speak(
+        `您好，我是${t.name}，专注于${t.subject}学科深度教研。本节微课将由我为您拆解核心考点。`,
+        t.voiceType || 'gentle-scholar',
+        () => setPlayingTeacherId(null)
+      );
+    }
+  };
 
   useEffect(() => {
     loadTeachers();
@@ -71,6 +98,9 @@ export const TeacherStudioPage: React.FC<Props> = ({
       setCurrentStep(3);
       handleGenerateScript();
     }
+    return () => {
+      speechService.stop();
+    };
   }, []);
 
   const loadTeachers = async () => {
@@ -153,13 +183,13 @@ export const TeacherStudioPage: React.FC<Props> = ({
       name: `${t.name}·${t.subject}名师模型`,
       desc: `${t.style} · 4K拟真渲染 · 已对齐专属声纹`,
       videoUrl: t.dh_model_video_url || './demo_videos/merged.mp4',
-      posterUrl: t.photoUrl ? (t.photoUrl.startsWith('/') ? '.' + t.photoUrl : t.photoUrl) : './demo_videos/merged_poster.jpg',
+      posterUrl: getSafeAvatarUrl(t.photoUrl, t.id),
       voiceTrained: true,
       isCustom: false
     })) : [
-      { id: 'wang_chonglin_avatar', name: '王崇林·理科名师模型', desc: '4K超清·严谨启发式声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './demo_videos/merged_poster.jpg', voiceTrained: true, isCustom: false },
-      { id: 'li_qingyun_avatar', name: '李清韵·文科名师模型', desc: '4K超清·温润典雅声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './demo_videos/merged_poster.jpg', voiceTrained: true, isCustom: false },
-      { id: 'gao_zhiwei_avatar', name: '高志伟·幽默竞赛模型', desc: '4K超清·激情风趣声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './demo_videos/merged_poster.jpg', voiceTrained: true, isCustom: false }
+      { id: 'wang_chonglin_avatar', name: '王崇林·理科名师模型', desc: '4K超清·严谨启发式声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './photos/1.png', voiceTrained: true, isCustom: false },
+      { id: 'li_qingyun_avatar', name: '李清韵·文科名师模型', desc: '4K超清·温润典雅声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './photos/2.png', voiceTrained: true, isCustom: false },
+      { id: 'gao_zhiwei_avatar', name: '高志伟·幽默竞赛模型', desc: '4K超清·激情风趣声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './photos/3.png', voiceTrained: true, isCustom: false }
     ]),
     ...customModels
   ];
@@ -234,8 +264,8 @@ export const TeacherStudioPage: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* 步骤指示条 */}
-        <div className="studio-steps">
+        {/* Final Cut Pro / Logic Pro 风格 Timeline 步骤指示条 */}
+        <div className="studio-timeline-bar" style={{ marginBottom: '32px' }}>
           {stepsList.map(s => {
             const isDone = currentStep > s.step;
             const isCurrent = currentStep === s.step;
@@ -243,43 +273,19 @@ export const TeacherStudioPage: React.FC<Props> = ({
               <div
                 key={s.step}
                 onClick={() => (isDone ? setCurrentStep(s.step as any) : null)}
-                style={{
-                  padding: '16px 20px',
-                  borderRadius: 'var(--radius-md)',
-                  background: isCurrent
-                    ? 'var(--card-bg)'
-                    : isDone
-                    ? 'var(--bg-surface)'
-                    : 'var(--card-bg)',
-                  color: isCurrent ? 'var(--text-main)' : isDone ? 'var(--accent-primary)' : 'var(--text-muted)',
-                  border: isCurrent
-                    ? '1px solid var(--accent-primary)'
-                    : isDone
-                    ? '1px solid var(--accent-primary)'
-                    : '1px solid var(--border-glass)',
-                  boxShadow: isCurrent ? 'var(--shadow-sm)' : 'none',
-                  cursor: isDone ? 'pointer' : 'default',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  transition: 'all var(--trans-fast)'
-                }}
+                className={`studio-step-pill ${isCurrent ? 'active' : ''} ${isDone ? 'done' : ''}`}
+                style={{ cursor: isDone ? 'pointer' : 'default' }}
               >
-                <div style={{
-                  width: '26px',
-                  height: '26px',
-                  borderRadius: '50%',
-                  background: isCurrent ? 'var(--accent-primary)' : isDone ? 'var(--accent-primary)' : 'var(--bg-surface)',
-                  color: isCurrent || isDone ? '#ffffff' : 'var(--text-muted)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.8rem',
-                  fontWeight: 800
-                }}>
-                  {isDone ? <CheckIcon size={14} /> : s.step}
+                <div className="studio-step-num">
+                  {isDone ? <Check size={12} /> : s.step}
                 </div>
-                <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>{s.title}</div>
+                <div style={{
+                  fontSize: '0.88rem',
+                  fontWeight: isCurrent ? 800 : 600,
+                  color: isCurrent ? 'var(--text-main)' : isDone ? 'var(--text-main)' : 'var(--text-muted)'
+                }}>
+                  {s.title}
+                </div>
               </div>
             );
           })}
@@ -288,72 +294,113 @@ export const TeacherStudioPage: React.FC<Props> = ({
         {/* 步骤 1：选择主讲名师 */}
         {currentStep === 1 && (
           <div className="card-impeccable" style={{ padding: '36px' }}>
-            <h3 style={{ fontSize: '1.35rem', color: 'var(--text-main)', marginBottom: '8px', fontWeight: 800 }}>
-              第一步：选定微课主讲名师
-            </h3>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
+              <h3 style={{ fontSize: '1.35rem', color: 'var(--text-main)', margin: 0, fontWeight: 800 }}>
+                第一步：选定微课主讲名师
+              </h3>
+              <span className="badge badge-gold" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                <Award size={12} />
+                <span>4K超拟真名师库</span>
+              </span>
+            </div>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '28px' }}>
-              可选用系统内原生的特级名师，或选用由您在多维合成工坊中生成的专属虚拟名师。
+              可选用系统内原生的特级名师，或选用由您在多维合成工坊中生成的专属虚拟名师。点击卡片右侧试听名师原声。
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', marginBottom: '36px' }}>
+            <div className="studio-teacher-picker-grid">
               {synthRecipe && (
                 <div
                   onClick={() => handleSelectTeacher('synth')}
-                  style={{
-                    padding: '18px',
-                    borderRadius: 'var(--radius-lg)',
-                    border: selectedTeacherId === 'synth' ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
-                    background: selectedTeacherId === 'synth' ? 'var(--card-bg)' : 'var(--bg-surface)',
-                    boxShadow: selectedTeacherId === 'synth' ? 'var(--shadow-sm)' : 'none',
-                    cursor: 'pointer',
-                    transition: 'all var(--trans-fast)'
-                  }}
+                  className={`studio-teacher-picker-card ${selectedTeacherId === 'synth' ? 'selected' : ''}`}
                 >
-                  <span className="badge badge-cyan" style={{ marginBottom: '10px' }}>专属定制名师</span>
-                  <div style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-main)' }}>{synthRecipe.name}</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>五维基因融合 · 专属自适应</div>
+                  <div className="studio-teacher-avatar-box" style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.25), rgba(147,51,234,0.25))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <SparklesIcon size={24} style={{ color: 'var(--accent-primary)' }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span className="badge badge-cyan" style={{ fontSize: '0.68rem', padding: '2px 6px' }}>专属定制</span>
+                    </div>
+                    <div style={{ fontWeight: 800, fontSize: '0.98rem', color: 'var(--text-main)', marginTop: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {synthRecipe.name}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      五维基因融合 · 专属自适应
+                    </div>
+                  </div>
+                  {selectedTeacherId === 'synth' && (
+                    <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
+                      <Check size={13} />
+                    </div>
+                  )}
                 </div>
               )}
 
-              {teachers.map(t => (
-                <div
-                  key={t.id}
-                  onClick={() => handleSelectTeacher(t.id)}
-                  style={{
-                    padding: '18px',
-                    borderRadius: 'var(--radius-lg)',
-                    border: selectedTeacherId === t.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
-                    background: selectedTeacherId === t.id ? 'var(--card-bg)' : 'var(--bg-surface)',
-                    boxShadow: selectedTeacherId === t.id ? 'var(--shadow-sm)' : 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '14px',
-                    transition: 'all var(--trans-fast)'
-                  }}
-                >
-                  <div style={{
-                    width: '52px',
-                    height: '52px',
-                    borderRadius: '14px',
-                    overflow: 'hidden',
-                    background: 'var(--bg-surface)',
-                    border: '1px solid var(--border-glass)',
-                    flexShrink: 0
-                  }}>
-                    <img
-                      src={t.photoUrl ? (t.photoUrl.startsWith('/') ? '.' + t.photoUrl : t.photoUrl) : './avatars/t1.svg'}
-                      alt=""
-                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg'; }}
-                      style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                    />
+              {teachers.map(t => {
+                const isSelected = selectedTeacherId === t.id;
+                const isPlaying = playingTeacherId === t.id;
+                return (
+                  <div
+                    key={t.id}
+                    onClick={() => handleSelectTeacher(t.id)}
+                    className={`studio-teacher-picker-card ${isSelected ? 'selected' : ''}`}
+                  >
+                    <div className="studio-teacher-avatar-box">
+                      <img
+                        src={getSafeAvatarUrl(t.photoUrl, t.id)}
+                        alt={t.name}
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = './photos/1.png'; }}
+                      />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{
+                          fontSize: '0.7rem',
+                          padding: '2px 8px',
+                          borderRadius: '100px',
+                          background: 'rgba(217, 119, 6, 0.14)',
+                          color: '#d97706',
+                          border: '1px solid rgba(217, 119, 6, 0.3)',
+                          fontWeight: 700
+                        }}>{t.subject}</span>
+                      </div>
+                      <div style={{ fontWeight: 800, fontSize: '0.96rem', color: 'var(--text-main)', marginTop: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {t.name}
+                      </div>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {t.style}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleTeacherAudio(e, t)}
+                        title={isPlaying ? "停止试听" : "试听名师声纹"}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '8px',
+                          background: isPlaying ? 'rgba(0, 113, 227, 0.16)' : 'var(--bg-subtle)',
+                          border: isPlaying ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                          color: isPlaying ? 'var(--accent-primary)' : 'var(--text-muted)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          flexShrink: 0
+                        }}
+                      >
+                        {isPlaying ? <VolumeX size={15} /> : <Volume2 size={15} />}
+                      </button>
+                      {isSelected && (
+                        <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
+                          <Check size={13} />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.98rem', color: 'var(--text-main)' }}>{t.name}</div>
-                    <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '2px' }}>{t.subject} · {t.style}</div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -872,41 +919,88 @@ export const TeacherStudioPage: React.FC<Props> = ({
               </div>
             ) : (
               <div>
-                {/* 终版微课播放器 */}
-                <div className="digital-human-frame" style={{
-                  maxWidth: '740px',
-                  margin: '0 auto 32px'
-                }}>
-                  <video
-                    src={finalVideoSource}
-                    controls
-                    autoPlay
-                    style={{ width: '100%', display: 'block', maxHeight: '440px', background: '#000' }}
-                  />
-                </div>
-
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '6px' }}>
-                    微课视频已成功生成并交付
+                {/* Cinema Pro 4K Hardware Theater Frame */}
+                <div className="cinema-pro-bezel">
+                  {/* Top Bar with window dots, title, and 4K status */}
+                  <div className="cinema-pro-topbar">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f56', display: 'inline-block' }} />
+                      <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
+                      <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#27c93f', display: 'inline-block' }} />
+                      <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', marginLeft: '8px', fontWeight: 600, fontFamily: 'monospace' }}>
+                        STUDIO-DISPLAY // 3840×2160 UHD // PRO-RES-422
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '3px 10px',
+                        borderRadius: '100px',
+                        background: 'rgba(239, 68, 68, 0.2)',
+                        border: '1px solid rgba(239, 68, 68, 0.4)',
+                        color: '#f87171',
+                        fontSize: '0.74rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.06em'
+                      }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444', animation: 'tastePulse 1.8s infinite' }} />
+                        MASTER 4K · 60FPS
+                      </span>
+                      <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontFamily: 'monospace', fontWeight: 700 }}>
+                        TIMECODE 00:03:42:15
+                      </span>
+                    </div>
                   </div>
-                  <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '28px' }}>
-                    主题：{topic} · 主讲：{activeModel?.name || currentTeacherName} · 演播室：{currentBg?.name || '智慧教室'} · {voiceMode === 'native' ? '原声视频音轨' : 'AI特级声纹驱动'} · 课时：{courseDuration === '3min' ? '3分钟考点闪击' : '5分钟专题攻坚'}
-                  </p>
 
-                  <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-                    <a
-                      href={finalVideoSource}
-                      download={`名师微课-${topic || '导数精讲'}.mp4`}
-                      className="btn btn-primary"
-                      style={{ padding: '12px 28px', display: 'flex', alignItems: 'center', gap: '8px' }}
-                    >
-                      <DownloadIcon size={16} />
-                      <span>下载微课成品视频</span>
-                    </a>
-                    <button onClick={() => setCurrentStep(1)} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span>制作另一堂微课</span>
-                      <ChevronRightIcon size={14} />
-                    </button>
+                  {/* Viewport: Video player */}
+                  <div className="cinema-pro-viewport">
+                    <video
+                      src={finalVideoSource}
+                      controls
+                      autoPlay
+                      style={{ width: '100%', display: 'block', maxHeight: '520px', background: '#000' }}
+                    />
+                  </div>
+
+                  {/* Footer telemetry and synchronized blackboard meta */}
+                  <div className="cinema-pro-footer">
+                    <div>
+                      <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span>{topic || '高中数学核心考点专题攻坚'}</span>
+                        <span style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '6px', background: 'rgba(59, 130, 246, 0.25)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
+                          已交付成品
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '6px', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                        <span>主讲名师：<strong style={{ color: '#e2e8f0' }}>{activeModel?.name || currentTeacherName}</strong></span>
+                        <span>演播场景：<strong style={{ color: '#e2e8f0' }}>{currentBg?.name || '智慧教室'}</strong></span>
+                        <span>声音音轨：<strong style={{ color: '#e2e8f0' }}>{voiceMode === 'native' ? '原声视频音轨' : 'AI特级声纹驱动'}</strong></span>
+                        <span>微课制式：<strong style={{ color: '#e2e8f0' }}>{courseDuration === '3min' ? '3分钟考点闪击' : '5分钟专题攻坚'}</strong></span>
+                        <span>色彩空间：<strong style={{ color: '#e2e8f0' }}>Rec.709 Wide Gamut</strong></span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <a
+                        href={finalVideoSource}
+                        download={`名师微课-${topic || '导数精讲'}.mp4`}
+                        className="btn btn-primary"
+                        style={{ padding: '10px 22px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.88rem' }}
+                      >
+                        <DownloadIcon size={15} />
+                        <span>导出 4K 微课</span>
+                      </a>
+                      <button
+                        onClick={() => setCurrentStep(1)}
+                        className="btn btn-secondary"
+                        style={{ padding: '10px 20px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.88rem', background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.15)', color: '#e2e8f0' }}
+                      >
+                        <span>制作新微课</span>
+                        <ChevronRightIcon size={14} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

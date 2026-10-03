@@ -12,6 +12,8 @@ import {
   BookOpenIcon,
   SlidersIcon,
 } from '../components/Icons';
+import { Volume2, VolumeX, Award } from 'lucide-react';
+import { speechService } from '../services/speech';
 import { SkeletonCard } from '../components/SkeletonCard';
 
 interface Props {
@@ -19,11 +21,9 @@ interface Props {
   onAddToCompose: (teacherId: string) => void;
 }
 
-const getSafeAvatarUrl = (url?: string, defaultId: string = '1') => {
-  if (!url) return `./avatars/t${defaultId.replace(/\D/g, '') || '1'}.svg`;
-  if (url.startsWith('http://') || url.startsWith('https://')) return url;
-  if (url.startsWith('/')) return '.' + url;
-  return url;
+const getSafeAvatarUrl = (_url?: string, defaultId: string = '1') => {
+  const num = defaultId.replace(/\D/g, '') || '1';
+  return `./photos/${num}.png`;
 };
 
 export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompose }) => {
@@ -32,6 +32,22 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
   const [selectedSubject, setSelectedSubject] = useState('全部');
   const [searchKey, setSearchKey] = useState('');
   const [activeTeacher, setActiveTeacher] = useState<any | null>(null);
+  const [playingMasterId, setPlayingMasterId] = useState<string | null>(null);
+
+  const toggleMasterAudio = (t: any) => {
+    if (playingMasterId === t.id) {
+      speechService.stop();
+      setPlayingMasterId(null);
+    } else {
+      speechService.stop();
+      setPlayingMasterId(t.id);
+      speechService.speak(
+        `同学你好！我是${t.subject}特级名师${t.name}。${t.description || t.style}`,
+        () => setPlayingMasterId(t.id),
+        () => setPlayingMasterId(null)
+      );
+    }
+  };
 
   const subjects = ['全部', '数学', '语文', '英语', '物理', '化学', '生物', '历史', '地理', '政治'];
 
@@ -143,120 +159,83 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
             未找到符合条件的名师
           </div>
         ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(330px, 1fr))',
-            gap: '24px'
-          }}>
-            {filteredTeachers.map(t => (
-              <div
-                key={t.id}
-                className="card-impeccable card-hover-lift"
-                style={{
-                  padding: '24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                  cursor: 'default'
-                }}
-              >
-                {/* 教师头像、姓名与学科 */}
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '14px' }}>
-                  <div style={{
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    background: 'var(--bg-surface)',
-                    border: '1px solid var(--border-glass)',
-                    flexShrink: 0,
-                    boxShadow: 'var(--shadow-sm)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '3px'
-                  }}>
+          <div className="library-master-grid">
+            {filteredTeachers.map(t => {
+              const isPlaying = playingMasterId === t.id;
+              return (
+                <div
+                  key={t.id}
+                  className="library-master-card"
+                >
+                  <div className="library-photo-viewport">
                     <img
                       src={getSafeAvatarUrl(t.photoUrl, t.id)}
                       alt={t.name}
                       onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg';
+                        (e.currentTarget as HTMLImageElement).src = './photos/1.png';
                       }}
-                      style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                     />
-                  </div>
-
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)', fontWeight: 800 }}>
-                        {t.name}
-                      </h3>
-                      <span className="badge badge-blue">
-                        {t.subject}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--accent-primary)', fontWeight: 600, marginTop: '2px' }}>
-                      {t.style}
+                    <div className="master-gallery-photo-gradient" />
+                    <div className="master-subject-badge-clean">
+                      <Award size={12} />
+                      <span>{t.subject} · 特级名师</span>
                     </div>
                   </div>
-                </div>
 
-                {/* 描述与优点 */}
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-body)', lineHeight: '1.55', marginBottom: '14px', minHeight: '40px' }}>
-                  {t.description}
-                </p>
+                  <div className="master-gallery-body">
+                    <div className="master-card-header">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
+                        <h3 className="master-card-name">{t.name}</h3>
+                        <span style={{ fontSize: '11px', color: 'var(--accent-primary)', fontWeight: 650 }}>
+                          {t.style}
+                        </span>
+                      </div>
+                      <div className="master-card-exp">
+                        {t.experience || `${t.school || '领军中学'} · 骨干教研名师`}
+                      </div>
+                    </div>
 
-                {/* 核心优点标签 */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '18px' }}>
-                  {t.strengths?.slice(0, 2).map((s: string, idx: number) => (
-                    <span key={idx} className="badge badge-cyan" style={{ fontSize: '0.74rem' }}>
-                      <CheckIcon size={11} style={{ marginRight: '3px' }} />
-                      <span>{s}</span>
-                    </span>
-                  ))}
-                </div>
+                    <p className="master-card-quote">
+                      “{t.description || t.quote || '启发式思维建构，带你突破每一个认知断层。'}”
+                    </p>
 
-                {/* 底部行动栏 */}
-                <div style={{
-                  marginTop: 'auto',
-                  paddingTop: '16px',
-                  borderTop: '1px solid var(--border-glass)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '8px'
-                }}>
-                  <button
-                    onClick={() => setActiveTeacher(t)}
-                    className="btn btn-ghost"
-                    style={{ fontSize: '0.82rem', padding: '6px 10px', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}
-                  >
-                    <span>查看画像</span>
-                    <ChevronRightIcon size={13} />
-                  </button>
+                    <div className="master-card-footer-clean">
+                      <button
+                        type="button"
+                        className={`master-voice-btn ${isPlaying ? 'playing' : ''}`}
+                        onClick={() => toggleMasterAudio(t)}
+                        title={isPlaying ? "停止原声" : "试听名师原声"}
+                      >
+                        {isPlaying ? <Volume2 size={12} /> : <VolumeX size={12} />}
+                        <span>{isPlaying ? '原声播报中' : '试听原声'}</span>
+                      </button>
 
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                      onClick={() => onAddToCompose(t.id)}
-                      className="btn btn-secondary"
-                      style={{ fontSize: '0.82rem', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '5px' }}
-                      title="把该老师基因加入合成工坊"
-                    >
-                      <DnaIcon size={14} style={{ color: 'var(--accent-primary)' }} />
-                      <span>基因合成</span>
-                    </button>
-                    <button
-                      onClick={() => onStartChat(t.id)}
-                      className="btn btn-primary"
-                      style={{ fontSize: '0.82rem', padding: '6px 14px', display: 'flex', alignItems: 'center', gap: '5px' }}
-                    >
-                      <MessageSquareIcon size={14} />
-                      <span>1对1辅导</span>
-                    </button>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                          type="button"
+                          onClick={() => setActiveTeacher(t)}
+                          className="btn btn-ghost"
+                          style={{ padding: '6px 10px', fontSize: '11px' }}
+                          title="查看 5D 画像"
+                        >
+                          <span>画像</span>
+                          <ChevronRightIcon size={12} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => onStartChat(t.id)}
+                          className="master-1v1-btn"
+                          style={{ padding: '6px 14px', fontSize: '11px' }}
+                        >
+                          <MessageSquareIcon size={12} />
+                          <span>请教</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
@@ -342,26 +321,25 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                 border: '1px solid var(--border-glass)'
               }}>
                 <div style={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '16px',
+                  width: '96px',
+                  height: '96px',
+                  borderRadius: '18px',
                   overflow: 'hidden',
                   background: 'var(--bg-surface)',
-                  border: '1px solid var(--border-glass)',
+                  border: '1.5px solid var(--border-glass)',
                   flexShrink: 0,
-                  boxShadow: 'var(--shadow-sm)',
+                  boxShadow: 'var(--shadow-md)',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '4px'
+                  justifyContent: 'center'
                 }}>
                   <img
                     src={getSafeAvatarUrl(activeTeacher.photoUrl, activeTeacher.id)}
                     alt={activeTeacher.name}
                     onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg';
+                      (e.currentTarget as HTMLImageElement).src = './photos/1.png';
                     }}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }}
                   />
                 </div>
                 <div style={{ flex: 1 }}>
