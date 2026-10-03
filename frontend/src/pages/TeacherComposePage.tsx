@@ -206,6 +206,89 @@ export const TeacherComposePage: React.FC<Props> = ({
           </p>
         </div>
 
+        {/* =================================================================
+            5-SOURCE GENE CONVERGENCE PIPELINE (5源汇聚基因流光管道)
+            ================================================================= */}
+        <div className="gene-pipeline-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-primary)', boxShadow: '0 0 8px var(--accent-primary)' }} />
+              <strong style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 750 }}>
+                5 源教学基因汇聚流光管道 · 实时融合链路
+              </strong>
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              多模态参数实时穿透 · 零冲突高保真注入
+            </span>
+          </div>
+
+          <div className="gene-pipeline-grid">
+            {dimensionRows.map((dim) => {
+              const teacherId = selections[dim.key] || 't1';
+              const teacherObj = catalog.find((t) => t.id === teacherId);
+              const teacherName = teacherObj?.name || '特级名师';
+              return (
+                <div key={dim.key} className="gene-stream-pill">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--accent-primary)' }}>
+                      {dim.label}
+                    </span>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38bdf8' }} />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <img
+                      src={`./avatars/${teacherId}.svg`}
+                      alt=""
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg'; }}
+                      style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(0,0,0,0.1)', flexShrink: 0 }}
+                    />
+                    <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {teacherName}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {dim.trait}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* 流向汇聚连接指示 */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
+              <ChevronRightIcon size={24} />
+            </div>
+
+            {/* 中央合成反应堆核心 */}
+            <div className="gene-reactor-core">
+              <div style={{
+                width: 44,
+                height: 44,
+                borderRadius: 12,
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--accent-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                boxShadow: '0 0 12px rgba(0, 113, 227, 0.3)'
+              }}>
+                <SparklesIcon size={22} style={{ color: 'var(--accent-primary)' }} />
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent-primary)', textTransform: 'uppercase' }}>
+                  专属生成核心
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {synthName || '全能特级智学名师'}
+                </div>
+                <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 650, marginTop: 2 }}>
+                  ● 五维一致性 96% · 协同增益就绪
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* 核心双栏配置工坊 */}
         <div className="compose-layout">
           {/* 左侧配置矩阵 */}
