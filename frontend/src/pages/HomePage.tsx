@@ -21,9 +21,14 @@ import {
   Award,
   Copy,
   Check,
+  Volume2,
+  VolumeX,
+  Play,
+  Users,
 } from 'lucide-react';
 import { RadarChart5D } from '../components/RadarChart5D';
 import { prefersReducedMotion, useHeroEntrance, useCountUp, useCountUpFloat } from '../lib/gsap';
+import { speechService } from '../services/speech';
 import { monitorApi } from '../services/eduApi';
 import { getLearnerName, readDiagnosis, type StoredDiagnosis } from '../services/learnerStore';
 
@@ -89,6 +94,109 @@ function renderKatexHtml(latex: string, displayMode = false): string {
   }
 }
 
+interface FeaturedMaster {
+  id: string;
+  name: string;
+  title: string;
+  subject: string;
+  photoUrl: string;
+  quote: string;
+  tag: string;
+  badge: string;
+  experience: string;
+}
+
+const FEATURED_MASTERS: FeaturedMaster[] = [
+  {
+    id: 't1',
+    name: '王崇林',
+    title: '特级教师 · 金牌教练',
+    subject: '高中数学',
+    photoUrl: './photos/1.png',
+    quote: '构造对称差函数，化复杂的二元极值约束直接降维至一元单调性判定。',
+    tag: '思维启发 · 竞赛公理',
+    badge: '全国特级教师',
+    experience: '32年教龄 · 培养14名CMO金牌'
+  },
+  {
+    id: 't2',
+    name: '李清韵',
+    title: '特级教师 · 高考阅卷组长',
+    subject: '高中语文',
+    photoUrl: './photos/2.png',
+    quote: '由文入道，品读意象深处的家国情怀，以哲学思辨重塑高考文思。',
+    tag: '情境文学 · 审美哲思',
+    badge: '国家级教学名师',
+    experience: '28年教龄 · 权威作文评卷人'
+  },
+  {
+    id: 't3',
+    name: '张文斌',
+    title: '正高级教师 · 奥赛导师',
+    subject: '高中物理',
+    photoUrl: './photos/3.png',
+    quote: '抓住能量守恒与电磁感应双棒动量定理，拨开繁杂计算直击物理本源。',
+    tag: '模型归纳 · 严谨推演',
+    badge: '全国正高级教师',
+    experience: '29年教龄 · CPhO指导教练'
+  },
+  {
+    id: 't4',
+    name: '赵雅婷',
+    title: '特级教师 · 跨文化思辨',
+    subject: '学科英语',
+    photoUrl: './photos/4.png',
+    quote: '拆解长难句语法骨架，在语篇建构中领会纯正原版逻辑与思辨精髓。',
+    tag: '原版思辨 · 语篇建构',
+    badge: '国际TESOL专家',
+    experience: '22年教龄 · 语法与读写带头人'
+  },
+  {
+    id: 't5',
+    name: '周怀瑾',
+    title: '特级教师 · 实验名师',
+    subject: '高中化学',
+    photoUrl: './photos/5.png',
+    quote: '从微观粒子运动直击宏观化学平衡转化率，平衡移动一式了然。',
+    tag: '宏微结合 · 探究实验',
+    badge: '化学学科带头人',
+    experience: '26年教龄 · 命题研究专家'
+  },
+  {
+    id: 't6',
+    name: '刘思齐',
+    title: '骨干名师 · 历史领军',
+    subject: '高中历史',
+    photoUrl: './photos/6.png',
+    quote: '唯物史观穿透时空，探寻生产力与社会发展的内在逻辑与时代回响。',
+    tag: '唯物史观 · 时空观念',
+    badge: '特级历史名师',
+    experience: '25年教龄 · 史学研究学者'
+  },
+  {
+    id: 't7',
+    name: '韩雪松',
+    title: '特级教师 · 综合大题',
+    subject: '高中生物',
+    photoUrl: './photos/7.png',
+    quote: '生命系统结构与功能观，破解遗传概率与现代生物工程压轴大题。',
+    tag: '生命观念 · 科学探究',
+    badge: '竞赛金牌导师',
+    experience: '24年教龄 · 生物大题破局专家'
+  },
+  {
+    id: 't8',
+    name: '高志伟',
+    title: '金牌教练 · 幽默秒杀',
+    subject: '高中数学',
+    photoUrl: './photos/8.png',
+    quote: '秒杀不是投机，而是建立在极致公理直觉之上的高维降维打击。',
+    tag: '激情幽默 · 极简破局',
+    badge: '数学思维拓荒者',
+    experience: '20年教龄 · 秒杀解题法创始人'
+  },
+];
+
 export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   
@@ -104,6 +212,21 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   const [focusMinutes, setFocusMinutes] = useState<number>(82);
   const [diagnosis, setDiagnosis] = useState<StoredDiagnosis | null>(null);
   const [copiedFormula, setCopiedFormula] = useState<boolean>(false);
+  const [isHeroAudioPlaying, setIsHeroAudioPlaying] = useState<boolean>(false);
+
+  const toggleHeroAudio = () => {
+    if (isHeroAudioPlaying) {
+      speechService.stop();
+      setIsHeroAudioPlaying(false);
+    } else {
+      setIsHeroAudioPlaying(true);
+      speechService.speak(
+        "同学你好！我是你的数学特级名师王崇林。任何复杂极值与导数综合难题，我带你由浅入深，从草稿纸第一步开始剖析，咱们一起攻克！",
+        () => setIsHeroAudioPlaying(true),
+        () => setIsHeroAudioPlaying(false)
+      );
+    }
+  };
 
   const animatedPrecision = useCountUpFloat(0.1, 1.2, true, 1);
   const animatedConvergence = useCountUpFloat(1.2, 1.4, true, 1);
@@ -294,9 +417,85 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             </button>
           </div>
 
-          {/* Apple Studio Display Bezel: The Cognitive Folio (对开书卷硬件展台) */}
-          <div className="apple-studio-bezel">
-            <div className="apple-studio-bezel-inner">
+          {/* 60/40 Asymmetric Stage: Left Master Avatar Broadcast Bay + Right Cognitive Folio */}
+          <div className="hero-asymmetric-stage">
+            {/* Left Wing: 4K Master Teacher Digital Human Broadcast Bay */}
+            <div className="hero-avatar-bay">
+              <div className="hero-avatar-media">
+                <img
+                  src="./demo_videos/merged_poster.jpg"
+                  alt="4K特级名师演播舱"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = './photos/1.png';
+                  }}
+                />
+                <div className="hero-avatar-overlay" />
+                <div className="hero-avatar-live-chip">
+                  <span className="hero-avatar-live-dot" />
+                  <span>4K 演播实况 · 广播中</span>
+                </div>
+
+                {/* Audio voice toggle floating pill */}
+                <button
+                  type="button"
+                  className={`hero-avatar-audio-toggle ${isHeroAudioPlaying ? 'playing' : ''}`}
+                  onClick={toggleHeroAudio}
+                  title={isHeroAudioPlaying ? "静音特级教师原声" : "开启特级名师原声解惑"}
+                >
+                  {isHeroAudioPlaying ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                  <span style={{ fontSize: '12px' }}>
+                    {isHeroAudioPlaying ? '特级原声解惑中...' : '点击聆听特级名师原声'}
+                  </span>
+                  {isHeroAudioPlaying && (
+                    <span className="hero-eq-bars">
+                      <span className="hero-eq-bar" />
+                      <span className="hero-eq-bar" />
+                      <span className="hero-eq-bar" />
+                      <span className="hero-eq-bar" />
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {/* Bay Metadata & Status */}
+              <div className="hero-avatar-info">
+                <div>
+                  <h3 className="hero-avatar-teacher-name">
+                    苏步青门下 · 王特级
+                    <span className="hero-avatar-tag">数学正高级 / 功勋名师</span>
+                  </h3>
+                  <p className="hero-avatar-sub">“不给答案，只在思维断点处为你亮起一盏灯”</p>
+                </div>
+
+                <div className="hero-avatar-actions">
+                  <button
+                    type="button"
+                    className="apple-btn-pill-primary"
+                    style={{ flex: 1, height: '38px', fontSize: '13px' }}
+                    onClick={() => onNavigate('studio')}
+                  >
+                    <Play size={13} fill="currentColor" />
+                    <span>即席生成微课</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="apple-btn-pill-secondary"
+                    style={{ height: '38px', padding: '0 14px', fontSize: '13px' }}
+                    onClick={() => {
+                      const el = document.getElementById('grand-master-gallery');
+                      el?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
+                    <Users size={13} />
+                    <span>选聘名师</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Wing: Apple Studio Display Bezel: The Cognitive Folio (对开书卷硬件展台) */}
+            <div className="apple-studio-bezel" style={{ marginTop: 0 }}>
+              <div className="apple-studio-bezel-inner">
               
               {/* Window Controls Topbar */}
               <div className="apple-studio-topbar">
@@ -463,7 +662,112 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
             </div>
           </div>
+        </div>
+        {/* End of hero-asymmetric-stage */}
 
+      </div>
+    </section>
+
+      {/* =================================================================
+          ACT I.5: THE GRAND MASTER GALLERY (全国特级正高级名师殿堂)
+          ================================================================= */}
+      <section id="grand-master-gallery" className="master-gallery-section apple-fullbleed-band--dark">
+        <div className="apple-stage-container">
+          <div className="apple-chapter-ribbon" style={{ marginBottom: 12 }}>
+            <Users size={13} />
+            <span>HALL OF MASTERS · 全国特级正高级名师殿堂</span>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 20, marginBottom: 32 }}>
+            <div>
+              <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', textAlign: 'left', margin: 0 }}>
+                汇聚全国九大学科领军名师<br />
+                <span>每一位名师，皆具 25 年以上执教智慧资产</span>
+              </h2>
+              <p className="apple-pro-subtitle" style={{ textAlign: 'left', marginTop: 10, marginBottom: 0, maxWidth: 640 }}>
+                融合特级教师的解题心法、提问艺术与板书风骨。挑选专属领航导师，开启点石成金的思维觉醒之旅。
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                type="button"
+                className="reel-nav-btn"
+                onClick={() => {
+                  const el = document.getElementById('master-cards-track');
+                  el?.scrollBy({ left: -340, behavior: 'smooth' });
+                }}
+                title="向左滚动名师"
+                aria-label="向左滚动名师"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                type="button"
+                className="reel-nav-btn"
+                onClick={() => {
+                  const el = document.getElementById('master-cards-track');
+                  el?.scrollBy({ left: 340, behavior: 'smooth' });
+                }}
+                title="向右滚动名师"
+                aria-label="向右滚动名师"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Master Cards Horizontal Reel */}
+          <div id="master-cards-track" className="master-gallery-scroll-container">
+            {FEATURED_MASTERS.map((master) => (
+              <div key={master.id} className="master-gallery-card">
+                <div className="master-gallery-photo-wrap">
+                  <img
+                    src={master.photoUrl}
+                    alt={master.name}
+                    className="master-gallery-photo"
+                    loading="lazy"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = './photos/1.png';
+                    }}
+                  />
+                  <div className="master-gallery-photo-gradient" />
+                  <div className="master-gallery-badge-row">
+                    <span className="master-subject-badge">{master.subject}</span>
+                    <span className="master-title-badge">{master.title}</span>
+                  </div>
+                  <div className="master-school-pill">{master.badge}</div>
+                </div>
+
+                <div className="master-gallery-body">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                    <h3 className="master-card-name">{master.name}</h3>
+                    <span className="master-style-tag">{master.tag}</span>
+                  </div>
+
+                  <p className="master-card-quote">“{master.quote}”</p>
+
+                  <div className="master-pedagogy-row">
+                    <span className="pedagogy-chip">{master.experience}</span>
+                  </div>
+
+                  <div className="master-card-footer">
+                    <div className="font-mono-telemetry" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                      <span>名师资质 </span>
+                      <strong style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>全国金牌</strong>
+                    </div>
+                    <button
+                      type="button"
+                      className="master-1v1-btn"
+                      onClick={() => onNavigate('studio')}
+                    >
+                      <span>向TA请教</span>
+                      <ArrowRight size={13} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -750,6 +1054,31 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                     +84% 思维自驱力
                   </span>
               </div>
+
+                {/* 4K Digital Classroom Visual HUD Banner */}
+                <div className="hud-visual-banner" style={{ marginBottom: 20 }}>
+                  <img
+                    src="./demo_videos/merged_poster.jpg"
+                    alt="4K微课演播实况预览"
+                    className="hud-visual-banner-img"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = './photos/2.png';
+                    }}
+                  />
+                  <div className="hud-visual-banner-overlay" />
+                  <div className="hud-visual-badge-floating">
+                    <span className="hero-avatar-live-dot" />
+                    <span>4K 虚拟名师板书同步演算 · 帧级数字人实时驱动</span>
+                  </div>
+                  <div style={{ position: 'absolute', bottom: 16, left: 16, right: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 3 }}>
+                    <span style={{ fontSize: '13px', fontWeight: 650, color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>
+                      王特级 · 《导数压轴极值点偏移巧构造》沉浸式示范课
+                    </span>
+                    <span className="font-mono-telemetry" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)', background: 'rgba(0,0,0,0.5)', padding: '2px 8px', borderRadius: 6, backdropFilter: 'blur(8px)' }}>
+                      时长 03:42 · 1080P/60
+                    </span>
+                  </div>
+                </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
                   <div style={{ background: 'var(--bg-surface)', borderRadius: 16, padding: 20, borderLeft: '4px solid var(--accent-primary)', border: '1px solid var(--border-glass)' }}>

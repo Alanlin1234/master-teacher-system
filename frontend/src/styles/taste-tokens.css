@@ -1149,3 +1149,482 @@
   box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6), 0 0 24px -4px rgba(59, 130, 246, 0.2);
   border-color: rgba(59, 130, 246, 0.45);
 }
+
+/* ==========================================================================
+   HERO 60/40 ASYMMETRIC STAGE (Awwwards 60/40 Stage)
+   ========================================================================== */
+.hero-asymmetric-stage {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 32px;
+  align-items: stretch;
+  margin-top: 36px;
+}
+
+@media (max-width: 1080px) {
+  .hero-asymmetric-stage {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+.hero-avatar-bay {
+  background: var(--bg-surface);
+  border-radius: 20px;
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.5), 0 0 24px -4px rgba(59, 130, 246, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-avatar-bay:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.65), 0 0 32px -4px rgba(59, 130, 246, 0.25);
+}
+
+.hero-avatar-media {
+  position: relative;
+  width: 100%;
+  height: 290px;
+  overflow: hidden;
+  background: #020617;
+}
+
+.hero-avatar-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-avatar-bay:hover .hero-avatar-media img {
+  transform: scale(1.03);
+}
+
+.hero-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 12, 20, 0.1) 0%, rgba(8, 12, 20, 0.4) 60%, var(--bg-surface) 100%);
+  pointer-events: none;
+}
+
+[data-theme="light"] .hero-avatar-overlay {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.4) 60%, var(--bg-surface) 100%);
+}
+
+.hero-avatar-info {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justifyContent: space-between;
+  flex: 1;
+}
+
+/* ==========================================================================
+   GRAND MASTER GALLERY (全国特级名师名人堂画廊)
+   ========================================================================== */
+.master-gallery-section {
+  padding: 72px 0 88px;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-app);
+}
+
+.master-gallery-scroll-container {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 16px 4px 32px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.2) transparent;
+}
+
+.master-gallery-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.master-gallery-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.25);
+  border-radius: 9999px;
+}
+
+.master-gallery-card {
+  flex: 0 0 320px;
+  scroll-snap-align: start;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.master-gallery-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow: 0 28px 64px -12px rgba(0, 0, 0, 0.65), 0 0 32px -4px rgba(59, 130, 246, 0.25);
+}
+
+.master-gallery-photo-wrap {
+  width: 100%;
+  height: 270px;
+  position: relative;
+  background: #020617;
+  overflow: hidden;
+}
+
+.master-gallery-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.master-gallery-card:hover .master-gallery-photo-wrap img {
+  transform: scale(1.05);
+}
+
+.master-gallery-photo-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8,12,20,0) 40%, rgba(8,12,20,0.7) 80%, var(--bg-surface) 100%);
+  pointer-events: none;
+}
+
+[data-theme="light"] .master-gallery-photo-gradient {
+  background: linear-gradient(180deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.7) 80%, var(--bg-surface) 100%);
+}
+
+.master-gallery-body {
+  padding: 18px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ==========================================================================
+   HERO AVATAR BAY & DIGITAL HUMAN HUD
+   ========================================================================== */
+.hero-avatar-live-chip {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(8, 12, 20, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 650;
+  color: #ffffff;
+  z-index: 2;
+  letter-spacing: 0.03em;
+}
+
+.hero-avatar-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse-dot 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.hero-avatar-audio-toggle {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  justifyContent: center;
+  gap: 8px;
+  background: rgba(8, 12, 20, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-avatar-audio-toggle:hover {
+  background: rgba(0, 113, 227, 0.85);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.hero-avatar-audio-toggle.playing {
+  background: linear-gradient(135deg, rgba(0, 113, 227, 0.9), rgba(59, 130, 246, 0.85));
+  border-color: rgba(96, 165, 250, 0.6);
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.35);
+}
+
+.hero-eq-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+  margin-left: 4px;
+}
+
+.hero-eq-bar {
+  width: 2.5px;
+  background: #ffffff;
+  border-radius: 1px;
+  animation: eq-bounce 0.8s infinite ease-in-out alternate;
+}
+
+.hero-eq-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+.hero-eq-bar:nth-child(2) { height: 85%; animation-delay: 0.3s; }
+.hero-eq-bar:nth-child(3) { height: 60%; animation-delay: 0.15s; }
+.hero-eq-bar:nth-child(4) { height: 100%; animation-delay: 0.4s; }
+
+@keyframes eq-bounce {
+  0% { height: 25%; }
+  100% { height: 100%; }
+}
+
+.hero-avatar-teacher-name {
+  font-size: 16px;
+  font-weight: 750;
+  color: var(--text-main);
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hero-avatar-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(0, 113, 227, 0.12);
+  color: var(--accent-primary);
+  border: 1px solid rgba(0, 113, 227, 0.25);
+}
+
+.hero-avatar-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.hero-avatar-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* ==========================================================================
+   MASTER GALLERY BADGES & CARDS
+   ========================================================================== */
+.master-gallery-badge-row {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.master-subject-badge {
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 750;
+  padding: 3px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.4);
+}
+
+.master-title-badge {
+  background: rgba(8, 12, 20, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #f1f5f9;
+  font-size: 11px;
+  font-weight: 650;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.master-school-pill {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  background: rgba(8, 12, 20, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 2;
+}
+
+.master-card-name {
+  font-size: 17px;
+  font-weight: 750;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.master-style-tag {
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--accent-primary);
+  background: rgba(0, 113, 227, 0.08);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 113, 227, 0.18);
+}
+
+.master-card-quote {
+  font-size: 12px;
+  color: var(--text-body);
+  line-height: 1.5;
+  margin: 0 0 12px;
+  font-style: italic;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 36px;
+}
+
+.master-pedagogy-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.pedagogy-chip {
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border-glass);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.master-card-footer {
+  display: flex;
+  align-items: center;
+  justifyContent: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-glass);
+  margin-top: auto;
+}
+
+.master-1v1-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--accent-primary);
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 650;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
+}
+
+.master-1v1-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.4);
+}
+
+/* ==========================================================================
+   HUD VISUAL SCENARIO BANNERS FOR 4-ACT PIPELINE
+   ========================================================================== */
+.hud-visual-banner {
+  border-radius: 16px;
+  border: 1px solid var(--border-glass);
+  background: #020617;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.4);
+  height: 200px;
+}
+
+.hud-visual-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  opacity: 0.9;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-visual-banner:hover .hud-visual-banner-img {
+  transform: scale(1.03);
+}
+
+.hud-visual-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 12, 20, 0.2) 0%, rgba(8, 12, 20, 0.6) 65%, rgba(8, 12, 20, 0.92) 100%);
+  pointer-events: none;
+}
+
+.hud-visual-badge-floating {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(8, 12, 20, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 650;
+  color: #ffffff;
+  z-index: 2;
+}
