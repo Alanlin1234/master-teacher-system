@@ -21,9 +21,13 @@ interface Props {
   onAddToCompose: (teacherId: string) => void;
 }
 
-const getSafeAvatarUrl = (_url?: string, defaultId: string = '1') => {
-  const num = defaultId.replace(/\D/g, '') || '1';
-  return `./photos/${num}.png`;
+const getSafeAvatarUrl = (url?: string, defaultId: string = '1') => {
+  if (url && (url.includes('.svg') || url.includes('avatars/'))) {
+    return url.startsWith('/') ? '.' + url : url;
+  }
+  const rawNum = parseInt(defaultId.replace(/\D/g, ''), 10);
+  const safeNum = isNaN(rawNum) || rawNum < 1 ? 1 : ((rawNum - 1) % 10) + 1;
+  return `./avatars/t${safeNum}.svg`;
 };
 
 export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompose }) => {
@@ -172,7 +176,7 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                       src={getSafeAvatarUrl(t.photoUrl, t.id)}
                       alt={t.name}
                       onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = './photos/1.png';
+                        (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg';
                       }}
                     />
                     <div className="master-gallery-photo-gradient" />
@@ -337,9 +341,9 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
                     src={getSafeAvatarUrl(activeTeacher.photoUrl, activeTeacher.id)}
                     alt={activeTeacher.name}
                     onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = './photos/1.png';
+                      (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg';
                     }}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '6px' }}
                   />
                 </div>
                 <div style={{ flex: 1 }}>

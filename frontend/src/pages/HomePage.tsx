@@ -112,7 +112,7 @@ const FEATURED_MASTERS: FeaturedMaster[] = [
     name: '王崇林',
     title: '特级教师 · 金牌教练',
     subject: '高中数学',
-    photoUrl: './photos/1.png',
+    photoUrl: './avatars/t1.svg',
     quote: '构造对称差函数，化复杂的二元极值约束直接降维至一元单调性判定。',
     tag: '思维启发 · 竞赛公理',
     badge: '全国特级教师',
@@ -123,7 +123,7 @@ const FEATURED_MASTERS: FeaturedMaster[] = [
     name: '李清韵',
     title: '特级教师 · 高考阅卷组长',
     subject: '高中语文',
-    photoUrl: './photos/2.png',
+    photoUrl: './avatars/t2.svg',
     quote: '由文入道，品读意象深处的家国情怀，以哲学思辨重塑高考文思。',
     tag: '情境文学 · 审美哲思',
     badge: '国家级教学名师',
@@ -134,7 +134,7 @@ const FEATURED_MASTERS: FeaturedMaster[] = [
     name: '张文斌',
     title: '正高级教师 · 奥赛导师',
     subject: '高中物理',
-    photoUrl: './photos/3.png',
+    photoUrl: './avatars/t3.svg',
     quote: '抓住能量守恒与电磁感应双棒动量定理，拨开繁杂计算直击物理本源。',
     tag: '模型归纳 · 严谨推演',
     badge: '全国正高级教师',
@@ -145,7 +145,7 @@ const FEATURED_MASTERS: FeaturedMaster[] = [
     name: '赵雅婷',
     title: '特级教师 · 跨文化思辨',
     subject: '学科英语',
-    photoUrl: './photos/4.png',
+    photoUrl: './avatars/t4.svg',
     quote: '拆解长难句语法骨架，在语篇建构中领会纯正原版逻辑与思辨精髓。',
     tag: '原版思辨 · 语篇建构',
     badge: '国际TESOL专家',
@@ -156,7 +156,7 @@ const FEATURED_MASTERS: FeaturedMaster[] = [
     name: '周怀瑾',
     title: '特级教师 · 实验名师',
     subject: '高中化学',
-    photoUrl: './photos/5.png',
+    photoUrl: './avatars/t5.svg',
     quote: '从微观粒子运动直击宏观化学平衡转化率，平衡移动一式了然。',
     tag: '宏微结合 · 探究实验',
     badge: '化学学科带头人',
@@ -167,7 +167,7 @@ const FEATURED_MASTERS: FeaturedMaster[] = [
     name: '刘思齐',
     title: '骨干名师 · 历史领军',
     subject: '高中历史',
-    photoUrl: './photos/6.png',
+    photoUrl: './avatars/t6.svg',
     quote: '唯物史观穿透时空，探寻生产力与社会发展的内在逻辑与时代回响。',
     tag: '唯物史观 · 时空观念',
     badge: '特级历史名师',
@@ -178,7 +178,7 @@ const FEATURED_MASTERS: FeaturedMaster[] = [
     name: '韩雪松',
     title: '特级教师 · 综合大题',
     subject: '高中生物',
-    photoUrl: './photos/7.png',
+    photoUrl: './avatars/t7.svg',
     quote: '生命系统结构与功能观，破解遗传概率与现代生物工程压轴大题。',
     tag: '生命观念 · 科学探究',
     badge: '竞赛金牌导师',
@@ -189,7 +189,7 @@ const FEATURED_MASTERS: FeaturedMaster[] = [
     name: '高志伟',
     title: '金牌教练 · 幽默秒杀',
     subject: '高中数学',
-    photoUrl: './photos/8.png',
+    photoUrl: './avatars/t8.svg',
     quote: '秒杀不是投机，而是建立在极致公理直觉之上的高维降维打击。',
     tag: '激情幽默 · 极简破局',
     badge: '数学思维拓荒者',
@@ -649,7 +649,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       alt={master.name}
                       loading="lazy"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = './photos/1.png';
+                        (e.target as HTMLImageElement).src = './avatars/t1.svg';
                       }}
                     />
                     <div className="master-gallery-photo-gradient" />
@@ -982,7 +982,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                     alt="4K微课演播实况预览"
                     className="hud-visual-banner-img"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = './photos/2.png';
+                      (e.target as HTMLImageElement).src = './demo_videos/merged_poster.jpg';
                     }}
                   />
                   <div className="hud-visual-banner-overlay" />

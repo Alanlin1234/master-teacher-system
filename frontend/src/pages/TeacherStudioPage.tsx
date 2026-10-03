@@ -69,12 +69,12 @@ export const TeacherStudioPage: React.FC<Props> = ({
   const [playingTeacherId, setPlayingTeacherId] = useState<string | null>(null);
 
   const getSafeAvatarUrl = (photoUrl?: string, id?: string) => {
-    if (photoUrl && photoUrl.trim() !== '') {
+    if (photoUrl && (photoUrl.includes('.svg') || photoUrl.includes('avatars/'))) {
       return photoUrl.startsWith('/') ? '.' + photoUrl : photoUrl;
     }
     const num = id ? parseInt(id.replace(/\D/g, ''), 10) : 1;
-    const safeNum = isNaN(num) || num < 1 ? 1 : ((num - 1) % 17) + 1;
-    return `./photos/${safeNum}.png`;
+    const safeNum = isNaN(num) || num < 1 ? 1 : ((num - 1) % 10) + 1;
+    return `./avatars/t${safeNum}.svg`;
   };
 
   const toggleTeacherAudio = (e: React.MouseEvent, t: any) => {
@@ -187,9 +187,9 @@ export const TeacherStudioPage: React.FC<Props> = ({
       voiceTrained: true,
       isCustom: false
     })) : [
-      { id: 'wang_chonglin_avatar', name: '王崇林·理科名师模型', desc: '4K超清·严谨启发式声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './photos/1.png', voiceTrained: true, isCustom: false },
-      { id: 'li_qingyun_avatar', name: '李清韵·文科名师模型', desc: '4K超清·温润典雅声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './photos/2.png', voiceTrained: true, isCustom: false },
-      { id: 'gao_zhiwei_avatar', name: '高志伟·幽默竞赛模型', desc: '4K超清·激情风趣声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './photos/3.png', voiceTrained: true, isCustom: false }
+      { id: 'wang_chonglin_avatar', name: '王崇林·理科名师模型', desc: '4K超清·严谨启发式声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './avatars/t1.svg', voiceTrained: true, isCustom: false },
+      { id: 'li_qingyun_avatar', name: '李清韵·文科名师模型', desc: '4K超清·温润典雅声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './avatars/t2.svg', voiceTrained: true, isCustom: false },
+      { id: 'gao_zhiwei_avatar', name: '高志伟·幽默竞赛模型', desc: '4K超清·激情风趣声线·已完成声纹微调', videoUrl: './demo_videos/merged.mp4', posterUrl: './avatars/t3.svg', voiceTrained: true, isCustom: false }
     ]),
     ...customModels
   ];
@@ -348,7 +348,7 @@ export const TeacherStudioPage: React.FC<Props> = ({
                       <img
                         src={getSafeAvatarUrl(t.photoUrl, t.id)}
                         alt={t.name}
-                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = './photos/1.png'; }}
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = './avatars/t1.svg'; }}
                       />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
