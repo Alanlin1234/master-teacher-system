@@ -1726,3 +1726,187 @@
   flex-wrap: wrap;
   gap: 16px;
 }
+
+/* ==========================================================================
+   ACT III & ACT II: DUAL-TRACK THINKING PATH & COGNITIVE ASCENT CHARTS
+   ========================================================================== */
+.thinking-path-canvas {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="light"] .thinking-path-canvas {
+  background: #ffffff;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.08);
+}
+
+.thinking-dual-track {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .thinking-dual-track {
+    grid-template-columns: 1fr;
+  }
+}
+
+.thinking-track-card {
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.thinking-track-card--master {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 113, 227, 0.12) 0%, rgba(15, 23, 42, 0.6) 100%);
+  border: 1.5px solid rgba(0, 113, 227, 0.35);
+  box-shadow: 0 8px 30px -6px rgba(0, 113, 227, 0.2);
+}
+
+[data-theme="light"] .thinking-track-card--master {
+  background: radial-gradient(circle at 50% 0%, rgba(219, 234, 254, 0.8) 0%, rgba(248, 250, 252, 0.95) 100%);
+  border-color: rgba(0, 113, 227, 0.25);
+  box-shadow: 0 8px 24px -4px rgba(0, 113, 227, 0.1);
+}
+
+.thinking-track-card--baseline {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px dashed rgba(148, 163, 184, 0.3);
+  opacity: 0.88;
+}
+
+[data-theme="light"] .thinking-track-card--baseline {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Nodes and Flow */
+.thinking-flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  margin: 16px 0;
+}
+
+.thinking-flow-node {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-glass);
+  position: relative;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.thinking-flow-node:hover {
+  transform: translateX(4px);
+}
+
+.thinking-flow-node--active {
+  border-color: var(--accent-primary);
+  background: rgba(0, 113, 227, 0.08);
+}
+
+.thinking-flow-node--failed {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.06);
+}
+
+.node-icon-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justifyContent: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.node-icon-bubble--master {
+  background: rgba(0, 113, 227, 0.2);
+  color: var(--accent-primary);
+  border: 1px solid rgba(0, 113, 227, 0.3);
+}
+
+.node-icon-bubble--baseline {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.node-icon-bubble--failed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Dynamic Retention Curve Panel */
+.retention-curve-box {
+  background: var(--bg-surface-elevated);
+  border-radius: 14px;
+  border: 1px solid var(--border-glass);
+  padding: 14px 16px;
+  margin-top: 14px;
+}
+
+.retention-curve-header {
+  display: flex;
+  align-items: center;
+  justifyContent: space-between;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+/* Stage 4 Ascent Spectrum */
+.stage4-ascent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+@media (max-width: 640px) {
+  .stage4-ascent-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stage4-ascent-step {
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.stage4-ascent-step:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.stage4-ascent-step.tier-3 {
+  border-color: rgba(251, 191, 36, 0.4);
+  background: radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.1) 0%, var(--bg-surface) 100%);
+}
+

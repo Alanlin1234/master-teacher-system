@@ -25,6 +25,7 @@ import {
   VolumeX,
   Play,
   Users,
+  Network,
 } from 'lucide-react';
 import { RadarChart5D } from '../components/RadarChart5D';
 import { prefersReducedMotion, useHeroEntrance, useCountUp, useCountUpFloat } from '../lib/gsap';
@@ -215,6 +216,11 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   const [isHeroAudioPlaying, setIsHeroAudioPlaying] = useState<boolean>(false);
 
   const [playingMasterId, setPlayingMasterId] = useState<string | null>(null);
+
+  const safeMasterRetention = useMemo(() => {
+    const avg = (scores.style + scores.method + scores.strengths + scores.personality + scores.communication) / 5;
+    return Math.min(98, Math.max(82, Math.round(76 + avg * 22)));
+  }, [scores]);
 
   const toggleHeroAudio = () => {
     if (isHeroAudioPlaying) {
@@ -1000,33 +1006,77 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
-                  <div style={{ background: 'var(--bg-surface)', borderRadius: 16, padding: 20, borderLeft: '4px solid var(--accent-primary)', border: '1px solid var(--border-glass)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: 10 }}>
-                      <strong style={{ color: 'var(--accent-primary)' }}>专属名师：启发构造对称差函数 F(x) = f(x) - f(2x₀ - x)</strong>
-                      <span className="font-mono-telemetry" style={{ color: 'var(--accent-primary)', fontWeight: 750 }}>认知阶梯 98%</span>
-                </div>
-                    <div className="derivation-spectrum-bar" />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-muted)', marginTop: 10, fontWeight: 600 }}>
-                      <span>① 发现对称中心</span>
-                      <span>② 反问测试点</span>
-                      <span>③ 单调单射证明</span>
-              </div>
-                </div>
+                {/* Visual Thinking Ascent Spectrum & Contrast Chart */}
+                <div style={{ marginBottom: 24 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span className="apple-status-dot apple-status-dot--primary" />
+                      名师微课三阶思维攀登图谱 (Cognitive Ascent Ladder)
+                    </span>
+                    <span className="badge badge-cyan font-mono-telemetry" style={{ fontSize: '11px' }}>
+                      登顶自悟率 98%
+                    </span>
+                  </div>
 
-                  <div style={{ background: 'var(--bg-surface)', borderRadius: 16, padding: 20, borderLeft: '4px solid #94a3b8', border: '1px solid var(--border-glass)', opacity: 0.85 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: 10 }}>
-                      <strong style={{ color: 'var(--text-muted)' }}>通用基准 AI：暴力联立方程硬套对数均值公式</strong>
-                      <span className="font-mono-telemetry" style={{ color: 'var(--text-muted)', fontWeight: 700 }}>遗忘率极高</span>
-              </div>
-                    <div style={{ height: 6, background: '#94a3b8', borderRadius: 3, opacity: 0.3 }} />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-muted)', marginTop: 10 }}>
-                      <span>① 硬套公式</span>
-                      <span>② 直接给答案</span>
-                      <span>✕ 无思考启发</span>
-            </div>
-          </div>
-          </div>
+                  <div className="stage4-ascent-grid">
+                    <div className="stage4-ascent-step">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--accent-primary)' }}>阶梯 ①</span>
+                        <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>阻滞突破</span>
+                      </div>
+                      <div style={{ fontSize: '13px', fontWeight: 750, color: 'var(--text-main)' }}>洞察极值对称</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.4 }}>锁定 x₀=√(a/2) 两侧切线斜率异同</div>
+                      <div style={{ height: 4, background: 'rgba(0,113,227,0.2)', borderRadius: 2, marginTop: 4 }}>
+                        <div style={{ width: '38%', height: '100%', background: 'var(--accent-primary)', borderRadius: 2 }} />
+                      </div>
+                    </div>
+
+                    <div className="stage4-ascent-step">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--accent-primary)' }}>阶梯 ②</span>
+                        <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>反问搭桥</span>
+                      </div>
+                      <div style={{ fontSize: '13px', fontWeight: 750, color: 'var(--text-main)' }}>构造对称差函数</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.4 }}>F(x) = f(x) - f(2x₀ - x) 降维单调性</div>
+                      <div style={{ height: 4, background: 'rgba(0,113,227,0.2)', borderRadius: 2, marginTop: 4 }}>
+                        <div style={{ width: '74%', height: '100%', background: 'var(--accent-primary)', borderRadius: 2 }} />
+                      </div>
+                    </div>
+
+                    <div className="stage4-ascent-step tier-3">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 750, color: '#f59e0b' }}>阶梯 ③ 🏆</span>
+                        <span style={{ fontSize: '10px', color: '#f59e0b', fontWeight: 700 }}>举一反三</span>
+                      </div>
+                      <div style={{ fontSize: '13px', fontWeight: 750, color: 'var(--text-main)' }}>公理直觉内化</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.4 }}>变式秒杀，考点彻底化为本能记忆</div>
+                      <div style={{ height: 4, background: 'rgba(245,158,11,0.2)', borderRadius: 2, marginTop: 4 }}>
+                        <div style={{ width: '100%', height: '100%', background: '#f59e0b', borderRadius: 2 }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Generic AI Contrast Bar */}
+                  <div style={{
+                    padding: '12px 18px',
+                    borderRadius: 14,
+                    background: 'var(--bg-surface)',
+                    border: '1px dashed var(--border-glass)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 12
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: '#94a3b8' }}>⚠️ 通用基准 AI 灌输对照：</span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>直接硬套对数均值公式 ➔ 零思考阶梯 ➔ 遇新题立即失分</span>
+                    </div>
+                    <span style={{ fontSize: '11px', color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '2px 8px', borderRadius: 6, fontWeight: 700 }}>
+                      留存仅 14%
+                    </span>
+                  </div>
+                </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 18, borderTop: '1px solid var(--border-glass)', fontSize: '13px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>板书支持 LaTeX KaTeX 实时几何推导</span>
@@ -1196,126 +1246,244 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
                 </div>
 
-            {/* Right Column: Keynote-grade Master vs Baseline Comparison Stage */}
-            <div className="workbench-diff-container">
-              
-              {/* Master Teacher Bay */}
-              <div className="apple-clean-diff-card apple-clean-diff-card--master">
+            {/* Visual Dual-Track Thinking Path & Retention Graph */}
+            <div className="thinking-path-canvas" style={{ flex: 1 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <GraduationCap size={20} style={{ color: 'var(--accent-primary)' }} />
-                      <strong style={{ fontSize: '16px', color: 'var(--accent-primary)' }}>定制特级名师</strong>
-                    </div>
-                    <span className="badge badge-blue font-mono-telemetry" style={{ fontSize: '11px' }}>
-                      {dynamicDiffAnswer.masterMetric}
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Network size={18} style={{ color: 'var(--accent-primary)' }} />
+                    <span>双轨思维路径图谱：名师启发登顶 vs 通用AI直坠</span>
+                  </div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: 4 }}>
+                    基于当前 5D 参数实时解构：学生认知参与度与遗忘衰减动态映射
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span className="badge badge-blue font-mono-telemetry" style={{ fontSize: '11px' }}>
+                    名师留存率 {safeMasterRetention}%
+                  </span>
+                  <span className="badge badge-rose font-mono-telemetry" style={{ fontSize: '11px' }}>
+                    AI灌输留存 14%
                   </span>
                 </div>
-
-                  {/* Clean KaTeX Formula with Quick Copy */}
-                  <div style={{ position: 'relative', margin: '16px 0', padding: '18px 16px', background: 'var(--bg-surface-elevated)', borderRadius: 16, border: '1px solid var(--border-glass)', textAlign: 'center' }}>
-                    <div dangerouslySetInnerHTML={{ __html: renderKatexHtml(dynamicDiffAnswer.masterFormula, true) }} />
-                    <button
-                      type="button"
-                      onClick={() => handleCopyFormula(dynamicDiffAnswer.masterFormula)}
-                      style={{
-                        position: 'absolute',
-                        right: 12,
-                        top: 12,
-                        background: 'var(--bg-subtle)',
-                        border: '1px solid var(--border-glass)',
-                        borderRadius: '8px',
-                        padding: '4px 8px',
-                        color: copiedFormula ? 'var(--accent-green)' : 'var(--text-muted)',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 4,
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        transition: 'all 0.15s ease'
-                      }}
-                      title="复制 LaTeX 源码"
-                    >
-                      {copiedFormula ? <Check size={12} /> : <Copy size={12} />}
-                      <span>{copiedFormula ? '已复制' : '复制'}</span>
-                    </button>
-                  </div>
-
-                  {/* Editorial Thought Guidance */}
-                  <div className="font-editorial" style={{ fontSize: '15px', color: 'var(--text-main)', lineHeight: 1.75, background: 'rgba(0,113,227,0.05)', padding: '16px 18px', borderRadius: 14, borderLeft: '3px solid var(--accent-primary)', marginBottom: 16 }}>
-                    {dynamicDiffAnswer.masterQuote}
-            </div>
-
-                  {/* Step Hierarchy */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
-                    {dynamicDiffAnswer.steps.map((st, idx) => (
-                      <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '12px', color: 'var(--text-main)' }}>
-                        <CheckCircle2 size={14} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
-                        <span>阶梯 {idx + 1}: {st}</span>
-              </div>
-                    ))}
               </div>
 
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--accent-primary)', fontSize: '11px', padding: '3px 10px', borderRadius: 9999, fontWeight: 600 }}>
-                      启发式反问
-                    </span>
-                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--accent-primary)', fontSize: '11px', padding: '3px 10px', borderRadius: 9999, fontWeight: 600 }}>
-                      数形结合降维
-              </span>
-                  </div>
-            </div>
-
-                <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid var(--border-glass)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span className="font-mono-telemetry" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>5D 参数实时适配</span>
-                  <button
-                    type="button"
-                    className="apple-btn-pill-primary"
-                    style={{ height: '36px', padding: '0 18px', fontSize: '13px' }}
-                    onClick={() => onNavigate('compose', { teacherSection: 'compose', initialScores: scores })}
-                  >
-                    <span>注入名师工坊</span>
-                    <ArrowRight size={14} />
-                  </button>
-            </div>
-          </div>
-
-              {/* Baseline Generic AI Bay */}
-              <div className="apple-clean-diff-card">
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              {/* Dual Track Grid */}
+              <div className="thinking-dual-track">
+                
+                {/* Track 1: Master Teacher Ladder Track */}
+                <div className="thinking-track-card thinking-track-card--master">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <Bot size={20} style={{ color: 'var(--text-muted)' }} />
-                      <strong style={{ fontSize: '16px', color: 'var(--text-muted)' }}>通用基准大模型</strong>
-              </div>
-                    <span className="font-mono-telemetry" style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-muted)', color: 'var(--text-muted)', fontSize: '11px', padding: '3px 10px', borderRadius: 9999, fontWeight: 600 }}>
-                      {dynamicDiffAnswer.baselineMetric}
-              </span>
-            </div>
-
-                  {/* Raw Formula */}
-                  <div style={{ margin: '16px 0', padding: '18px 16px', background: 'var(--bg-muted)', borderRadius: 16, border: '1px dashed var(--border-glass)', textAlign: 'center', color: '#64748b' }}>
-                    <div dangerouslySetInnerHTML={{ __html: renderKatexHtml(dynamicDiffAnswer.baselineFormula, true) }} />
+                      <GraduationCap size={18} style={{ color: 'var(--accent-primary)' }} />
+                      <strong style={{ fontSize: '15px', color: 'var(--text-main)' }}>定制名师思维阶梯</strong>
+                    </div>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent-primary)', background: 'rgba(0,113,227,0.12)', padding: '2px 8px', borderRadius: 9999 }}>
+                      启发式内化
+                    </span>
                   </div>
 
-                  {/* Muted Critique */}
-                  <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.75, background: 'var(--bg-surface)', padding: '16px 18px', borderRadius: 14, borderLeft: '3px solid #94a3b8', marginBottom: 16 }}>
-                    {dynamicDiffAnswer.baselineCritique}
-              </div>
+                  {/* Highlight Formula Pill */}
+                  <div style={{
+                    padding: '8px 12px',
+                    borderRadius: 10,
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border-glass)',
+                    fontSize: '12px',
+                    color: 'var(--accent-primary)',
+                    fontFamily: 'monospace',
+                    textAlign: 'center',
+                    marginBottom: 14,
+                    fontWeight: 700
+                  }}>
+                    F(x) = f(x) - f(2x₀ - x) 构造对称差
+                  </div>
 
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <span className="badge" style={{ background: 'var(--bg-muted)', color: 'var(--text-muted)' }}>直接灌输</span>
-                    <span className="badge" style={{ background: 'var(--bg-muted)', color: 'var(--text-muted)' }}>无认知台阶</span>
+                  {/* 4 Ladder Nodes */}
+                  <div className="thinking-flow-steps">
+                    <div className="thinking-flow-node thinking-flow-node--active">
+                      <div className="node-icon-bubble node-icon-bubble--master">1</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 750, color: 'var(--text-main)' }}>毫米级视线阻滞溯源</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>精准捕获极值点放缩停顿 18.4s</div>
+                      </div>
+                      <CheckCircle2 size={14} style={{ color: 'var(--accent-primary)' }} />
+                    </div>
+
+                    <div className="thinking-flow-node thinking-flow-node--active">
+                      <div className="node-icon-bubble node-icon-bubble--master">2</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 750, color: 'var(--text-main)' }}>苏格拉底递进反问点拨</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>"观察两边斜率符号有何几何关联？"</div>
+                      </div>
+                      <Sparkles size={14} style={{ color: '#f59e0b' }} />
+                    </div>
+
+                    <div className="thinking-flow-node thinking-flow-node--active">
+                      <div className="node-icon-bubble node-icon-bubble--master">3</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 750, color: 'var(--text-main)' }}>师生共构思维支架</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>学生自发顿悟，将二元极值降至一元</div>
+                      </div>
+                      <CheckCircle2 size={14} style={{ color: 'var(--accent-primary)' }} />
+                    </div>
+
+                    <div className="thinking-flow-node thinking-flow-node--active" style={{ borderColor: 'rgba(245,158,11,0.4)', background: 'rgba(245,158,11,0.06)' }}>
+                      <div className="node-icon-bubble" style={{ background: 'rgba(245,158,11,0.2)', color: '#f59e0b' }}>4</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 750, color: '#f59e0b' }}>公理直觉形成 · 变式秒杀</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>考场变式自如破解，核心思维留存 {safeMasterRetention}%</div>
+                      </div>
+                      <Award size={14} style={{ color: '#f59e0b' }} />
+                    </div>
+                  </div>
+
+                  {/* Retention Curve Preview SVG */}
+                  <div className="retention-curve-box">
+                    <div className="retention-curve-header">
+                      <span>7天记忆留存衰减模型 (Ebbinghaus Retained)</span>
+                      <span style={{ color: 'var(--accent-primary)' }}>高位稳定 {safeMasterRetention}%</span>
+                    </div>
+                    <svg viewBox="0 0 280 60" style={{ width: '100%', height: 60, overflow: 'visible' }}>
+                      <line x1="10" y1="50" x2="270" y2="50" stroke="var(--border-glass)" strokeWidth="1" />
+                      <line x1="10" y1="10" x2="10" y2="50" stroke="var(--border-glass)" strokeWidth="1" />
+                      {/* Master retention curve (stays high) */}
+                      <path
+                        d={`M 10 14 C 70 14, 150 ${50 - (safeMasterRetention * 0.4)}, 270 ${50 - (safeMasterRetention * 0.4)}`}
+                        fill="none"
+                        stroke="var(--accent-primary)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+                      <circle cx="270" cy={50 - (safeMasterRetention * 0.4)} r="4" fill="var(--accent-primary)" />
+                      <text x="260" y={42 - (safeMasterRetention * 0.4)} fill="var(--accent-primary)" fontSize="10" fontWeight="750" textAnchor="end">
+                        {safeMasterRetention}%
+                      </text>
+                      <text x="15" y="44" fill="var(--text-muted)" fontSize="9">第1天</text>
+                      <text x="140" y="44" fill="var(--text-muted)" fontSize="9">第3天</text>
+                      <text x="245" y="44" fill="var(--text-muted)" fontSize="9">第7天</text>
+                    </svg>
                   </div>
                 </div>
 
-                <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid var(--border-glass)', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                  <span className="font-mono-telemetry" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>无个性化调优 · 遗忘率高</span>
+                {/* Track 2: Generic AI Cliff Fall Track */}
+                <div className="thinking-track-card thinking-track-card--baseline">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Bot size={18} style={{ color: '#94a3b8' }} />
+                      <strong style={{ fontSize: '15px', color: 'var(--text-muted)' }}>通用基准大模型</strong>
+                    </div>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '2px 8px', borderRadius: 9999 }}>
+                      断崖式硬灌
+                    </span>
+                  </div>
+
+                  {/* Highlight Formula Pill */}
+                  <div style={{
+                    padding: '8px 12px',
+                    borderRadius: 10,
+                    background: 'var(--bg-surface)',
+                    border: '1px dashed var(--border-glass)',
+                    fontSize: '12px',
+                    color: '#94a3b8',
+                    fontFamily: 'monospace',
+                    textAlign: 'center',
+                    marginBottom: 14
+                  }}>
+                    f'(x) = 0 =&gt; 暴力套入对数均值公式
+                  </div>
+
+                  {/* 4 Cliff Nodes */}
+                  <div className="thinking-flow-steps">
+                    <div className="thinking-flow-node">
+                      <div className="node-icon-bubble node-icon-bubble--baseline">1</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)' }}>机械解析输入题干</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>缺少视线捕捉，不知学生卡在何处</div>
+                      </div>
+                    </div>
+
+                    <div className="thinking-flow-node">
+                      <div className="node-icon-bubble node-icon-bubble--baseline">2</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)' }}>直接灌输终极步骤</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>剥夺独立反思，硬给高难解题套路</div>
+                      </div>
+                    </div>
+
+                    <div className="thinking-flow-node thinking-flow-node--failed">
+                      <div className="node-icon-bubble node-icon-bubble--failed">✕</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ef4444' }}>学生思考参与度归零</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>抄写答案形成假懂，实际概念依然混淆</div>
+                      </div>
+                    </div>
+
+                    <div className="thinking-flow-node thinking-flow-node--failed">
+                      <div className="node-icon-bubble node-icon-bubble--failed">✕</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ef4444' }}>变式即刻崩盘 · 留存断崖坠落</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>2小时后艾宾浩斯留存急剧下滑至 14%</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Retention Curve Cliff Fall SVG */}
+                  <div className="retention-curve-box">
+                    <div className="retention-curve-header">
+                      <span>7天记忆留存衰减模型 (Ebbinghaus Plunge)</span>
+                      <span style={{ color: '#ef4444' }}>断崖跌落 14%</span>
+                    </div>
+                    <svg viewBox="0 0 280 60" style={{ width: '100%', height: 60, overflow: 'visible' }}>
+                      <line x1="10" y1="50" x2="270" y2="50" stroke="var(--border-glass)" strokeWidth="1" />
+                      <line x1="10" y1="10" x2="10" y2="50" stroke="var(--border-glass)" strokeWidth="1" />
+                      {/* Baseline cliff curve (plunges down) */}
+                      <path
+                        d="M 10 14 C 40 14, 70 44, 270 44"
+                        fill="none"
+                        stroke="#ef4444"
+                        strokeWidth="2.5"
+                        strokeDasharray="4 3"
+                        strokeLinecap="round"
+                      />
+                      <circle cx="270" cy="44" r="3.5" fill="#ef4444" />
+                      <text x="260" y="38" fill="#ef4444" fontSize="10" fontWeight="700" textAnchor="end">
+                        14%
+                      </text>
+                      <text x="15" y="44" fill="var(--text-muted)" fontSize="9">第1天</text>
+                      <text x="140" y="44" fill="var(--text-muted)" fontSize="9">第3天</text>
+                      <text x="245" y="44" fill="var(--text-muted)" fontSize="9">第7天</text>
+                    </svg>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Bottom Telemetry Bar */}
+              <div style={{
+                marginTop: 20,
+                paddingTop: 16,
+                borderTop: '1px solid var(--border-glass)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: 12
+              }}>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span>💡 调节左侧 5D 滑块，右侧名师阶梯高度与留存曲线将实时随启发深度动态提升</span>
+                </div>
+                <button
+                  type="button"
+                  className="apple-btn-pill-primary"
+                  style={{ height: '36px', padding: '0 20px', fontSize: '13px' }}
+                  onClick={() => onNavigate('compose', { teacherSection: 'compose', initialScores: scores })}
+                >
+                  <span>以此思维图谱注入工坊</span>
+                  <ArrowRight size={14} />
+                </button>
               </div>
             </div>
-
-          </div>
 
               </div>
           </div>
