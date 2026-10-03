@@ -111,6 +111,11 @@
   --accent-warm: #d97706;
   --accent-warm-subtle: rgba(217, 119, 6, 0.12);
   --accent-warm-border: rgba(217, 119, 6, 0.3);
+
+  /* Typography Font Stacks */
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-editorial: "Newsreader", "Instrument Serif", "Georgia", "Cambria", "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
 }
 
 /* ==========================================================================
@@ -185,7 +190,7 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--bg-app);
   color: var(--text-main);
   line-height: 1.6;
@@ -198,6 +203,7 @@ body {
 
 /* Headings with Tight Negative Letter-Spacing */
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
   font-weight: 700;
   letter-spacing: -0.035em;
   color: var(--text-main);
@@ -209,13 +215,19 @@ h2 { font-size: 1.85rem; }
 h3 { font-size: 1.35rem; }
 h4 { font-size: 1.1rem; }
 
-.tabular-nums {
+.tabular-nums, .font-mono-telemetry {
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
-/* 现代工业几何展示字级规范 (替换易降级锯齿的宋体，杜绝视觉怪异感) */
-.brand-serif, .brand-display {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+/* 典雅书卷展示字级规范 (Editorial Serif) */
+.brand-serif, .font-editorial {
+  font-family: var(--font-editorial);
+  letter-spacing: -0.015em;
+}
+
+.brand-display {
+  font-family: var(--font-sans);
   font-weight: 800;
   letter-spacing: -0.03em;
 }

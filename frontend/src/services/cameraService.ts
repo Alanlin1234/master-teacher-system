@@ -2,14 +2,16 @@ export class CameraService {
   private stream: MediaStream | null = null;
   private videoEl: HTMLVideoElement | null = null;
 
-  async start(videoElement: HTMLVideoElement): Promise<void> {
+  async start(videoElement: HTMLVideoElement, onStatusChange?: (status: any) => void): Promise<void> {
     this.videoEl = videoElement;
+    onStatusChange?.('connecting');
     this.stream = await navigator.mediaDevices.getUserMedia({
       video: { width: 640, height: 480, facingMode: 'user' },
       audio: false,
     });
     videoElement.srcObject = this.stream;
     await videoElement.play();
+    onStatusChange?.('focused');
   }
 
   stop(): void {

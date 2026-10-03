@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   scores?: Record<string, number>;
@@ -9,22 +9,24 @@ interface Props {
 }
 
 const DIMENSIONS = [
-  { key: 'style', label: '上课风格' },
-  { key: 'personality', label: '人格特征' },
-  { key: 'strengths', label: '核心优点' },
-  { key: 'method', label: '教学方法' },
-  { key: 'communication', label: '沟通方式' },
+  { key: 'style', label: '上课风格', desc: '先问启发 vs 严密实证' },
+  { key: 'personality', label: '人格特征', desc: '亲切风趣 vs 沉稳严谨' },
+  { key: 'strengths', label: '核心优点', desc: '模型精炼 vs 极简直观' },
+  { key: 'method', label: '教学方法', desc: '数形结合 vs 公理推导' },
+  { key: 'communication', label: '沟通方式', desc: '循序渐进 vs 宏观破局' },
 ];
 
 export const RadarChart5D: React.FC<Props> = ({
   scores = {},
   size = 280,
-  highlightColor = '#38bdf8',
+  highlightColor = 'var(--accent-primary)',
   showLabels = true,
   showComposite = true,
 }) => {
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+
   const center = size / 2;
-  const radius = (size / 2) * 0.7;
+  const radius = (size / 2) * 0.68;
   const count = DIMENSIONS.length;
 
   const getCoordinates = (value: number, index: number) => {
@@ -48,21 +50,24 @@ export const RadarChart5D: React.FC<Props> = ({
     return `${x},${y}`;
   }).join(' ');
 
-  const avg = Object.values(scores).length > 0
-    ? Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length
+  const scoreValues = Object.values(scores);
+  const avg = scoreValues.length > 0
+    ? scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length
     : 0.88;
   const compositeScore = Math.round(avg * 100);
 
+  const activeDim = DIMENSIONS.find(d => d.key === hoveredKey);
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
       <svg width={size} height={size} style={{ overflow: 'visible' }}>
         <defs>
           <radialGradient id="neonRadarGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="var(--accent-primary)" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#6366f1" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="var(--accent-primary)" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.06" />
           </radialGradient>
           <filter id="radarVertexGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feGaussianBlur stdDeviation="3.5" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -78,13 +83,14 @@ export const RadarChart5D: React.FC<Props> = ({
             fill={idx === gridPaths.length - 1 ? 'var(--bg-glass-subtle)' : 'none'}
             stroke="var(--border-glass)"
             strokeWidth="1"
-            strokeDasharray={idx < 3 ? '2 3' : 'none'}
+            strokeDasharray={idx < 3 ? '3 3' : 'none'}
           />
         ))}
 
         {/* 放射轴线 */}
-        {DIMENSIONS.map((_, i) => {
+        {DIMENSIONS.map((dim, i) => {
           const { x, y } = getCoordinates(1.0, i);
+          const isHovered = hoveredKey === dim.key;
           return (
             <line
               key={i}
@@ -92,8 +98,9 @@ export const RadarChart5D: React.FC<Props> = ({
               y1={center}
               x2={x}
               y2={y}
-              stroke="var(--border-glass)"
-              strokeWidth="1"
+              stroke={isHovered ? 'var(--accent-primary)' : 'var(--border-glass)'}
+              strokeWidth={isHovered ? '2' : '1'}
+              style={{ transition: 'stroke 0.2s ease, stroke-width 0.2s ease' }}
             />
           );
         })}
@@ -109,14 +116,21 @@ export const RadarChart5D: React.FC<Props> = ({
         />
 
         {showComposite && (
-          <>
+          <g style={{ cursor: 'pointer' }}>
             <circle
               cx={center}
               cy={center}
-              r={16}
+              r={18}
               fill="var(--card-bg)"
               stroke={highlightColor}
-              strokeWidth="1.5"
+              strokeWidth="2"
+              box-shadow="0 0 12px rgba(59, 130, 246, 0.4)"
+            />
+            <circle
+              cx={center}
+              cy={center}
+              r={14}
+              fill="var(--accent-primary-subtle)"
             />
             <text
               x={center}
@@ -130,26 +144,35 @@ export const RadarChart5D: React.FC<Props> = ({
             >
               {compositeScore}
             </text>
-          </>
+          </g>
         )}
 
         {/* 荧光顶点与外显高精标签 */}
         {DIMENSIONS.map((dim, i) => {
           const val = scores[dim.key] ?? 0.85;
           const { x, y } = getCoordinates(Math.min(1.0, Math.max(0.2, val)), i);
-          const labelCoord = getCoordinates(1.22, i);
+          const labelCoord = getCoordinates(1.24, i);
+          const isHovered = hoveredKey === dim.key;
 
           return (
-            <g key={dim.key}>
+            <g
+              key={dim.key}
+              onMouseEnter={() => setHoveredKey(dim.key)}
+              onMouseLeave={() => setHoveredKey(null)}
+              style={{ cursor: 'pointer' }}
+            >
+              {/* Vertex glow */}
               <circle
                 cx={x}
                 cy={y}
-                r="4"
-                fill="var(--card-bg)"
+                r={isHovered ? 6 : 4}
+                fill={isHovered ? 'var(--accent-primary)' : 'var(--card-bg)'}
                 stroke={highlightColor}
-                strokeWidth="2.5"
+                strokeWidth={isHovered ? 3 : 2}
                 filter="url(#radarVertexGlow)"
+                style={{ transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
               />
+
               {showLabels && (
                 <text
                   x={labelCoord.x}
@@ -157,17 +180,41 @@ export const RadarChart5D: React.FC<Props> = ({
                   textAnchor="middle"
                   dominantBaseline="central"
                   fontSize="12px"
-                  fontWeight="700"
-                  fill="var(--text-body)"
+                  fontWeight={isHovered ? '800' : '650'}
+                  fill={isHovered ? 'var(--text-main)' : 'var(--text-body)'}
                   letterSpacing="0.02em"
+                  style={{ transition: 'fill 0.2s ease' }}
                 >
-                  {dim.label} <tspan fill="var(--accent-primary)">{Math.round(val * 100)}</tspan>
+                  {dim.label} <tspan fill="var(--accent-primary)" fontWeight="800">{Math.round(val * 100)}</tspan>
                 </text>
               )}
             </g>
           );
         })}
       </svg>
+
+      {/* Interactive Micro-Tooltip */}
+      {activeDim && (
+        <div style={{
+          position: 'absolute',
+          bottom: -18,
+          background: 'var(--bg-surface-elevated)',
+          border: '1px solid var(--border-glass)',
+          boxShadow: 'var(--shadow-md)',
+          borderRadius: '9999px',
+          padding: '3px 12px',
+          fontSize: '11px',
+          color: 'var(--text-main)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          pointerEvents: 'none',
+          animation: 'fadeIn 0.2s ease forwards'
+        }}>
+          <span style={{ color: 'var(--accent-primary)', fontWeight: 750 }}>{activeDim.label}</span>
+          <span style={{ color: 'var(--text-muted)' }}>{activeDim.desc}</span>
+        </div>
+      )}
     </div>
   );
 };

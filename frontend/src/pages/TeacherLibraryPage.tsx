@@ -151,12 +151,13 @@ export const TeacherLibraryPage: React.FC<Props> = ({ onStartChat, onAddToCompos
             {filteredTeachers.map(t => (
               <div
                 key={t.id}
-                className="card-impeccable"
+                className="card-impeccable card-hover-lift"
                 style={{
                   padding: '24px',
                   display: 'flex',
                   flexDirection: 'column',
-                  position: 'relative'
+                  position: 'relative',
+                  cursor: 'default'
                 }}
               >
                 {/* 教师头像、姓名与学科 */}

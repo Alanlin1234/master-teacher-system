@@ -283,8 +283,8 @@ export function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-export function useCountUp(target: number, duration = 1.4, enabled = true) {
-  const [displayValue, setDisplayValue] = useState(target);
+export function useCountUp(target: number, duration = 1.4, enabled = true): number {
+  const [displayValue, setDisplayValue] = useState<number>(target);
 
   useEffect(() => {
     if (!enabled || prefersReducedMotion()) {
@@ -305,6 +305,67 @@ export function useCountUp(target: number, duration = 1.4, enabled = true) {
   }, [target, duration, enabled]);
 
   return displayValue;
+}
+
+export function useCountUpFloat(target: number, duration = 1.4, enabled = true, decimals = 1): number {
+  const [displayValue, setDisplayValue] = useState<number>(target);
+
+  useEffect(() => {
+    if (!enabled || prefersReducedMotion()) {
+      setDisplayValue(target);
+      return;
+    }
+    const factor = Math.pow(10, decimals);
+    const counterObj = { val: 0 };
+    const tween = gsap.to(counterObj, {
+      val: target,
+      duration,
+      ease: 'power2.out',
+      onUpdate: () => {
+        setDisplayValue(Math.round(counterObj.val * factor) / factor);
+      },
+    });
+
+    return () => tween.kill();
+  }, [target, duration, enabled, decimals]);
+
+  return displayValue;
+}
+
+/**
+ * Hook: Magnetic physics hover attraction for buttons & cards
+ */
+export function useMagneticButton(ref: React.RefObject<HTMLElement | null>, strength = 0.22) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReducedMotion()) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const deltaX = (e.clientX - centerX) * strength;
+      const deltaY = (e.clientY - centerY) * strength;
+
+      el.style.transform = `translate3d(${deltaX.toFixed(2)}px, ${deltaY.toFixed(2)}px, 0)`;
+    };
+
+    const handleMouseLeave = () => {
+      el.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+      el.style.transform = 'translate3d(0, 0, 0)';
+      setTimeout(() => {
+        if (el) el.style.transition = '';
+      }, 350);
+    };
+
+    el.addEventListener('mousemove', handleMouseMove);
+    el.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      el.removeEventListener('mousemove', handleMouseMove);
+      el.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [ref, strength]);
 }
 
 /**
