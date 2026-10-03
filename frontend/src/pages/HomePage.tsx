@@ -214,16 +214,36 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
   const [copiedFormula, setCopiedFormula] = useState<boolean>(false);
   const [isHeroAudioPlaying, setIsHeroAudioPlaying] = useState<boolean>(false);
 
+  const [playingMasterId, setPlayingMasterId] = useState<string | null>(null);
+
   const toggleHeroAudio = () => {
     if (isHeroAudioPlaying) {
       speechService.stop();
       setIsHeroAudioPlaying(false);
     } else {
+      speechService.stop();
+      setPlayingMasterId(null);
       setIsHeroAudioPlaying(true);
       speechService.speak(
         "同学你好！我是你的数学特级名师王崇林。任何复杂极值与导数综合难题，我带你由浅入深，从草稿纸第一步开始剖析，咱们一起攻克！",
         () => setIsHeroAudioPlaying(true),
         () => setIsHeroAudioPlaying(false)
+      );
+    }
+  };
+
+  const toggleMasterAudio = (master: FeaturedMaster) => {
+    if (playingMasterId === master.id) {
+      speechService.stop();
+      setPlayingMasterId(null);
+    } else {
+      speechService.stop();
+      setIsHeroAudioPlaying(false);
+      setPlayingMasterId(master.id);
+      speechService.speak(
+        `同学你好！我是${master.subject}名师${master.name}。${master.quote}`,
+        () => setPlayingMasterId(master.id),
+        () => setPlayingMasterId(null)
       );
     }
   };
@@ -384,11 +404,6 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             <span>再决定由哪位名师来讲</span>
           </h1>
 
-          {/* Book Editorial Pullquote */}
-          <div className="apple-editorial-pullquote">
-            “每个在思维瓶颈前停滞的学生，缺少的从不是更多的公式硬套，而是一位懂得他卡在第几步的专属名师。”
-          </div>
-
           {/* Precision Subtitle */}
           <p className="apple-pro-subtitle" style={{ maxWidth: 740, margin: '0 auto 36px', textWrap: 'balance' }}>
             一本专为 K12 全学段学生与特级名师编写的实时认知解构手册。基于毫米级多模态专注流与 IRT 认知穿透，即席重构特级名师专属解题基因。
@@ -417,85 +432,9 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             </button>
           </div>
 
-          {/* 60/40 Asymmetric Stage: Left Master Avatar Broadcast Bay + Right Cognitive Folio */}
-          <div className="hero-asymmetric-stage">
-            {/* Left Wing: 4K Master Teacher Digital Human Broadcast Bay */}
-            <div className="hero-avatar-bay">
-              <div className="hero-avatar-media">
-                <img
-                  src="./demo_videos/merged_poster.jpg"
-                  alt="4K特级名师演播舱"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = './photos/1.png';
-                  }}
-                />
-                <div className="hero-avatar-overlay" />
-                <div className="hero-avatar-live-chip">
-                  <span className="hero-avatar-live-dot" />
-                  <span>4K 演播实况 · 广播中</span>
-                </div>
-
-                {/* Audio voice toggle floating pill */}
-                <button
-                  type="button"
-                  className={`hero-avatar-audio-toggle ${isHeroAudioPlaying ? 'playing' : ''}`}
-                  onClick={toggleHeroAudio}
-                  title={isHeroAudioPlaying ? "静音特级教师原声" : "开启特级名师原声解惑"}
-                >
-                  {isHeroAudioPlaying ? <Volume2 size={16} /> : <VolumeX size={16} />}
-                  <span style={{ fontSize: '12px' }}>
-                    {isHeroAudioPlaying ? '特级原声解惑中...' : '点击聆听特级名师原声'}
-                  </span>
-                  {isHeroAudioPlaying && (
-                    <span className="hero-eq-bars">
-                      <span className="hero-eq-bar" />
-                      <span className="hero-eq-bar" />
-                      <span className="hero-eq-bar" />
-                      <span className="hero-eq-bar" />
-                    </span>
-                  )}
-                </button>
-              </div>
-
-              {/* Bay Metadata & Status */}
-              <div className="hero-avatar-info">
-                <div>
-                  <h3 className="hero-avatar-teacher-name">
-                    苏步青门下 · 王特级
-                    <span className="hero-avatar-tag">数学正高级 / 功勋名师</span>
-                  </h3>
-                  <p className="hero-avatar-sub">“不给答案，只在思维断点处为你亮起一盏灯”</p>
-                </div>
-
-                <div className="hero-avatar-actions">
-                  <button
-                    type="button"
-                    className="apple-btn-pill-primary"
-                    style={{ flex: 1, height: '38px', fontSize: '13px' }}
-                    onClick={() => onNavigate('studio')}
-                  >
-                    <Play size={13} fill="currentColor" />
-                    <span>即席生成微课</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="apple-btn-pill-secondary"
-                    style={{ height: '38px', padding: '0 14px', fontSize: '13px' }}
-                    onClick={() => {
-                      const el = document.getElementById('grand-master-gallery');
-                      el?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  >
-                    <Users size={13} />
-                    <span>选聘名师</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Wing: Apple Studio Display Bezel: The Cognitive Folio (对开书卷硬件展台) */}
-            <div className="apple-studio-bezel" style={{ marginTop: 0 }}>
-              <div className="apple-studio-bezel-inner">
+          {/* Centered Apple Studio Display Bezel: The Cognitive Folio (对开书卷核心硬件展台) */}
+          <div className="apple-studio-bezel apple-studio-bezel--centered">
+            <div className="apple-studio-bezel-inner">
               
               {/* Window Controls Topbar */}
               <div className="apple-studio-topbar">
@@ -523,8 +462,8 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                     <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
                       PAGE 01 · 学生真实演算草稿断层 (STUDENT DRAFT)
                     </span>
-                    <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--text-muted)', borderRadius: 9999, fontSize: '11px', padding: '2px 8px' }}>
-                      坐标 X:184 · Y:312
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                      视线捕获热点
                     </span>
                   </div>
 
@@ -558,9 +497,24 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                       <span style={{ fontSize: '11px', fontWeight: 750, color: 'var(--accent-primary)', letterSpacing: '0.05em' }}>
                         PAGE 02 · 特级名师启发式思维阶梯 (MASTER INSIGHT)
                       </span>
-                      <span style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-subtle)', color: 'var(--accent-primary)', borderRadius: 9999, fontSize: '11px', padding: '2px 8px', fontWeight: 600 }}>
-                        自适应 99.4%
-                      </span>
+                      {/* Inline Master Voice Audio Pill */}
+                      <button
+                        type="button"
+                        className={`folio-voice-pill ${isHeroAudioPlaying ? 'playing' : ''}`}
+                        onClick={toggleHeroAudio}
+                        title={isHeroAudioPlaying ? "静音特级名师原声" : "聆听特级名师原声解惑"}
+                      >
+                        {isHeroAudioPlaying ? <Volume2 size={12} /> : <VolumeX size={12} />}
+                        <span>{isHeroAudioPlaying ? '名师原声启发中...' : '聆听名师原声'}</span>
+                        {isHeroAudioPlaying && (
+                          <span className="folio-eq-bars">
+                            <span className="folio-eq-bar" />
+                            <span className="folio-eq-bar" />
+                            <span className="folio-eq-bar" />
+                            <span className="folio-eq-bar" />
+                          </span>
+                        )}
+                      </button>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
@@ -629,44 +583,11 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
               </div>
 
-              {/* Bottom Archetype Quick Switch Strip */}
-              <div style={{ padding: '14px 32px', background: 'var(--bg-subtle)', borderTop: '1px solid var(--border-glass)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>快速切换考题求证:</span>
-                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  {[
-                    { label: '极值点偏移', query: '极值点偏移为什么一定要构造对称差函数？' },
-                    { label: '圆锥曲线离心率', query: '椭圆与双曲线的离心率在几何统一性上怎么直观理解？' },
-                    { label: '导数切线放缩', query: '为什么导数大于0函数一定单调递增，逆命题为何不成立？' },
-                  ].map((token) => (
-                    <button
-                      key={token.label}
-                      type="button"
-                      onClick={() => setUserQuestion(token.query)}
-                      style={{
-                        background: userQuestion.includes(token.label.slice(0, 3)) ? 'var(--accent-primary-subtle)' : 'var(--bg-surface)',
-                        border: `1px solid ${userQuestion.includes(token.label.slice(0, 3)) ? 'var(--accent-primary)' : 'var(--border-glass)'}`,
-                        color: userQuestion.includes(token.label.slice(0, 3)) ? 'var(--accent-primary)' : 'var(--text-main)',
-                        fontSize: '12px',
-                        fontWeight: userQuestion.includes(token.label.slice(0, 3)) ? 700 : 500,
-                        padding: '6px 14px',
-                        borderRadius: '9999px',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      {token.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
             </div>
           </div>
-        </div>
-        {/* End of hero-asymmetric-stage */}
 
-      </div>
-    </section>
+        </div>
+      </section>
 
       {/* =================================================================
           ACT I.5: THE GRAND MASTER GALLERY (全国特级正高级名师殿堂)
@@ -718,55 +639,57 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
 
           {/* Master Cards Horizontal Reel */}
           <div id="master-cards-track" className="master-gallery-scroll-container">
-            {FEATURED_MASTERS.map((master) => (
-              <div key={master.id} className="master-gallery-card">
-                <div className="master-gallery-photo-wrap">
-                  <img
-                    src={master.photoUrl}
-                    alt={master.name}
-                    className="master-gallery-photo"
-                    loading="lazy"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = './photos/1.png';
-                    }}
-                  />
-                  <div className="master-gallery-photo-gradient" />
-                  <div className="master-gallery-badge-row">
-                    <span className="master-subject-badge">{master.subject}</span>
-                    <span className="master-title-badge">{master.title}</span>
-                  </div>
-                  <div className="master-school-pill">{master.badge}</div>
-                </div>
-
-                <div className="master-gallery-body">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-                    <h3 className="master-card-name">{master.name}</h3>
-                    <span className="master-style-tag">{master.tag}</span>
-                  </div>
-
-                  <p className="master-card-quote">“{master.quote}”</p>
-
-                  <div className="master-pedagogy-row">
-                    <span className="pedagogy-chip">{master.experience}</span>
-                  </div>
-
-                  <div className="master-card-footer">
-                    <div className="font-mono-telemetry" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                      <span>名师资质 </span>
-                      <strong style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>全国金牌</strong>
+            {FEATURED_MASTERS.map((master) => {
+              const isPlaying = playingMasterId === master.id;
+              return (
+                <div key={master.id} className="master-gallery-card">
+                  <div className="master-gallery-photo-wrap">
+                    <img
+                      src={master.photoUrl}
+                      alt={master.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = './photos/1.png';
+                      }}
+                    />
+                    <div className="master-gallery-photo-gradient" />
+                    <div className="master-subject-badge-clean">
+                      <Award size={12} />
+                      <span>{master.subject} · {master.badge.slice(0, 4)}</span>
                     </div>
-                    <button
-                      type="button"
-                      className="master-1v1-btn"
-                      onClick={() => onNavigate('studio')}
-                    >
-                      <span>向TA请教</span>
-                      <ArrowRight size={13} />
-                    </button>
+                  </div>
+
+                  <div className="master-gallery-body">
+                    <div className="master-card-header">
+                      <h3 className="master-card-name">{master.name}</h3>
+                      <div className="master-card-exp">{master.experience}</div>
+                    </div>
+
+                    <p className="master-card-quote">“{master.quote}”</p>
+
+                    <div className="master-card-footer-clean">
+                      <button
+                        type="button"
+                        className={`master-voice-btn ${isPlaying ? 'playing' : ''}`}
+                        onClick={() => toggleMasterAudio(master)}
+                        title={isPlaying ? "暂停名师原声" : "试听名师原声"}
+                      >
+                        {isPlaying ? <Volume2 size={12} /> : <VolumeX size={12} />}
+                        <span>{isPlaying ? '原声播报中' : '试听原声'}</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="master-1v1-btn"
+                        onClick={() => onNavigate('studio')}
+                      >
+                        <span>向TA请教</span>
+                        <ArrowRight size={13} />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -782,13 +705,10 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             <span>CHAPTER 01 · 循迹 · 四幕因果全息剧场 (THE CAUSAL LOOP)</span>
           </div>
 
-          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)', marginBottom: 16 }}>
+          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2rem, 3.8vw, 3rem)', marginBottom: 16 }}>
             从草稿纸专注阻滞<br />
             <span>到专属名师微课即席生成</span>
           </h2>
-          <div className="apple-editorial-pullquote" style={{ maxWidth: 680, marginBottom: 32 }}>
-            “翻开第 1 章：从学生笔尖停顿的 18.4 秒，到特级名师微课的即席诞生。”
-          </div>
           <p className="apple-pro-subtitle" style={{ marginBottom: 40, textWrap: 'balance' }}>
             四大核心感知与认知计算模块，一气呵成。
           </p>
@@ -1067,7 +987,7 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
                   />
                   <div className="hud-visual-banner-overlay" />
                   <div className="hud-visual-badge-floating">
-                    <span className="hero-avatar-live-dot" />
+                    <span className="apple-status-dot apple-status-dot--primary" />
                     <span>4K 虚拟名师板书同步演算 · 帧级数字人实时驱动</span>
                   </div>
                   <div style={{ position: 'absolute', bottom: 16, left: 16, right: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 3 }}>
@@ -1164,13 +1084,10 @@ export const HomePage: React.FC<Props> = ({ onNavigate }) => {
             <span>CHAPTER 02 · 破局 · 5D 认知基因调谐工作台 (THE WORKBENCH)</span>
           </div>
 
-          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)', maxWidth: 880, marginBottom: 16 }}>
+          <h2 className="apple-monumental-headline" style={{ fontSize: 'clamp(2rem, 3.8vw, 3rem)', maxWidth: 880, marginBottom: 16 }}>
             自主调节 5D 认知基因<br />
             <span>实时透视生成差距</span>
-                </h2>
-          <div className="apple-editorial-pullquote" style={{ maxWidth: 700, marginBottom: 32 }}>
-            “翻开第 2 章：自由调谐名师基因，亲手见证启发式教育与暴力硬灌的本质鸿沟。”
-              </div>
+          </h2>
           <p className="apple-pro-subtitle" style={{ maxWidth: 680, marginBottom: 36, textWrap: 'balance' }}>
             轻拉滑块或输入您关心的考题，同屏直击特级名师启发支架与通用大模型的死板结论。
           </p>
